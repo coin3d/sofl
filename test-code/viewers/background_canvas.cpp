@@ -5,8 +5,8 @@
 
 // *************************************************************************
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/nodes/SoBaseColor.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoCube.h>
@@ -21,7 +21,7 @@
 
 // *************************************************************************
 
-class MyExaminerViewer : public SoWxExaminerViewer {
+class MyExaminerViewer : public SoFlExaminerViewer {
 
 public:
     MyExaminerViewer(wxWindow* parent, const char * filename);
@@ -37,7 +37,7 @@ private:
 };
 
 MyExaminerViewer::MyExaminerViewer(wxWindow* parent, const char * filename)
-        : SoWxExaminerViewer(parent)
+        : SoFlExaminerViewer(parent)
 {
     // Coin should not clear the pixel-buffer, so the background image
     // is not removed.
@@ -133,7 +133,7 @@ MyExaminerViewer::actualRedraw(void)
 
 
     // Render normal scene graph.
-    SoWxExaminerViewer::actualRedraw();
+    SoFlExaminerViewer::actualRedraw();
 
 
     // Increase arrow angle with 1/1000 degrees every frame.
@@ -153,15 +153,15 @@ main(int argc, char ** argv)
         exit(1);
     }
 
-    wxWindow* window = SoWx::init(argv[0]);
+    wxWindow* window = SoFl::init(argv[0]);
 
     MyExaminerViewer * viewer = new MyExaminerViewer(window, argv[1]);
 
     viewer->setSceneGraph(new SoCone);
     viewer->show();
 
-    SoWx::show(window);
-    SoWx::mainLoop();
+    SoFl::show(window);
+    SoFl::mainLoop();
 
     delete viewer;
     return 0;

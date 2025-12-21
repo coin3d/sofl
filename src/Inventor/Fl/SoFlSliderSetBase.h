@@ -34,7 +34,7 @@
 #define SOWX_SOWXSLIDERSETBASE_H
 
 
-class SoWxSliderSetBase {
+class SoFlSliderSetBase {
 
 };
 

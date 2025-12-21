@@ -32,8 +32,8 @@
 
 #include <Inventor/nodes/SoCone.h>
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 
 // *************************************************************************
 
@@ -41,20 +41,20 @@ int
 main(int argc,
      char ** argv )
 {
-    wxWindow* window = SoWx::init( argv[0] );
+    wxWindow* window = SoFl::init( argv[0] );
 
-    SoWxExaminerViewer * viewer = new SoWxExaminerViewer( window );
+    SoFlExaminerViewer * viewer = new SoFlExaminerViewer( window );
     viewer->setSize(SbVec2s(800,800));
 
     SoNode * root = new SoCone;
     viewer->setSceneGraph( root );
     viewer->show();
-    SoWx::show( window );
+    SoFl::show( window );
 
-    SoWx::mainLoop();
+    SoFl::mainLoop();
 
     delete viewer;
-    SoWx::done(); // delete all Coin stuff
+    SoFl::done(); // delete all Coin stuff
     return 0;
 } // main()
 

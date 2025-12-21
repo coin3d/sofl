@@ -33,7 +33,7 @@
 #define SOWX_SOWXMATERIALSLIDERSET_H
 
 
-class SoWxMaterialSliderSet {
+class SoFlMaterialSliderSet {
 
 };
 

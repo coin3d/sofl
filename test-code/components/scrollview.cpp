@@ -31,20 +31,20 @@
 \**************************************************************************/
 
 /*
-  Demonstrates embedding of an SoWxRenderArea within a QScrollView.
+  Demonstrates embedding of an SoFlRenderArea within a QScrollView.
 */
 
 /***********************************************************************/
 #if 0
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <qapplication.h>
 #include <qpainter.h>
-#if QT_VERSION < 0x040000 // Wx < 4.0.0
+#if QT_VERSION < 0x040000 // Fl < 4.0.0
 #include <qscrollview.h>
 #else
 #include <qscrollarea.h>
@@ -55,12 +55,12 @@ class MyScrollView : public QScrollArea {
 public:
   MyScrollView(QWidget * parent) : QScrollArea(parent)
     {
-#if QT_VERSION < 0x040000 // Wx < 4.0.0
+#if QT_VERSION < 0x040000 // Fl < 4.0.0
       this->resizeContents(10000, 10000);
       this->enableClipper(TRUE);
 #endif
 
-      // Container widget for the SoWxRenderArea.
+      // Container widget for the SoFlRenderArea.
 
       QWidget * container = new QWidget(this);
       container->resize(1000, 1000);
@@ -82,11 +82,11 @@ public:
 
       // Add the renderarea.
 
-      renderarea = new SoWxRenderArea(container);
+      renderarea = new SoFlRenderArea(container);
       renderarea->setSceneGraph(root);
       camera->viewAll(root, renderarea->getViewportRegion());
 
-#if QT_VERSION < 0x040000 // Wx < 4.0.0
+#if QT_VERSION < 0x040000 // Fl < 4.0.0
       this->addChild(container, 100, 100);
       this->showChild(container);
 #else
@@ -103,7 +103,7 @@ protected:
     }
 
 private:
-  SoWxRenderArea * renderarea;
+  SoFlRenderArea * renderarea;
 };
 
 /***********************************************************************/
@@ -111,13 +111,13 @@ private:
 int
 main(int argc, char ** argv)
 {
-  // Initialize Wx and SoWx.
+  // Initialize Fl and SoFl.
   QApplication app(argc, argv);
-  SoWx::init((QWidget *)NULL);
+  SoFl::init((QWidget *)NULL);
 
   // Set up scrollview window.
   MyScrollView * vp = new MyScrollView(NULL);
-#if QT_VERSION < 0x040000 // Wx < 4.0.0
+#if QT_VERSION < 0x040000 // Fl < 4.0.0
   vp->viewport()->setBackgroundMode(QWidget::NoBackground);
 #endif
 
@@ -126,7 +126,7 @@ main(int argc, char ** argv)
   // Set termination condition.
   QObject::connect(qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()));
   // Start event loop.
-  SoWx::mainLoop();
+  SoFl::mainLoop();
 
   return 0;
 }

@@ -30,18 +30,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 
 #define protected public
-#include <Inventor/Wx/viewers/SoWxFullViewer.h>
+#include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #undef protected
 
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 
 #include "common/get_scene_graph.h"
 
@@ -54,7 +54,7 @@ public:
         if ( !wxApp::OnInit() )
             return false;
 
-        wxWindow* window = SoWx::init("renderarea");
+        wxWindow* window = SoFl::init("renderarea");
 
         SoSeparator * root = new SoSeparator;
         root->ref();
@@ -64,20 +64,20 @@ public:
         SoSeparator * userroot = get_scene_graph();
         root->addChild(userroot);
 
-        SoWxFullViewer * renderarea =
-                new SoWxFullViewer(window,
+        SoFlFullViewer * renderarea =
+                new SoFlFullViewer(window,
                                    "Renderarea demonstration",
                                    FALSE,
-                                   SoWxFullViewer::BUILD_ALL,
-                                   SoWxViewer::BROWSER,
+                                   SoFlFullViewer::BUILD_ALL,
+                                   SoFlViewer::BROWSER,
                                    TRUE);
         camera->viewAll( userroot, renderarea->getViewportRegion() );
         renderarea->setSceneGraph(root);
         renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
         renderarea->show();
 
-        SoWx::show(window);
-        // SoWx::mainLoop();
+        SoFl::show(window);
+        // SoFl::mainLoop();
         return true;
     }
 };

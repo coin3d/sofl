@@ -32,21 +32,21 @@
 #ifndef SOWX_SOWXCOMPONENTP_H
 #define SOWX_SOWXCOMPONENTP_H
 
-#include "Inventor/Wx/SoGuiComponentP.h"
-#include "Inventor/Wx/SoWxComponent.h"
-#include <Inventor/Wx/SoWxCursor.h>
-#include <wx/window.h>
-#include <wx/frame.h>
+#include "Inventor/Fl/SoGuiComponentP.h"
+#include "Inventor/Fl/SoFlComponent.h"
+#include <Inventor/Fl/SoFlCursor.h>
+#include <fl/window.h>
+#include <fl/frame.h>
 
-class SoWxComponentP : public SoGuiComponentP {
+class SoFlComponentP : public SoGuiComponentP {
 public:
-    SoWxComponentP(SoWxComponent * publ);
-    ~SoWxComponentP();
+    SoFlComponentP(SoFlComponent * publ);
+    ~SoFlComponentP();
 
     static void fatalerrorHandler(void * userdata);
     static void atexit_cleanup();
 
-    static class wxCursor * getNativeCursor(const SoWxCursor::CustomCursor * cc);
+    static class wxCursor * getNativeCursor(const SoFlCursor::CustomCursor * cc);
 
     // Variables.
 
@@ -54,7 +54,7 @@ public:
     wxWindow * widget;
     SbBool embedded, shelled;
     std::string classname, widgetname;
-    SoWxComponentCB * closeCB;
+    SoFlComponentCB * closeCB;
     void * closeCBdata;
     SbPList * visibilitychangeCBs;
     SbBool realized;

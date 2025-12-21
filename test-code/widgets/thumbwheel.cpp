@@ -32,15 +32,15 @@
 
 /*
   This is just a simple test application to try out the functionality
-  of the SoWxThumbWheel widget.
+  of the SoFlThumbWheel widget.
 
-  FIXME: this doesn't work at the moment (the SoWxThumbWheel API is
-  not exported in the SoWx library). 20001125 mortene.
+  FIXME: this doesn't work at the moment (the SoFlThumbWheel API is
+  not exported in the SoFl library). 20001125 mortene.
 */
 
 
-#include <Inventor/Wx/widgets/SoWxThumbWheel.h>
-#include "wx/wx.h"
+#include <Inventor/Fl/widgets/SoFlThumbWheel.h>
+#include "fl/fl.h"
 
 #include "common/SimpleFrame.h"
 
@@ -58,14 +58,14 @@ public:
                                               wxSize(300,300));
 
         wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-        SoWxThumbWheel *wheel_h = new SoWxThumbWheel(SoWxThumbWheel::Horizontal,
+        SoFlThumbWheel *wheel_h = new SoFlThumbWheel(SoFlThumbWheel::Horizontal,
                                                      aFrame);
 
         wheel_h->SetSize(wheel_h->sizeHint());
         //wheel_h->SetMinSize( wheel_h->sizeHint());
 
         sizer->Add(wheel_h, 1, wxALL| wxEXPAND, 5 );
-        SoWxThumbWheel *wheel_v = new SoWxThumbWheel(SoWxThumbWheel::Vertical,
+        SoFlThumbWheel *wheel_v = new SoFlThumbWheel(SoFlThumbWheel::Vertical,
                                                      aFrame);
         // wheel_v->SetSize(30, 200);
         wheel_v->SetSize(wheel_v->sizeHint());

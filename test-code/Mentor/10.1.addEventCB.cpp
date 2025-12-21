@@ -49,8 +49,8 @@
  *-----------------------------------------------------------*/
 
 #include <Inventor/Sb.h>
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 #include <Inventor/actions/SoBoxHighlightRenderAction.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/events/SoKeyboardEvent.h>
@@ -85,7 +85,7 @@ main(int , char **argv)
     printf("Up and Down arrows       - scale selected objects\n");
 
     // Initialize Inventor and Xt
-    wxWindow* myWindow = SoWx::init(argv[0]);
+    wxWindow* myWindow = SoFl::init(argv[0]);
     if (myWindow == NULL) exit(1);
 
     // Create and set up the selection node
@@ -158,7 +158,7 @@ main(int , char **argv)
     selectionRoot->addChild(cylRoot);
 
     // Create a render area for viewing the scene
-    SoWxRenderArea *myRenderArea = new SoWxRenderArea(myWindow);
+    SoFlRenderArea *myRenderArea = new SoFlRenderArea(myWindow);
     myRenderArea->setSceneGraph(selectionRoot);
     myRenderArea->setGLRenderAction(new SoBoxHighlightRenderAction());
     myRenderArea->redrawOnSelectionChange(selectionRoot);
@@ -170,8 +170,8 @@ main(int , char **argv)
 
     // Show our application window, and loop forever...
     myRenderArea->show();
-    SoWx::show(myWindow);
-    SoWx::mainLoop();
+    SoFl::show(myWindow);
+    SoFl::mainLoop();
 
     // FIXME: deallocate resources. 20000412 mortene.
 

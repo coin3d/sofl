@@ -18,13 +18,13 @@
  * USA
  */
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 
 #include "common/get_scene_graph.h"
 
@@ -36,7 +36,7 @@ public:
         if ( !wxApp::OnInit() )
             return false;
 
-        wxWindow* window = SoWx::init("renderarea");
+        wxWindow* window = SoFl::init("renderarea");
 
         SoSeparator * root = new SoSeparator;
         root->ref();
@@ -46,15 +46,15 @@ public:
         SoSeparator * userroot = get_scene_graph();
         root->addChild(userroot);
 
-        SoWxRenderArea * renderarea =
-                new SoWxRenderArea(window, "Renderarea demonstration");
+        SoFlRenderArea * renderarea =
+                new SoFlRenderArea(window, "Renderarea demonstration");
         camera->viewAll( userroot, renderarea->getViewportRegion() );
         renderarea->setSceneGraph(root);
         renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
         renderarea->show();
 
-        SoWx::show(window);
-        // SoWx::mainLoop();
+        SoFl::show(window);
+        // SoFl::mainLoop();
         return true;
     }
 };

@@ -31,24 +31,24 @@
 \**************************************************************************/
 
 /*
-  Demonstrates embedding of an SoWxExaminerViewer within a simple
+  Demonstrates embedding of an SoFlExaminerViewer within a simple
   widget hierarchy.
 */
 
 /***********************************************************************/
 
-#include "Inventor/Wx/SoWx.h"
-#include "Inventor/Wx/viewers/SoWxExaminerViewer.h"
+#include "Inventor/Fl/SoFl.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include <wx/panel.h>
-#include <wx/gdicmn.h>
-#include <wx/colour.h>
-#include <wx/string.h>
-#include <wx/splitter.h>
-#include <wx/sizer.h>
-#include <wx/frame.h>
+#include <fl/panel.h>
+#include <fl/gdicmn.h>
+#include <fl/colour.h>
+#include <fl/string.h>
+#include <fl/splitter.h>
+#include <fl/sizer.h>
+#include <fl/frame.h>
 
 class SplitFrame : public wxFrame
 {
@@ -91,7 +91,7 @@ public:
 
         // Add the examinerviewer.
 
-        SoWxExaminerViewer * examinerviewer = new SoWxExaminerViewer(panel2);
+        SoFlExaminerViewer * examinerviewer = new SoFlExaminerViewer(panel2);
         examinerviewer->setSceneGraph(root);
         examinerviewer->show();
 
@@ -125,8 +125,8 @@ public:
 int
 main(int argc, char ** argv)
 {
-    // Initialize SoWx.
-    SoWx::init((wxWindow *)NULL);
+    // Initialize SoFl.
+    SoFl::init((wxWindow *)NULL);
 
     // Set up scrollview window.
     SplitFrame * vp = new SplitFrame(0);
@@ -135,9 +135,9 @@ main(int argc, char ** argv)
     vp->Show();
 
     // start event loop.
-    SoWx::mainLoop();
+    SoFl::mainLoop();
 
     // remove all resources
-    SoWx::done();
+    SoFl::done();
     return 0;
 }

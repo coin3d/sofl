@@ -32,10 +32,10 @@
 
 #define BOOST_TEST_NO_LIB 1
 #include <boost/test/unit_test.hpp>
-#include "Inventor/Wx/SoWx.h"
-#include <wx/version.h>
+#include "Inventor/Fl/SoFl.h"
+#include <fl/version.h>
 
-BOOST_AUTO_TEST_SUITE(TestSoWx);
+BOOST_AUTO_TEST_SUITE(TestSoFl);
 
 std::string 
 buildVersion(int major, 
@@ -48,17 +48,17 @@ buildVersion(int major,
 
 BOOST_AUTO_TEST_CASE(shouldVerifyVersion) {
     int major,minor,release;
-    SoWx::getVersionInfo(&major,&minor,&release);
+    SoFl::getVersionInfo(&major,&minor,&release);
     BOOST_CHECK_EQUAL(major, 0);
     BOOST_CHECK_EQUAL(minor, 1);
     BOOST_CHECK_EQUAL(release, 1);
 
     std::string oracle = buildVersion(major,minor,release);
-    std::string s1 = SoWx::getVersionString();
+    std::string s1 = SoFl::getVersionString();
     BOOST_CHECK_EQUAL(s1, oracle);
 
     oracle = buildVersion(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER);
-    s1 = SoWx::getVersionToolkitString();
+    s1 = SoFl::getVersionToolkitString();
     BOOST_CHECK_EQUAL(s1, oracle);
 }
 

@@ -14,7 +14,7 @@ add_subdirectory(devices)
 add_subdirectory(widgets)
 
 set(TEST_NAME test_soww)
-add_executable(${TEST_NAME} TestSuiteMain.cpp TestSoWx.cpp)
-target_link_libraries(${TEST_NAME}  SoWx )
+add_executable(${TEST_NAME} TestSuiteMain.cpp TestSoFl.cpp)
+target_link_libraries(${TEST_NAME}  SoFl )
 
 add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})

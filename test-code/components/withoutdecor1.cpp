@@ -30,28 +30,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/nodes/SoCone.h>
 
 // This makes sure that building a widget with BUILD_NONE, and then
 // calling setDecoration( TRUE ) works.
 int main(int argc, char ** argv)
 {
-  wxWindow * window = SoWx::init(argc, argv, argv[0]);
+  wxWindow * window = SoFl::init(argc, argv, argv[0]);
 
-  SoWxExaminerViewer * viewer = new SoWxExaminerViewer
+  SoFlExaminerViewer * viewer = new SoFlExaminerViewer
     (window, "Examiner Viewer" ,TRUE,
-     SoWxFullViewer::BUILD_NONE);
+     SoFlFullViewer::BUILD_NONE);
 
   viewer->setSceneGraph(new SoCone);
   viewer->setDecoration( TRUE );
   viewer->show();
-  SoWx::show(window);
+  SoFl::show(window);
 
   window->SetSize(500, 500);
 
-  SoWx::mainLoop();
+  SoFl::mainLoop();
 
   delete viewer;
   return 0;

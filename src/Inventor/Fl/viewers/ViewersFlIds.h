@@ -37,7 +37,7 @@
 #error this is a private header file
 #endif
 
-#include "wx/windowid.h"
+#include "fl/windowid.h"
 
 extern const wxWindowID FULL_VIEWER_P;
 

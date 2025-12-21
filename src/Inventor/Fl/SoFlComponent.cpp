@@ -30,40 +30,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxComponent.h"
-#include "Inventor/Wx/SoWxComponentP.h"
-#include "Inventor/Wx/SoAny.h"
-#include "Inventor/Wx/SoWxGLWidget.h"
-#include "Inventor/Wx/SoWxRenderArea.h"
-#include "Inventor/Wx/SoWxCursor.h"
+#include "Inventor/Fl/SoFlComponent.h"
+#include "Inventor/Fl/SoFlComponentP.h"
+#include "Inventor/Fl/SoAny.h"
+#include "Inventor/Fl/SoFlGLWidget.h"
+#include "Inventor/Fl/SoFlRenderArea.h"
+#include "Inventor/Fl/SoFlCursor.h"
 
-#include "Inventor/Wx/viewers/SoWxViewer.h"
-#include "Inventor/Wx/viewers/SoWxFullViewer.h"
-#include "Inventor/Wx/viewers/SoWxExaminerViewer.h"
-#include "Inventor/Wx/viewers/SoWxPlaneViewer.h"
-#include "Inventor/Wx/viewers/SoWxConstrainedViewer.h"
-#include "Inventor/Wx/viewers/SoWxFlyViewer.h"
+#include "Inventor/Fl/viewers/SoFlViewer.h"
+#include "Inventor/Fl/viewers/SoFlFullViewer.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
+#include "Inventor/Fl/viewers/SoFlPlaneViewer.h"
+#include "Inventor/Fl/viewers/SoFlConstrainedViewer.h"
+#include "Inventor/Fl/viewers/SoFlFlyViewer.h"
 
-#include "Inventor/Wx/SoWxInternal.h"
+#include "Inventor/Fl/SoFlInternal.h"
 
 #include "sowxdefs.h"
-#include "SoWxP.h"
+#include "SoFlP.h"
 
 #define SOWXCOMP_RESIZE_DEBUG 1
 
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SOWX_OBJECT_ABSTRACT_SOURCE(SoWxComponent);
+SOWX_OBJECT_ABSTRACT_SOURCE(SoFlComponent);
 
-SoWxComponent::~SoWxComponent(){
+SoFlComponent::~SoFlComponent(){
 
 }
 
-SoWxComponent::SoWxComponent(wxWindow* const parent,
+SoFlComponent::SoFlComponent(wxWindow* const parent,
                              const char * const name,
                              const SbBool embed) {
-    PRIVATE(this) = new SoWxComponentP(this);
+    PRIVATE(this) = new SoFlComponentP(this);
 
     PRIVATE(this)->realized = false;
     PRIVATE(this)->shelled = false;
@@ -74,11 +74,11 @@ SoWxComponent::SoWxComponent(wxWindow* const parent,
     PRIVATE(this)->visibilitychangeCBs = NULL;
     PRIVATE(this)->fullscreen = false;
 
-    this->setClassName("SoWxComponent");
+    this->setClassName("SoFlComponent");
 
     PRIVATE(this)->storesize.setValue(-1, -1);
 
-    SoAny::si()->addInternalFatalErrorHandler(SoWxComponentP::fatalerrorHandler,
+    SoAny::si()->addInternalFatalErrorHandler(SoFlComponentP::fatalerrorHandler,
                                               PRIVATE(this));
 
     PRIVATE(this)->widgetname = (name ? name :
@@ -97,33 +97,33 @@ SoWxComponent::SoWxComponent(wxWindow* const parent,
     // TODO: PRIVATE(this)->parent->installEventFilter(PRIVATE(this));
 }
 
-void  SoWxComponent::initClasses(void) {
-    SoWxComponent::initClass();
-    SoWxGLWidget::initClass();
-    SoWxRenderArea::initClass();
-    SoWxViewer::initClass();
-    SoWxExaminerViewer::initClass();
-    SoWxPlaneViewer::initClass();
-    SoWxConstrainedViewer::initClass();
-    SoWxFullViewer::initClass();
-    SoWxFlyViewer::initClass();
+void  SoFlComponent::initClasses(void) {
+    SoFlComponent::initClass();
+    SoFlGLWidget::initClass();
+    SoFlRenderArea::initClass();
+    SoFlViewer::initClass();
+    SoFlExaminerViewer::initClass();
+    SoFlPlaneViewer::initClass();
+    SoFlConstrainedViewer::initClass();
+    SoFlFullViewer::initClass();
+    SoFlFlyViewer::initClass();
 }
 
 void
-SoWxComponent::afterRealizeHook(void) {
+SoFlComponent::afterRealizeHook(void) {
     SOWX_STUB();
 }
 
 void
-SoWxComponent::setClassName(const char * const name) {
+SoFlComponent::setClassName(const char * const name) {
     PRIVATE(this)->classname = name;
 }
 
 void
-SoWxComponent::setBaseWidget(wxWindow* w) {
+SoFlComponent::setBaseWidget(wxWindow* w) {
 
 #ifdef SOWX_DEBUG
-    SoDebugError::postInfo("SoWx::setBaseWidget",
+    SoDebugError::postInfo("SoFl::setBaseWidget",
                            "%s",
                            dumpWindowData(w).c_str());
 #endif
@@ -150,7 +150,7 @@ SoWxComponent::setBaseWidget(wxWindow* w) {
     this->registerWidget(PRIVATE(this)->widget);
 
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxComponent::setBaseWidget",
+    SoDebugError::postInfo("SoFlComponent::setBaseWidget",
                            "widget: %p, parent: %p", w, PRIVATE(this)->parent);
 #endif
 
@@ -160,21 +160,21 @@ SoWxComponent::setBaseWidget(wxWindow* w) {
             this->setTitle(this->getDefaultTitle());
         }
 
-        SoWx::getShellWidget(this->getWidget())->SetName(iconText);
+        SoFl::getShellWidget(this->getWidget())->SetName(iconText);
     }
     PRIVATE(this)->widget->SetName(widgetName);
 }
 
 void
-SoWxComponent::show(void) {
+SoFlComponent::show(void) {
     if(SOWX_DEBUG && !PRIVATE(this)->widget) { // debug
-        SoDebugError::postWarning("SoWxComponent::show",
+        SoDebugError::postWarning("SoFlComponent::show",
                                   "Called while no wxWindow has been set.");
         return;
     }
 
     if (SOWXCOMP_RESIZE_DEBUG) {  // debug
-        SoDebugError::postInfo("SoWxComponent::show-1",
+        SoDebugError::postInfo("SoFlComponent::show-1",
                                "resizing %p: (%d, %d)",
                                PRIVATE(this)->widget,
                                PRIVATE(this)->storesize[0],
@@ -186,7 +186,7 @@ SoWxComponent::show(void) {
                                          PRIVATE(this)->storesize[1]);
 
     if (SOWXCOMP_RESIZE_DEBUG) {  // debug
-        SoDebugError::postInfo("SoWxComponent::show-2",
+        SoDebugError::postInfo("SoFlComponent::show-2",
                                "resized %p: (%d, %d)",
                                PRIVATE(this)->widget,
                                PRIVATE(this)->widget->GetSize().GetX(),
@@ -195,7 +195,7 @@ SoWxComponent::show(void) {
 
     if(! PRIVATE(this)->embedded && PRIVATE(this)->shelled) {
 #if SOWX_DEBUG
-        SoDebugError::postInfo("SoWxComponent::show",
+        SoDebugError::postInfo("SoFlComponent::show",
                                "perform show if is not embedded and is shelled");
         PRIVATE(this)->parent->Show();
 #endif
@@ -206,19 +206,19 @@ SoWxComponent::show(void) {
 }
 
 void
-SoWxComponent::hide(void) {
+SoFlComponent::hide(void) {
     SOWX_STUB();
     PRIVATE(this)->widget->Hide();
 }
 
 void
-SoWxComponent::setComponentCursor(const SoWxCursor & cursor) {
+SoFlComponent::setComponentCursor(const SoFlCursor & cursor) {
     SOWX_STUB();
-    SoWxComponent::setWidgetCursor(this->getWidget(), cursor);
+    SoFlComponent::setWidgetCursor(this->getWidget(), cursor);
 }
 
 void
-SoWxComponent::setWidgetCursor(wxWindow* w, const SoWxCursor & cursor) {
+SoFlComponent::setWidgetCursor(wxWindow* w, const SoFlCursor & cursor) {
 
     if(!w) {
         return;
@@ -228,25 +228,25 @@ SoWxComponent::setWidgetCursor(wxWindow* w, const SoWxCursor & cursor) {
     // the previous cursor before doing anything, to avoid spending
     // unnecessary clockcycles during animation. 20011203 mortene.
 
-    if (cursor.getShape() == SoWxCursor::CUSTOM_BITMAP) {
-        const SoWxCursor::CustomCursor * cc = &cursor.getCustomCursor();
-        w->SetCursor(*SoWxComponentP::getNativeCursor(cc));
+    if (cursor.getShape() == SoFlCursor::CUSTOM_BITMAP) {
+        const SoFlCursor::CustomCursor * cc = &cursor.getCustomCursor();
+        w->SetCursor(*SoFlComponentP::getNativeCursor(cc));
     }
     else {
         switch (cursor.getShape()) {
-            case SoWxCursor::DEFAULT:
+            case SoFlCursor::DEFAULT:
                 w->SetCursor(*wxSTANDARD_CURSOR);
                 break;
 
-            case SoWxCursor::BUSY:
+            case SoFlCursor::BUSY:
                 w->SetCursor(*wxHOURGLASS_CURSOR);
                 break;
 
-            case SoWxCursor::CROSSHAIR:
+            case SoFlCursor::CROSSHAIR:
                 w->SetCursor(*wxCROSS_CURSOR);
                 break;
 
-            case SoWxCursor::UPARROW:
+            case SoFlCursor::UPARROW:
                 w->SetCursor(*wxCROSS_CURSOR);
                 break;
 
@@ -258,12 +258,12 @@ SoWxComponent::setWidgetCursor(wxWindow* w, const SoWxCursor & cursor) {
 }
 
 SbBool
-SoWxComponent::isFullScreen(void) const {
+SoFlComponent::isFullScreen(void) const {
     return (PRIVATE(this)->fullscreen);
 }
 
 SbBool
-SoWxComponent::setFullScreen(const SbBool onoff) {
+SoFlComponent::setFullScreen(const SbBool onoff) {
     wxWindow * w = this->getShellWidget();
     if (w == NULL) w = this->getParentWidget();
     if (w == NULL) w = this->getWidget();
@@ -281,7 +281,7 @@ SoWxComponent::setFullScreen(const SbBool onoff) {
 }
 
 SbBool
-SoWxComponent::isVisible(void) {
+SoFlComponent::isVisible(void) {
     bool ret = false;
     if( PRIVATE(this)->widget ) {
         ret = PRIVATE(this)->widget->IsShownOnScreen();
@@ -290,10 +290,10 @@ SoWxComponent::isVisible(void) {
 }
 
 SbBool
-SoWxComponent::isTopLevelShell(void) const {
+SoFlComponent::isTopLevelShell(void) const {
 #if SOWX_DEBUG
     if (! PRIVATE(this)->widget) {
-        SoDebugError::postWarning("SoWxComponent::isTopLevelShell",
+        SoDebugError::postWarning("SoFlComponent::isTopLevelShell",
                                   "Called while no wxWindow has been set.");
         return false;
     }
@@ -302,44 +302,44 @@ SoWxComponent::isTopLevelShell(void) const {
 }
 
 wxWindow*
-SoWxComponent::getWidget(void) const {
+SoFlComponent::getWidget(void) const {
     return this->getBaseWidget();
 }
 
 wxWindow*
-SoWxComponent::getBaseWidget(void) const {
+SoFlComponent::getBaseWidget(void) const {
     return PRIVATE(this)->widget;
 }
 
 wxWindow*
-SoWxComponent::getParentWidget(void) const {
+SoFlComponent::getParentWidget(void) const {
     return PRIVATE(this)->parent;
 }
 
 void
-SoWxComponent::setSize(const SbVec2s size) {
+SoFlComponent::setSize(const SbVec2s size) {
 
 #ifdef SOWX_DEBUG
-    SoDebugError::postInfo("SoWxComponent::setSize",
+    SoDebugError::postInfo("SoFlComponent::setSize",
                            " baseWidget %s",
                            dumpWindowData(this->getBaseWidget()).c_str());
-    SoDebugError::postInfo("SoWxComponent::setSize",
+    SoDebugError::postInfo("SoFlComponent::setSize",
                            " shellWidget %s",
                            dumpWindowData(this->getShellWidget()).c_str());
 #endif
 
 #if 0
     if ( PRIVATE(this)->embedded ) {
-        SoWx::setWidgetSize(this->getBaseWidget(), size);
+        SoFl::setWidgetSize(this->getBaseWidget(), size);
     }
     else {
-        SoWx::setWidgetSize(this->getShellWidget(), size);
+        SoFl::setWidgetSize(this->getShellWidget(), size);
     }
 #endif
 #if 1
 #if SOWX_DEBUG
     if((size[0] <= 0) || (size[1] <= 0)) {
-        SoDebugError::postWarning("SoWxComponent::setSize",
+        SoDebugError::postWarning("SoFlComponent::setSize",
                                   "Invalid size setting: <%d, %d>.",
                                   size[0], size[1]);
         return;
@@ -347,7 +347,7 @@ SoWxComponent::setSize(const SbVec2s size) {
 #endif // SOWX_DEBUG
 
 #if SOWXCOMP_RESIZE_DEBUG  // debug
-    SoDebugError::postInfo("SoWxComponent::setSize",
+    SoDebugError::postInfo("SoFlComponent::setSize",
                            "resize %p: (%d, %d)",
                            PRIVATE(this)->widget,
                            size[0], size[1]);
@@ -366,62 +366,62 @@ SoWxComponent::setSize(const SbVec2s size) {
 }
 
 SbVec2s
-SoWxComponent::getSize(void) const {
+SoFlComponent::getSize(void) const {
     return (PRIVATE(this)->storesize);
 }
 
 void
-SoWxComponent::setTitle(const char * const title) {
-    SoWx::getShellWidget(this->getWidget())->SetName(title);
+SoFlComponent::setTitle(const char * const title) {
+    SoFl::getShellWidget(this->getWidget())->SetName(title);
 }
 
 const char *
-SoWxComponent::getTitle(void) const {
-    return (SoWx::getShellWidget(this->getWidget())->GetName());
+SoFlComponent::getTitle(void) const {
+    return (SoFl::getShellWidget(this->getWidget())->GetName());
 }
 
 void
-SoWxComponent::setIconTitle(const char * const title) {
+SoFlComponent::setIconTitle(const char * const title) {
     SOWX_STUB();
 }
 
 const char *
-SoWxComponent::getIconTitle(void) const {
-    SOWX_STUB();
-    return ("");
-}
-
-const char *
-SoWxComponent::getWidgetName(void) const{
+SoFlComponent::getIconTitle(void) const {
     SOWX_STUB();
     return ("");
 }
 
 const char *
-SoWxComponent::getClassName(void) const {
+SoFlComponent::getWidgetName(void) const{
+    SOWX_STUB();
+    return ("");
+}
+
+const char *
+SoFlComponent::getClassName(void) const {
     SOWX_STUB();
     return ("");
 }
 
 void
-SoWxComponent::setWindowCloseCallback(SoWxComponentCB * const func,
+SoFlComponent::setWindowCloseCallback(SoFlComponentCB * const func,
                                       void * const user ) {
     SOWX_STUB();
 }
 
 void
-SoWxComponent::sizeChanged(const SbVec2s & size) {
+SoFlComponent::sizeChanged(const SbVec2s & size) {
     SOWX_STUB();
 }
 
 void
-SoWxComponent::addVisibilityChangeCallback(SoWxComponentVisibilityCB * const func,
+SoFlComponent::addVisibilityChangeCallback(SoFlComponentVisibilityCB * const func,
                                            void * const user) {
     SOWX_STUB();
 }
 
 void
-SoWxComponent::removeVisibilityChangeCallback(SoWxComponentVisibilityCB * const func,
+SoFlComponent::removeVisibilityChangeCallback(SoFlComponentVisibilityCB * const func,
                                               void * const user){
     SOWX_STUB();
 }

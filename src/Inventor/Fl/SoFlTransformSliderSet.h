@@ -34,7 +34,7 @@
 #define SOWX_SOWXTRANSFORMSLIDERSET_H
 
 
-class SoWxTransformSliderSet {
+class SoFlTransformSliderSet {
 
 };
 

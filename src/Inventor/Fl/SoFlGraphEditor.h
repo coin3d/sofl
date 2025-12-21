@@ -34,15 +34,15 @@
 #ifndef SOWX_GRAPHEDITOR_H
 #define SOWX_GRAPHEDITOR_H
 
-#include <Inventor/Wx/SoWxComponent.h>
+#include <Inventor/Fl/SoFlComponent.h>
 
 class SoNode;
 class SoField;
 
 // *************************************************************************
 
-class SOWX_DLL_API SoWxGraphEditor : public SoWxComponent {
-  SOWX_OBJECT_HEADER(SoWxGraphEditor, SoWxComponent);
+class SOWX_DLL_API SoFlGraphEditor : public SoFlComponent {
+  SOWX_OBJECT_HEADER(SoFlGraphEditor, SoFlComponent);
 
 public:
   enum BuildFlag {
@@ -52,17 +52,17 @@ public:
     EVERYTHING =    0x07
   };
 
-  SoWxGraphEditor(wxWindow * const parent = (wxWindow *) NULL,
+  SoFlGraphEditor(wxWindow * const parent = (wxWindow *) NULL,
                    const char * const name = (char *) NULL,
                    const SbBool embed = TRUE,
                    const int parts = EVERYTHING);
-  ~SoWxGraphEditor(void);
+  ~SoFlGraphEditor(void);
 
   virtual void setSceneGraph(SoNode * root);
   SoNode * getSceneGraph(void) const;
 
 protected:
-  SoWxGraphEditor(wxWindow * const parent, const char * const name,
+  SoFlGraphEditor(wxWindow * const parent, const char * const name,
                    const SbBool embed, const int parts, const SbBool build);
 
   wxWindow * buildWidget(wxWindow * parent);
@@ -108,7 +108,7 @@ private:
   WxAdjustment * vertical;
   WxAdjustment * horizontal;
 
-}; // class SoWxGraphEditor
+}; // class SoFlGraphEditor
 
 // *************************************************************************
 

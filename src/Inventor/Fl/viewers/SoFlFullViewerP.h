@@ -36,17 +36,17 @@
 #error this is a private header file
 #endif
 
-#include "Inventor/Wx/viewers/SoGuiFullViewerP.h"
-#include "Inventor/Wx/viewers/SoWxFullViewer.h"
-#include <wx/tglbtn.h>
+#include "Inventor/Fl/viewers/SoGuiFullViewerP.h"
+#include "Inventor/Fl/viewers/SoFlFullViewer.h"
+#include <fl/tglbtn.h>
 #include <string>
 #include <map>
 
-class SoWxFullViewerP : public SoGuiFullViewerP, public wxEvtHandler {
+class SoFlFullViewerP : public SoGuiFullViewerP, public wxEvtHandler {
 public:
 
-    explicit SoWxFullViewerP(SoWxFullViewer *pViewer);
-    ~SoWxFullViewerP();
+    explicit SoFlFullViewerP(SoFlFullViewer *pViewer);
+    ~SoFlFullViewerP();
 
     std::string popupmenutitle;
     wxWindow * viewerwidget;
@@ -62,8 +62,8 @@ public:
     SbPList * appbuttonlist;
     SbPList * viewerbuttons;
 
-    typedef void(SoWxFullViewer:: *VoidFuncNoPar)() ;
-    typedef void(SoWxFullViewer:: *VoidFuncOnePar)(float) ;
+    typedef void(SoFlFullViewer:: *VoidFuncNoPar)() ;
+    typedef void(SoFlFullViewer:: *VoidFuncOnePar)(float) ;
     struct WheelFunctions {
         WheelFunctions() {
 

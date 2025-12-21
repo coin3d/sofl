@@ -30,4 +30,4 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "SoWxClipboard.h"
+#include "SoFlClipboard.h"

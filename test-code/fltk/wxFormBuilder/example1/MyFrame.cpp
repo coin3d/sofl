@@ -32,7 +32,7 @@
 
 #include "MyFrame.h"
 #include <iostream>
-#include <wx/wx.h>
+#include <fl/fl.h>
 
 MyFrame::MyFrame()
 :AFrame(0) {

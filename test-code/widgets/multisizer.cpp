@@ -30,21 +30,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "wx/wx.h"
-#include "wx/button.h"
-#include "wx/gbsizer.h"
+#include "fl/fl.h"
+#include "fl/button.h"
+#include "fl/gbsizer.h"
 #define  SOWX_INTERNAL
-#include <Inventor/Wx/SoWx.h>
-#include "Inventor/Wx/SoWxP.h"
+#include <Inventor/Fl/SoFl.h>
+#include "Inventor/Fl/SoFlP.h"
 #define protected public
-#include <Inventor/Wx/viewers/SoWxFullViewer.h>
+#include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #undef protected
 
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 
 #include "common/SimpleFrame.h"
 
@@ -61,14 +61,14 @@ public:
                                               wxDefaultPosition,
                                               wxSize(400,400));
 
-        wxWindow* window = SoWx::init("renderarea");
+        wxWindow* window = SoFl::init("renderarea");
 
-        SoWxFullViewer * renderarea =
-                new SoWxFullViewer(window,
+        SoFlFullViewer * renderarea =
+                new SoFlFullViewer(window,
                                    "Renderarea demonstration",
                                    FALSE,
-                                   SoWxFullViewer::BUILD_ALL,
-                                   SoWxViewer::BROWSER,
+                                   SoFlFullViewer::BUILD_ALL,
+                                   SoFlViewer::BROWSER,
                                    FALSE);
         wxBoxSizer* vertical_sizer = new wxBoxSizer(wxVERTICAL);
 

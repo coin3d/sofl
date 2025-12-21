@@ -31,24 +31,24 @@
 \**************************************************************************/
 
 /*!
-  \class SoWxThumbWheel SoWxThumbWheel.h Inventor/Wx/widgets/SoWxThumbWheel.h
-  \brief The SoWxThumbWheel class is a UI component for fancy looking thumbwheel controls.
+  \class SoFlThumbWheel SoFlThumbWheel.h Inventor/Fl/widgets/SoFlThumbWheel.h
+  \brief The SoFlThumbWheel class is a UI component for fancy looking thumbwheel controls.
 
   \ingroup components
 */
 
 
-#include <Inventor/Wx/widgets/SoWxThumbWheel.h>
-#include <Inventor/Wx/widgets/SoAnyThumbWheel.h>
+#include <Inventor/Fl/widgets/SoFlThumbWheel.h>
+#include <Inventor/Fl/widgets/SoAnyThumbWheel.h>
 #include <Inventor/SbBasic.h>
 #include <Inventor/errors/SoDebugError.h>
 
 #include "WheelEvents.h"
 #include "sowxdefs.h"
-#include "Inventor/Wx/viewers/ViewersWxIds.h"
+#include "Inventor/Fl/viewers/ViewersWxIds.h"
 
-#include <wx/wx.h>
-#include <wx/mstream.h>
+#include <fl/fl.h>
+#include <fl/mstream.h>
 
 #include <cassert>
 #include <cstdio>
@@ -57,39 +57,39 @@
 #include <algorithm>
 #include <stdint.h>
 
-wxBEGIN_EVENT_TABLE(SoWxThumbWheel, wxPanel)
-                EVT_MOTION(SoWxThumbWheel::mouseMoveEvent)
-                EVT_LEFT_DOWN(SoWxThumbWheel::mousePressEvent)
-                EVT_LEFT_UP(SoWxThumbWheel::mouseReleaseEvent)
-                EVT_MOUSEWHEEL(SoWxThumbWheel::mouseWheel)
-                EVT_PAINT(SoWxThumbWheel::paintEvent)
+wxBEGIN_EVENT_TABLE(SoFlThumbWheel, wxPanel)
+                EVT_MOTION(SoFlThumbWheel::mouseMoveEvent)
+                EVT_LEFT_DOWN(SoFlThumbWheel::mousePressEvent)
+                EVT_LEFT_UP(SoFlThumbWheel::mouseReleaseEvent)
+                EVT_MOUSEWHEEL(SoFlThumbWheel::mouseWheel)
+                EVT_PAINT(SoFlThumbWheel::paintEvent)
 wxEND_EVENT_TABLE()
 
 static const int SHADEBORDERWIDTH = 0;
 
-SoWxThumbWheel::SoWxThumbWheel(wxWindow * parent,
+SoFlThumbWheel::SoFlThumbWheel(wxWindow * parent,
                                const char * name)
         : wxPanel(parent,
                   wxID_ANY) {
-    this->constructor(SoWxThumbWheel::Vertical);
+    this->constructor(SoFlThumbWheel::Vertical);
 }
 
-SoWxThumbWheel::SoWxThumbWheel(Orientation orientation,
+SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
                                wxWindow * parent,
                                const char * name)
         : wxPanel(parent,
                   wxID_ANY) {
     if(!name)
-        this->SetName("SoWxThumbWheel");
+        this->SetName("SoFlThumbWheel");
     else
         this->SetName(name);
     this->constructor(orientation);
 }
 
 void
-SoWxThumbWheel::constructor(Orientation orientation) {
+SoFlThumbWheel::constructor(Orientation orientation) {
     this->orient = orientation;
-    this->state = SoWxThumbWheel::Idle;
+    this->state = SoFlThumbWheel::Idle;
     this->wheelValue = this->tempWheelValue = 0.0f;
     this->wheel = new SoAnyThumbWheel;
     this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
@@ -102,7 +102,7 @@ SoWxThumbWheel::constructor(Orientation orientation) {
     SetMaxSize(s);
 }
 
-SoWxThumbWheel::~SoWxThumbWheel() {
+SoFlThumbWheel::~SoFlThumbWheel() {
     delete this->wheel;
     if (this->pixmaps) {
         for (int i = 0; i < this->numPixmaps; i++)
@@ -112,18 +112,18 @@ SoWxThumbWheel::~SoWxThumbWheel() {
 }
 
 void
-SoWxThumbWheel::setOrientation(Orientation orientation) {
+SoFlThumbWheel::setOrientation(Orientation orientation) {
     this->orient = orientation;
     Refresh();
 }
 
 void
-SoWxThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
+SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
     wxPaintDC dc(this);
 
     int w, dval;
     wxSize size= this->GetSize();
-    if (this->orient == SoWxThumbWheel::Vertical) {
+    if (this->orient == SoFlThumbWheel::Vertical) {
         w = size.GetX() - 12;
         dval = size.GetY() - 6;
     } else {
@@ -132,7 +132,7 @@ SoWxThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
     }
 
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::paintEvent",
+    SoDebugError::postInfo("SoFlThumbWheel::paintEvent",
                               "dval: %d and w: %d",
                               dval, w);
 #endif
@@ -143,10 +143,10 @@ SoWxThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
     this->initWheel(dval, w);
 
     int pixmap = this->wheel->getBitmapForValue(this->tempWheelValue,
-                                                (this->state == SoWxThumbWheel::Disabled) ?
+                                                (this->state == SoFlThumbWheel::Disabled) ?
                                                 SoAnyThumbWheel::DISABLED : SoAnyThumbWheel::ENABLED);
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::paintEvent",
+    SoDebugError::postInfo("SoFlThumbWheel::paintEvent",
                               "pixmap value is: %d and bitmap pointer is %p",
                               pixmap, this->pixmaps);
 #endif
@@ -198,12 +198,12 @@ SoWxThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
 */
 
 void
-SoWxThumbWheel::mousePressEvent(wxMouseEvent&  event) {
-    if (this->state != SoWxThumbWheel::Idle)
+SoFlThumbWheel::mousePressEvent(wxMouseEvent&  event) {
+    if (this->state != SoFlThumbWheel::Idle)
         return;
-    this->state = SoWxThumbWheel::Dragging;
+    this->state = SoFlThumbWheel::Dragging;
 
-    if (this->orient == SoWxThumbWheel::Vertical)
+    if (this->orient == SoFlThumbWheel::Vertical)
         this->mouseDownPos = event.GetY() - SHADEBORDERWIDTH - 6;
     else
         this->mouseDownPos = event.GetX() - SHADEBORDERWIDTH - 6;
@@ -211,7 +211,7 @@ SoWxThumbWheel::mousePressEvent(wxMouseEvent&  event) {
     this->mouseLastPos = this->mouseDownPos;
 
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::mouseMoveEvent","");
+    SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent","");
 #endif
 
     sendEvent(SO_WX_MOUSE_WHEEL_PRESSED, "mousePressEvent");
@@ -221,19 +221,19 @@ SoWxThumbWheel::mousePressEvent(wxMouseEvent&  event) {
   \internal
 */
 void
-SoWxThumbWheel::mouseMoveEvent(wxMouseEvent& event) {
+SoFlThumbWheel::mouseMoveEvent(wxMouseEvent& event) {
 
-    if (this->state != SoWxThumbWheel::Dragging)
+    if (this->state != SoFlThumbWheel::Dragging)
         return;
 
-    if (this->orient == SoWxThumbWheel::Vertical)
+    if (this->orient == SoFlThumbWheel::Vertical)
         this->mouseLastPos = event.GetY() - SHADEBORDERWIDTH - 6;
     else
         this->mouseLastPos = event.GetX() - SHADEBORDERWIDTH - 6;
 
     int delta = this->mouseLastPos - this->mouseDownPos;
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::mouseMoveEvent",
+    SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent",
                            "delta: %d wheelValue: %d mouseDownPos: %d",
                            delta,
                            this->wheelValue,
@@ -252,24 +252,24 @@ SoWxThumbWheel::mouseMoveEvent(wxMouseEvent& event) {
   \internal
 */
 void
-SoWxThumbWheel::mouseReleaseEvent(wxMouseEvent& WXUNUSED(event)) {
-    if (this->state != SoWxThumbWheel::Dragging)
+SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent& WXUNUSED(event)) {
+    if (this->state != SoFlThumbWheel::Dragging)
         return;
 
     this->wheelValue = this->tempWheelValue;
     this->mouseLastPos = this->mouseDownPos;
-    this->state = SoWxThumbWheel::Idle;
+    this->state = SoFlThumbWheel::Idle;
     sendEvent(SO_WX_MOUSE_WHEEL_RELEASED, "mouseReleaseEvent");
 }
 
 void
-SoWxThumbWheel::mouseWheel(wxMouseEvent &WXUNUSED(event)) {
+SoFlThumbWheel::mouseWheel(wxMouseEvent &WXUNUSED(event)) {
     SOWX_STUB();
     return;
 #if 0
     int delta = /*event.GetWheelDelta() * */(float)(event.GetWheelRotation()) / 120.0;
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::mouseWheel",
+    SoDebugError::postInfo("SoFlThumbWheel::mouseWheel",
                            "delta: %d wheelValue: %d mouseDownPos: %d",
                            delta,
                            this->wheelValue,
@@ -287,7 +287,7 @@ SoWxThumbWheel::mouseWheel(wxMouseEvent &WXUNUSED(event)) {
 
 /*
 float
-SoWxThumbWheel::getNormalizedValue(int pos) const
+SoFlThumbWheel::getNormalizedValue(int pos) const
 {
   int relativepos = pos - this->mouseDownPos;
   return (float) relativepos / (float)this->getWheelLength() * 2.0f;
@@ -296,39 +296,39 @@ SoWxThumbWheel::getNormalizedValue(int pos) const
 
 /*
 int
-SoWxThumbWheel::getWheelLength() const
+SoFlThumbWheel::getWheelLength() const
 {
-  return this->orient == SoWxThumbWheel::Vertical ?
+  return this->orient == SoFlThumbWheel::Vertical ?
     this->GetSize().GetY() : this->GetSize().GetX();
 }
 */
 
 /*
 int
-SoWxThumbWheel::orientedCoord(const QPoint &p) const
+SoFlThumbWheel::orientedCoord(const QPoint &p) const
 {
-  return (this->orient == SoWxThumbWheel::Horizontal) ?  p.x() : p.y();
+  return (this->orient == SoFlThumbWheel::Horizontal) ?  p.x() : p.y();
 }
 */
 
 wxSize
-SoWxThumbWheel::sizeHint() const {
+SoFlThumbWheel::sizeHint() const {
     const int length = 122;
     int thick = 24;
 
-    if (this->orient == SoWxThumbWheel::Horizontal)
+    if (this->orient == SoFlThumbWheel::Horizontal)
         return wxSize(length, thick);
     else
         return wxSize(thick, length);
 }
 
-SoWxThumbWheel::Orientation
-SoWxThumbWheel::orientation() const {
+SoFlThumbWheel::Orientation
+SoFlThumbWheel::orientation() const {
     return this->orient;
 }
 
 float
-SoWxThumbWheel::value() const {
+SoFlThumbWheel::value() const {
     return this->wheelValue;
 }
 
@@ -357,7 +357,7 @@ toRGBChannel(const std::vector<unsigned int>& img) {
 }
 
 void
-SoWxThumbWheel::initWheel(int diameter, int width) {
+SoFlThumbWheel::initWheel(int diameter, int width) {
     int dval, w;
     this->wheel->getSize(dval, w);
     if (dval == diameter && w == width) return;
@@ -393,28 +393,28 @@ SoWxThumbWheel::initWheel(int diameter, int width) {
 }
 
 void
-SoWxThumbWheel::setEnabled(bool enable) {
+SoFlThumbWheel::setEnabled(bool enable) {
     if (enable)
-        this->state = SoWxThumbWheel::Idle;
+        this->state = SoFlThumbWheel::Idle;
     else
-        this->state = SoWxThumbWheel::Disabled;
+        this->state = SoFlThumbWheel::Disabled;
     Refresh();
 }
 
 bool
-SoWxThumbWheel::isEnabled() const {
-    return (this->state != SoWxThumbWheel::Disabled);
+SoFlThumbWheel::isEnabled() const {
+    return (this->state != SoFlThumbWheel::Disabled);
 }
 
 void
-SoWxThumbWheel::setValue(float value) {
+SoFlThumbWheel::setValue(float value) {
     this->wheelValue = this->tempWheelValue = value;
     this->mouseDownPos = this->mouseLastPos;
     Refresh();
 }
 
 void
-SoWxThumbWheel::setRangeBoundaryHandling(boundaryHandling handling) {
+SoFlThumbWheel::setRangeBoundaryHandling(boundaryHandling handling) {
     switch (handling) {
         case CLAMP:
             this->wheel->setBoundaryHandling(SoAnyThumbWheel::CLAMP);
@@ -430,8 +430,8 @@ SoWxThumbWheel::setRangeBoundaryHandling(boundaryHandling handling) {
     }
 }
 
-SoWxThumbWheel::boundaryHandling
-SoWxThumbWheel::getRangeBoundaryHandling() const {
+SoFlThumbWheel::boundaryHandling
+SoFlThumbWheel::getRangeBoundaryHandling() const {
     switch (this->wheel->getBoundaryHandling()) {
         case SoAnyThumbWheel::CLAMP:
             return CLAMP;
@@ -446,10 +446,10 @@ SoWxThumbWheel::getRangeBoundaryHandling() const {
 }
 
 void
-SoWxThumbWheel::sendEvent(long id,
+SoFlThumbWheel::sendEvent(long id,
                           const std::string& event_id) {
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxThumbWheel::sendEvent",
+    SoDebugError::postInfo("SoFlThumbWheel::sendEvent",
                            "id: %d event: %s tempWheelValue: %d",
                            id,
                            event_id.c_str(),

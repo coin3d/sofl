@@ -30,10 +30,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxGLWidgetP.h"
-#include "Inventor/Wx/SoWxGLWidget.h"
-#include "Inventor/Wx/widgets/SoWxGLArea.h"
-#include "Inventor/Wx/SoAny.h"
+#include "Inventor/Fl/SoFlGLWidgetP.h"
+#include "Inventor/Fl/SoFlGLWidget.h"
+#include "Inventor/Fl/widgets/SoFlGLArea.h"
+#include "Inventor/Fl/SoAny.h"
 
 #include <Inventor/SbTime.h>
 
@@ -42,17 +42,17 @@
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SoWxGLWidgetP::SoWxGLWidgetP(SoWxGLWidget * o)
+SoFlGLWidgetP::SoFlGLWidgetP(SoFlGLWidget * o)
         : SoGuiGLWidgetP(o) {
     this->borderthickness = 0;
     this->oldcontext = NULL;
 }
 
-SoWxGLWidgetP::~SoWxGLWidgetP() {
+SoFlGLWidgetP::~SoFlGLWidgetP() {
 }
 
 void
-SoWxGLWidgetP::gl_init(wxCommandEvent& )
+SoFlGLWidgetP::gl_init(wxCommandEvent& )
 {
 #if SOWX_DEBUG
     SoDebugError::postInfo("gl_init", "invoked");
@@ -62,9 +62,9 @@ SoWxGLWidgetP::gl_init(wxCommandEvent& )
 }
 
 void
-SoWxGLWidgetP::gl_reshape(wxSizeEvent& event) {
+SoFlGLWidgetP::gl_reshape(wxSizeEvent& event) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxGLWidgetP::gl_reshape",
+    SoDebugError::postInfo("SoFlGLWidgetP::gl_reshape",
                            "<%d, %d>",
                            event.GetSize().GetWidth(),
                            event.GetSize().GetHeight());
@@ -76,21 +76,21 @@ SoWxGLWidgetP::gl_reshape(wxSizeEvent& event) {
 }
 
 void
-SoWxGLWidgetP::gl_exposed(wxCommandEvent&) {
+SoFlGLWidgetP::gl_exposed(wxCommandEvent&) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxGLWidgetP::gl_exposed", "%f", SbTime::getTimeOfDay().getValue());
+    SoDebugError::postInfo("SoFlGLWidgetP::gl_exposed", "%f", SbTime::getTimeOfDay().getValue());
 #endif
 
     if (PUBLIC(this)->waitForExpose) {
 #if SOWX_DEBUG
-        SoDebugError::postInfo("SoWxGLWidgetP::gl_exposed", "waitForExpose");
+        SoDebugError::postInfo("SoFlGLWidgetP::gl_exposed", "waitForExpose");
 #endif
         PUBLIC(this)->waitForExpose = false; // Gets flipped from TRUE on first expose.
         PUBLIC(this)->setSize(PUBLIC(this)->getSize());
     }
     if (this->wasresized) {
 #if SOWX_DEBUG
-        SoDebugError::postInfo("SoWxGLWidgetP::gl_exposed", "wasresized");
+        SoDebugError::postInfo("SoFlGLWidgetP::gl_exposed", "wasresized");
 #endif
         PUBLIC(this)->sizeChanged(this->glSize);
         this->wasresized = false;
@@ -165,12 +165,12 @@ static const char eventnaming[][50] = {
 //  2) robustness; killing off the previous widget in the build-method
 //  below has nasty sideeffects (like "random" coredumps), since the
 //  event loop might be using it
-SoWxGLArea*
-SoWxGLWidgetP::buildGLWidget(void) {
+SoFlGLArea*
+SoFlGLWidgetP::buildGLWidget(void) {
 
     try {
 #if SOWX_DEBUG
-        SoDebugError::postInfo("SoWxGLWidgetP::buildGLWidget",
+        SoDebugError::postInfo("SoFlGLWidgetP::buildGLWidget",
                 "%s, %s, %s, %s, %s",
                                PUBLIC(this)->isDoubleBuffer() ? "double" : "single",
                                this->hasZBuffer() ? "z-buffer" : "no z-buffer",
@@ -181,8 +181,8 @@ SoWxGLWidgetP::buildGLWidget(void) {
 
         wxWindow *wascurrent = this->currentglwidget;
         wxWindow *wasprevious = this->previousglwidget;
-        SoWxGLArea *wascurrentarea = this->currentglarea;
-        SoWxGLArea *waspreviousarea = this->previousglarea;
+        SoFlGLArea *wascurrentarea = this->currentglarea;
+        SoFlGLArea *waspreviousarea = this->previousglarea;
 
         void *display = NULL;
         void *screen = NULL;
@@ -209,25 +209,25 @@ SoWxGLWidgetP::buildGLWidget(void) {
             this->currentglarea = waspreviousarea;
             SoAny::si()->registerGLContext((void *) PUBLIC(this), display, screen);
 #if SOWX_DEBUG
-                SoDebugError::postInfo("SoWxGLWidgetP::buildGLWidget",
+                SoDebugError::postInfo("SoFlGLWidgetP::buildGLWidget",
                                        "reused previously used GL widget");
 #endif
         } else {
             if (this->currentglwidget)
                 SoAny::si()->unregisterGLContext((void *) PUBLIC(this));
 
-            this->currentglarea = new SoWxGLArea(
+            this->currentglarea = new SoFlGLArea(
                     glparent,
                     gl_attributes);
 
             // a wxPanel need a sizer, look at: https://forums.wxwidgets.org/viewtopic.php?t=44252
-            if( SoWxGLWidgetP::isAPanel(glparent)) {
+            if( SoFlGLWidgetP::isAPanel(glparent)) {
                 // new sizer remove the previous one (I'm sorry)
                 addSizer();
             }
 
             this->currentglwidget = this->currentglarea;
-            // TODO: this->currentglarea->registerQKeyEventHandler(SoWxGLWidgetP::GLAreaKeyEvent, PUBLIC(this));
+            // TODO: this->currentglarea->registerQKeyEventHandler(SoFlGLWidgetP::GLAreaKeyEvent, PUBLIC(this));
             // TODO: this->currentglwidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
             SoAny::si()->registerGLContext((void *) PUBLIC(this), display, screen);
             // Send this one to the final hunting grounds.
@@ -241,7 +241,7 @@ SoWxGLWidgetP::buildGLWidget(void) {
 #define GLWIDGET_FEATURECMP(_glformatfunc_, _cmpvalue_, _truestr_, _falsestr_) \
   do { \
     if (w->_glformatfunc_() != g._glformatfunc_()) { \
-      SoDebugError::postWarning("SoWxGLWidgetP::buildGLWidget", \
+      SoDebugError::postWarning("SoFlGLWidgetP::buildGLWidget", \
                                 "wanted %s, but that is not supported " \
                                 "by the OpenGL driver", \
                                 w->_glformatfunc_() == _cmpvalue_ ? _truestr_ : _falsestr_); \
@@ -260,7 +260,7 @@ SoWxGLWidgetP::buildGLWidget(void) {
 // TODO:
 #if 0
             if (QGLFormat_hasOverlay(w) != QGLFormat_hasOverlay(&g)) {
-                SoDebugError::postWarning("SoWxGLWidgetP::buildGLWidget",
+                SoDebugError::postWarning("SoFlGLWidgetP::buildGLWidget",
                                           "wanted %s, but that is not supported "
                                           "by the OpenGL driver",
                                           QGLFormat_hasOverlay(w) ?
@@ -276,17 +276,17 @@ SoWxGLWidgetP::buildGLWidget(void) {
         int frame = PUBLIC(this)->isBorder() ? this->borderthickness : 0;
         // TODO: this->currentglwidget->setGeometry(frame, frame,this->glSize[0] - 2*frame,this->glSize[1] - 2*frame);
 
-        this->currentglarea->Bind(wxEVT_SIZE, &SoWxGLWidgetP::gl_reshape, this);
-        this->currentglarea->Bind(SO_WX_GL_INIT, &SoWxGLWidgetP::gl_init, this);
-        this->currentglarea->Bind(SO_WX_GL_DRAW, &SoWxGLWidgetP::gl_exposed, this);
-        this->currentglarea->Bind(wxEVT_LEFT_DOWN, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_RIGHT_DOWN, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_LEFT_UP, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_RIGHT_UP, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_MOTION, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_MOUSEWHEEL, &SoWxGLWidgetP::onMouse, this);
-        this->currentglarea->Bind(wxEVT_KEY_DOWN, &SoWxGLWidgetP::onKey, this);
-        this->currentglarea->Bind(wxEVT_KEY_UP, &SoWxGLWidgetP::onKey, this);
+        this->currentglarea->Bind(wxEVT_SIZE, &SoFlGLWidgetP::gl_reshape, this);
+        this->currentglarea->Bind(SO_WX_GL_INIT, &SoFlGLWidgetP::gl_init, this);
+        this->currentglarea->Bind(SO_WX_GL_DRAW, &SoFlGLWidgetP::gl_exposed, this);
+        this->currentglarea->Bind(wxEVT_LEFT_DOWN, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_RIGHT_DOWN, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_LEFT_UP, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_RIGHT_UP, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_MOTION, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_MOUSEWHEEL, &SoFlGLWidgetP::onMouse, this);
+        this->currentglarea->Bind(wxEVT_KEY_DOWN, &SoFlGLWidgetP::onKey, this);
+        this->currentglarea->Bind(wxEVT_KEY_UP, &SoFlGLWidgetP::onKey, this);
 
         // Reset to avoid unnecessary scenegraph redraws.
         PUBLIC(this)->waitForExpose = true;
@@ -296,12 +296,12 @@ SoWxGLWidgetP::buildGLWidget(void) {
         PUBLIC(this)->widgetChanged(this->currentglwidget);
     }
     catch (std::exception& e) {
-        SoDebugError::postWarning("SoWxGLWidgetP::buildGLWidget",
+        SoDebugError::postWarning("SoFlGLWidgetP::buildGLWidget",
                                   "exception: %s",
                                   e.what());
     }
     catch(...) {
-        SoDebugError::postWarning("SoWxGLWidgetP::buildGLWidget",
+        SoDebugError::postWarning("SoFlGLWidgetP::buildGLWidget",
                                   "unknown exception");
     }
     return (this->currentglarea);
@@ -309,29 +309,29 @@ SoWxGLWidgetP::buildGLWidget(void) {
 
 // Returns the normal GL context.
 const wxGLContext *
-SoWxGLWidgetP::getNormalContext(void) {
-    SoWxGLArea * w = this->currentglarea;
+SoFlGLWidgetP::getNormalContext(void) {
+    SoFlGLArea * w = this->currentglarea;
     if (w) return w->context();
     return NULL;
 }
 
 // Returns the overlay GL context.
 const wxGLContext *
-SoWxGLWidgetP::getOverlayContext(void) {
-    SoWxGLArea * w = this->currentglarea;
+SoFlGLWidgetP::getOverlayContext(void) {
+    SoFlGLArea * w = this->currentglarea;
     // TODO: if (w) { return QGLWidget_overlayContext(w); }
     return NULL;
 }
 
 SbBool
-SoWxGLWidgetP::isDirectRendering(void) {
+SoFlGLWidgetP::isDirectRendering(void) {
     SbBool res = FALSE;
     //TODO: if(this->currentglarea && this->currentglarea->GetGLCTXAttrs().x11Direct)
         res = TRUE;
     return (res);
 }
 
-void SoWxGLWidgetP::initGLModes(int glmodes) {
+void SoFlGLWidgetP::initGLModes(int glmodes) {
 
     gl_attributes.clear();
     if(glmodes & SO_GL_DOUBLE) {
@@ -351,52 +351,52 @@ void SoWxGLWidgetP::initGLModes(int glmodes) {
     gl_attributes.push_back(0);
 
     /*
-    if(!SoWxGLArea::IsDisplaySupported(&gl_attributes[0])) {
-        SoDebugError::postInfo("SoWxGLWidget::SoWxGLWidget",
+    if(!SoFlGLArea::IsDisplaySupported(&gl_attributes[0])) {
+        SoDebugError::postInfo("SoFlGLWidget::SoFlGLWidget",
                                "required GL modes are not supported!");
     }
      */
 }
 
 void
-SoWxGLWidgetP::eventHandler(wxWindow * /*widget*/ , void *closure, wxEvent &event, bool *) {
+SoFlGLWidgetP::eventHandler(wxWindow * /*widget*/ , void *closure, wxEvent &event, bool *) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxGLWidgetP::eventHandler",
+    SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
                            "");
 #endif
     assert(closure != NULL);
-    SoWxGLWidget * component = ((SoWxGLWidgetP *) closure)->pub;
+    SoFlGLWidget * component = ((SoFlGLWidgetP *) closure)->pub;
     component->processEvent(event);
 }
 
 void
-SoWxGLWidgetP::onMouse(wxMouseEvent &event) {
+SoFlGLWidgetP::onMouse(wxMouseEvent &event) {
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxGLWidgetP::onMouse",
+    SoDebugError::postInfo("SoFlGLWidgetP::onMouse",
                            "mouse event");
 #endif
     PUBLIC(this)->processEvent(event);
 }
 
 void
-SoWxGLWidgetP::onKey(wxKeyEvent &event) {
+SoFlGLWidgetP::onKey(wxKeyEvent &event) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxGLWidgetP::onKey",
+    SoDebugError::postInfo("SoFlGLWidgetP::onKey",
                            "key event");
 #endif
     PUBLIC(this)->processEvent(event);
 }
 
 bool
-SoWxGLWidgetP::isAPanel(wxWindow* window) {
+SoFlGLWidgetP::isAPanel(wxWindow* window) {
     return (window->IsKindOf(wxCLASSINFO(wxPanel)));
 }
 
 void
-SoWxGLWidgetP::addSizer() {
+SoFlGLWidgetP::addSizer() {
 
     if(glparent->GetSizer()) {
-        SoDebugError::postWarning("SoWxGLWidgetP::addSizer",
+        SoDebugError::postWarning("SoFlGLWidgetP::addSizer",
                                   "panel holds a sizer, the old one will be removed");
     }
 
@@ -409,14 +409,14 @@ SoWxGLWidgetP::addSizer() {
 }
 
 bool
-SoWxGLWidgetP::hasZBuffer() const {
-    const bool z_buffer = SoWxGLArea::isGLFeatureAvailable(gl_attributes,
+SoFlGLWidgetP::hasZBuffer() const {
+    const bool z_buffer = SoFlGLArea::isGLFeatureAvailable(gl_attributes,
                                                            WX_GL_DEPTH_SIZE);
     return (z_buffer);
 }
 
 bool
-SoWxGLWidgetP::hasOverlay() const {
+SoFlGLWidgetP::hasOverlay() const {
     SOWX_STUB();
     return (false);
 }

@@ -4,6 +4,6 @@
 [submodule "data"]
 	path = data
 	url = https://github.com/coin3d/soanydata
-[submodule "src/Inventor/Wx/common"]
-	path = src/Inventor/Wx/common
+[submodule "src/Inventor/Fl/common"]
+	path = src/Inventor/Fl/common
 	url = https://github.com/coin3d/sogui.git

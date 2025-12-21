@@ -65,20 +65,20 @@
 #ifndef SOWX_SOWXTHUMBWHEEL_H
 #define SOWX_SOWXTHUMBWHEEL_H
 
-#include "Inventor/Wx/SoWxBasic.h"
-#include "Inventor/Wx/widgets/SoAnyThumbWheel.h"
+#include "Inventor/Fl/SoFlBasic.h"
+#include "Inventor/Fl/widgets/SoAnyThumbWheel.h"
 
-#include <wx/panel.h>
+#include <fl/panel.h>
 
-class SOWX_DLL_API SoWxThumbWheel : public wxPanel
+class SOWX_DLL_API SoFlThumbWheel : public wxPanel
 {
 
 public:
     enum Orientation { Horizontal, Vertical };
 
-    explicit SoWxThumbWheel(wxWindow * parent = 0, const char * name = 0);
-    explicit SoWxThumbWheel(Orientation, wxWindow * parent = 0, const char * name = 0);
-    ~SoWxThumbWheel();
+    explicit SoFlThumbWheel(wxWindow * parent = 0, const char * name = 0);
+    explicit SoFlThumbWheel(Orientation, wxWindow * parent = 0, const char * name = 0);
+    ~SoFlThumbWheel();
 
     void setOrientation(Orientation);
     Orientation orientation() const;
@@ -110,8 +110,8 @@ private:
     void sendEvent(long id,
                    const std::string& event_id);
 
-    SoWxThumbWheel(const SoWxThumbWheel & wheel);
-    SoWxThumbWheel & operator = (const SoWxThumbWheel & wheel);
+    SoFlThumbWheel(const SoFlThumbWheel & wheel);
+    SoFlThumbWheel & operator = (const SoFlThumbWheel & wheel);
 
     enum State { Idle, Dragging, Disabled } state;
 
@@ -128,7 +128,7 @@ private:
 
 wxDECLARE_EVENT_TABLE();
 
-}; // class SoWxThumbWheel
+}; // class SoFlThumbWheel
 
 // *************************************************************************
 

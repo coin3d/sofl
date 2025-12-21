@@ -38,11 +38,11 @@
 #endif
 
 #include <Inventor/SbBasic.h>
-#include "Inventor/Wx/viewers/SoGuiPlaneViewerP.h"
+#include "Inventor/Fl/viewers/SoGuiPlaneViewerP.h"
 
-class SoWxPlaneViewerP : public SoGuiPlaneViewerP {
+class SoFlPlaneViewerP : public SoGuiPlaneViewerP {
 public:
-    explicit SoWxPlaneViewerP(SoWxPlaneViewer*);
+    explicit SoFlPlaneViewerP(SoFlPlaneViewer*);
     void constructor(SbBool buildnow);
 
     struct {

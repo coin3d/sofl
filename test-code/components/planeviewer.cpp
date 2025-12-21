@@ -30,8 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxPlaneViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlPlaneViewer.h>
 
 #include "computils.h"
 
@@ -42,17 +42,17 @@ main(
   int argc,
   char ** argv )
 {
-  wxWindow * window = SoWx::init( argv[0] );
+  wxWindow * window = SoFl::init( argv[0] );
 
   SoNode * root = get_scene_graph( argc, argv );
   if ( ! root ) return -1;
 
-  SoWxPlaneViewer * viewer = new SoWxPlaneViewer();
+  SoFlPlaneViewer * viewer = new SoFlPlaneViewer();
   viewer->setSceneGraph( root );
   viewer->show();
-  // SoWx::show( window );
+  // SoFl::show( window );
 
-  SoWx::mainLoop();
+  SoFl::mainLoop();
 
   delete viewer;
   return 0;

@@ -30,89 +30,89 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWx.h"
-#include "Inventor/Wx/SoWxP.h"
-#include <wx/event.h>
-#include "Inventor/Wx/SoWxInternal.h"
+#include "Inventor/Fl/SoFl.h"
+#include "Inventor/Fl/SoFlP.h"
+#include <fl/event.h>
+#include "Inventor/Fl/SoFlInternal.h"
 #include "sowxdefs.h"
 
 wxWindow*
-SoWx::init(int & argc,
+SoFl::init(int & argc,
            char ** argv,
            const char * appname,
            const char * classname) {
 
     // retrieve the instance
-    SoWxP::instance();
+    SoFlP::instance();
 
-    if (SOWX_DEBUG && SoWxP::instance()->isInitialized()) {
-        SoDebugError::postWarning("SoWx::init",
+    if (SOWX_DEBUG && SoFlP::instance()->isInitialized()) {
+        SoDebugError::postWarning("SoFl::init",
                                   "This method should be called only once.");
-        return SoWxP::instance()->getMainFrame();
+        return SoFlP::instance()->getMainFrame();
     }
 
     // Call all the code for initializing Coin data
-    SoWxP::commonInit();
+    SoFlP::commonInit();
 
     // if wxApp is not already created
     if (wxApp::GetInstance() == NULL) {
         // Set up the QApplication instance which we have derived into a
         // subclass to catch spaceball events.
-        SoWxP::instance()->buildWxApp();
-        wxApp::SetInstance(SoWxP::instance()->main_app);
+        SoFlP::instance()->buildWxApp();
+        wxApp::SetInstance(SoFlP::instance()->main_app);
         wxEntryStart( argc, argv );
         wxTheApp->CallOnInit();
     }
     else {
         // The user already set one up for us.
         // so nothing to do
-        SoWxP::instance()->setWxApp(wxApp::GetInstance());
+        SoFlP::instance()->setWxApp(wxApp::GetInstance());
     }
 
-    SoWxP::instance()->setMainFrame( new wxFrame(0,
+    SoFlP::instance()->setMainFrame( new wxFrame(0,
                                                    wxID_ANY,
                                                    appname));
 
-    assert(SoWxP::instance());
+    assert(SoFlP::instance());
     assert(wxTheApp);
-    wxTheApp->Bind(wxEVT_IDLE, &SoWxP::onIdle,  SoWxP::instance());
-    SoWxP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoWxP::onClose,  SoWxP::instance());
+    wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
+    SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose,  SoFlP::instance());
 
     SoDB::getSensorManager()->setChangedCallback(SoGuiP::sensorQueueChanged,
                                                  NULL);
 
-    SoWxP::instance()->setInitialize(true);
+    SoFlP::instance()->setInitialize(true);
 #ifdef SOWX_DEBUG
-    SoDebugError::postInfo("SoWx::init",
+    SoDebugError::postInfo("SoFl::init",
                            "%s",
-                           dumpWindowData(SoWxP::instance()->getMainFrame()).c_str());
+                           dumpWindowData(SoFlP::instance()->getMainFrame()).c_str());
 #endif
-    return (SoWxP::instance()->getMainFrame());
+    return (SoFlP::instance()->getMainFrame());
 }
 
 void
-SoWx::init(wxWindow* toplevelwidget) {
+SoFl::init(wxWindow* toplevelwidget) {
 #ifdef COIN_IV_EXTENSIONS
 #define COIN_IV_EXTENSION(ext) ext::initClass();
     COIN_IV_EXTENSIONS
 #undef COIN_IV_EXTENSION
 #endif
 
-    if (SOWX_DEBUG && SoWxP::instance()->isInitialized()) {
-        SoDebugError::postWarning("SoWx::init",
+    if (SOWX_DEBUG && SoFlP::instance()->isInitialized()) {
+        SoDebugError::postWarning("SoFl::init",
                                   "This method should be called only once.");
         return;
     }
 
     // Call all the code for initializing Coin data
-    SoWxP::commonInit();
+    SoFlP::commonInit();
 
     // if wxApp is not already created
     if (wxApp::GetInstance() == NULL) {
-        SoWxP::instance()->buildWxApp();
-        wxApp::SetInstance(SoWxP::instance()->main_app);
+        SoFlP::instance()->buildWxApp();
+        wxApp::SetInstance(SoFlP::instance()->main_app);
         static const char * dummyargv[1];
-        dummyargv[0] = "SoWx";
+        dummyargv[0] = "SoFl";
         int argc = 1;
         wxEntryStart( argc, (char **)dummyargv );
         wxTheApp->CallOnInit();
@@ -120,22 +120,22 @@ SoWx::init(wxWindow* toplevelwidget) {
     else {
         // The user already set one up for us.
         // so nothing to do
-        SoWxP::instance()->setWxApp(wxApp::GetInstance());
+        SoFlP::instance()->setWxApp(wxApp::GetInstance());
     }
 
-    wxTheApp->Bind(wxEVT_IDLE, &SoWxP::onIdle,  SoWxP::instance());
+    wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
     if(toplevelwidget) {
-        SoWxP::instance()->setMainFrame(toplevelwidget);
-        SoWxP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoWxP::onClose, SoWxP::instance());
+        SoFlP::instance()->setMainFrame(toplevelwidget);
+        SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose, SoFlP::instance());
     }
     SoDB::getSensorManager()->setChangedCallback(SoGuiP::sensorQueueChanged,
                                                  NULL);
 
-    SoWxP::instance()->setInitialize(true);
+    SoFlP::instance()->setInitialize(true);
 #ifdef SOWX_DEBUG
-    SoDebugError::postInfo("SoWx::init",
+    SoDebugError::postInfo("SoFl::init",
                            "%s",
-                           dumpWindowData(SoWxP::instance()->getMainFrame()).c_str());
+                           dumpWindowData(SoFlP::instance()->getMainFrame()).c_str());
 #endif
 }
 
@@ -144,19 +144,19 @@ SoWx::init(wxWindow* toplevelwidget) {
  * (embedded in already existing window).
  */
 void
-SoWx::mainLoop(void) {
+SoFl::mainLoop(void) {
     wxTheApp->OnRun();
 }
 
 
 void
-SoWx::exitMainLoop(void)  {
+SoFl::exitMainLoop(void)  {
     wxExit();
 }
 
 void
-SoWx::done() {
-    SoWxP::instance()->finish();
+SoFl::done() {
+    SoFlP::instance()->finish();
 #if 0 // FIXME: These methods exist in TGS Inventor. We should add
     // them, and then call them from here. 20060210 kyrah
   SoInteraction::finish();
@@ -166,17 +166,17 @@ SoWx::done() {
 }
 
 void
-SoWx::show(wxWindow* const widget) {
+SoFl::show(wxWindow* const widget) {
     widget->Show();
 }
 
 void
-SoWx::hide(wxWindow* const widget) {
+SoFl::hide(wxWindow* const widget) {
     widget->Hide();
 }
 
 void
-SoWx::createSimpleErrorDialog(wxWindow* widget,
+SoFl::createSimpleErrorDialog(wxWindow* widget,
                               const char * title,
                               const char * string1,
                               const char * string2 ) {
@@ -189,7 +189,7 @@ getTopLevelWidget(void) {
 }
 
 wxWindow*
-SoWx::getShellWidget(const wxWindow* w) {
+SoFl::getShellWidget(const wxWindow* w) {
 #if 0
     return (wxGetTopLevelParent((wxWindowBase *) w));
 #else
@@ -202,7 +202,7 @@ SoWx::getShellWidget(const wxWindow* w) {
         p = p->GetParent();
     }
 #if SOWX_DEBUG && 0 // debug
-    SoDebugError::postInfo("SoWx::getShellWidget",
+    SoDebugError::postInfo("SoFl::getShellWidget",
                          "couldn't find shell for widget at %p", widget);
 #endif // debug
     return (NULL);
@@ -210,14 +210,14 @@ SoWx::getShellWidget(const wxWindow* w) {
 }
 
 void
-SoWx::setWidgetSize(wxWindow* const widget, const SbVec2s size) {
+SoFl::setWidgetSize(wxWindow* const widget, const SbVec2s size) {
     assert(widget != 0 && "widget can not be null");
     if ( widget ) {
         widget->SetSize(size[0], size[1]);
     }
 #if SOWX_DEBUG
     else  {
-        SoDebugError::postWarning("SoWx::setWidgetSize",
+        SoDebugError::postWarning("SoFl::setWidgetSize",
                                   "null widget on setting: <%d, %d>.",
                                   size[0], size[1]);
     }
@@ -226,7 +226,7 @@ SoWx::setWidgetSize(wxWindow* const widget, const SbVec2s size) {
 
 
 SbVec2s
-SoWx::getWidgetSize(const wxWindow* widget) {
+SoFl::getWidgetSize(const wxWindow* widget) {
     assert(widget != 0 && "widget can not be null");
     SbVec2s size(-1,-1);
     if ( widget ) {
@@ -236,7 +236,7 @@ SoWx::getWidgetSize(const wxWindow* widget) {
     }
 #if SOWX_DEBUG
     else  {
-        SoDebugError::postWarning("SoWx::getWidgetSize",
+        SoDebugError::postWarning("SoFl::getWidgetSize",
                                   "null widget");
     }
 #endif // SOWX_DEBUG

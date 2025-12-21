@@ -32,9 +32,9 @@
 
 #define BOOST_TEST_NO_LIB 1
 #include <boost/test/unit_test.hpp>
-#include "Inventor/Wx/devices/SoWxKeyboardP.h"
+#include "Inventor/Fl/devices/SoFlKeyboardP.h"
 
-BOOST_AUTO_TEST_SUITE(TestSoWxKeyboardP);
+BOOST_AUTO_TEST_SUITE(TestSoFlKeyboardP);
 
 static int counter = 0;
 void myData(SbDictKeyType key, void * value) {
@@ -44,8 +44,8 @@ void myData(SbDictKeyType key, void * value) {
 
 BOOST_AUTO_TEST_CASE(keyMapTest) {
     BOOST_CHECK_EQUAL(0,counter);
-    SoWxKeyboardP::make_translation_table();
-    SoWxKeyboardP::translatetable->applyToAll(myData);
+    SoFlKeyboardP::make_translation_table();
+    SoFlKeyboardP::translatetable->applyToAll(myData);
     BOOST_CHECK(counter>0);
 
 }

@@ -33,8 +33,8 @@
 #ifndef SOWW_SIMPLEFRAME_H
 #define SOWW_SIMPLEFRAME_H
 
-#include <wx/frame.h>
-#include <wx/defs.h>
+#include <fl/frame.h>
+#include <fl/defs.h>
 
 class SimpleFrame : public wxFrame
 {

@@ -33,7 +33,7 @@
 #define SOWX_SOWXSPACENAVDEVICE_H
 
 
-class SoWxSpacenavDevice {
+class SoFlSpacenavDevice {
 
 };
 

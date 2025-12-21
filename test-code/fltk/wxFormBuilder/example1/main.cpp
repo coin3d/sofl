@@ -30,21 +30,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
 #include "MyFrame.h"
 #include "common/get_scene_graph.h"
-#include "Inventor/Wx/viewers/SoWxExaminerViewer.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
 
 void add_view(wxWindow* window) {
 
-    SoWx::init(window);
+    SoFl::init(window);
 
     SoSeparator * root = new SoSeparator;
     root->ref();
@@ -54,19 +54,19 @@ void add_view(wxWindow* window) {
     SoSeparator * userroot = get_scene_graph();
     root->addChild(userroot);
 #if 1
-    SoWxRenderArea * renderarea = new SoWxRenderArea(window);
+    SoFlRenderArea * renderarea = new SoFlRenderArea(window);
     camera->viewAll( userroot, renderarea->getViewportRegion() );
     renderarea->setSceneGraph(root);
     renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
     renderarea->show();
 #else
-    SoWxExaminerViewer * viewer = new SoWxExaminerViewer(window);
+    SoFlExaminerViewer * viewer = new SoFlExaminerViewer(window);
     viewer->setSceneGraph( root );
     viewer->viewAll();
     viewer->show();
 #endif
 
-    SoWx::show(window);
+    SoFl::show(window);
 }
 
 

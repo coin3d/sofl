@@ -30,18 +30,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/devices/SoWxDevice.h"
-#include "SoWxDeviceP.h"
+#include "Inventor/Fl/devices/SoFlDevice.h"
+#include "SoFlDeviceP.h"
 
 #define PRIVATE(p) (p->pimpl)
 #define PUBLIC(p) (p->pub)
 
-SoWxDevice::SoWxDevice() {
-    PRIVATE(this) = new SoWxDeviceP(this);
+SoFlDevice::SoFlDevice() {
+    PRIVATE(this) = new SoFlDeviceP(this);
 
 }
 
-SoWxDevice::~SoWxDevice() {
+SoFlDevice::~SoFlDevice() {
     delete PRIVATE(this);
 }
 

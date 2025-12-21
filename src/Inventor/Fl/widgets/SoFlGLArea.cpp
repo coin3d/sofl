@@ -30,34 +30,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/widgets/SoWxGLArea.h"
-#include "Inventor/Wx/SoWxGLWidgetP.h"
+#include "Inventor/Fl/widgets/SoFlGLArea.h"
+#include "Inventor/Fl/SoFlGLWidgetP.h"
 #include "sowxdefs.h"
 
-#include "wx/wx.h"
-#include "wx/file.h"
-#include "wx/dcclient.h"
+#include "fl/fl.h"
+#include "fl/file.h"
+#include "fl/dcclient.h"
 
 #include <GL/gl.h>
 #include <map>
 
-wxBEGIN_EVENT_TABLE(SoWxGLArea, wxGLCanvas)
-                EVT_PAINT(SoWxGLArea::OnPaint)
-                EVT_ERASE_BACKGROUND(SoWxGLArea::OnEraseBackground)
+wxBEGIN_EVENT_TABLE(SoFlGLArea, wxGLCanvas)
+                EVT_PAINT(SoFlGLArea::OnPaint)
+                EVT_ERASE_BACKGROUND(SoFlGLArea::OnEraseBackground)
 wxEND_EVENT_TABLE()
 
 wxDEFINE_EVENT(SO_WX_GL_INIT, wxCommandEvent);
 wxDEFINE_EVENT(SO_WX_GL_DRAW, wxCommandEvent);
 
 
-SoWxGLArea::SoWxGLArea(wxWindow *parent,
+SoFlGLArea::SoFlGLArea(wxWindow *parent,
                        const std::vector<int>& attributes)
         : wxGLCanvas(parent,
                      wxID_ANY,
                      &attributes[0],
                      wxDefaultPosition,
                      parent->GetClientSize()) {
-    this->SetName("SoWxGLArea");
+    this->SetName("SoFlGLArea");
 
     gl_real_context = new wxGLContext(this);
     is_gl_initialized = false;
@@ -65,13 +65,13 @@ SoWxGLArea::SoWxGLArea(wxWindow *parent,
 }
 
 
-SoWxGLArea::~SoWxGLArea() {
+SoFlGLArea::~SoFlGLArea() {
     delete gl_real_context;
 }
 
-void SoWxGLArea::OnPaint(wxPaintEvent& event ) {
+void SoFlGLArea::OnPaint(wxPaintEvent& event ) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxGLArea::OnPaint",
+    SoDebugError::postInfo("SoFlGLArea::OnPaint",
                            "size:%d %d",
                            GetSize().x,
                            GetSize().y);
@@ -90,12 +90,12 @@ void SoWxGLArea::OnPaint(wxPaintEvent& event ) {
     event.Skip();
 }
 
-void SoWxGLArea::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
+void SoFlGLArea::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
     SOWX_STUB();
     // Do nothing, to avoid flashing on MSW
 }
 
-void SoWxGLArea::InitGL() {
+void SoFlGLArea::InitGL() {
     if(!is_gl_initialized) {
         SetCurrent(*gl_real_context);
         is_gl_initialized = true;
@@ -109,13 +109,13 @@ void SoWxGLArea::InitGL() {
     }
 }
 
-void SoWxGLArea::makeCurrent() {
+void SoFlGLArea::makeCurrent() {
     if(gl_real_context)
         SetCurrent(*gl_real_context);
 }
 
 const wxGLContext *
-SoWxGLArea::context() {
+SoFlGLArea::context() {
     return gl_real_context;
 }
 
@@ -135,7 +135,7 @@ isBoolean(int value) {
 }
 
 bool
-SoWxGLArea::isGLFeatureAvailable(const SoWxGLArea::GLFormat& format,
+SoFlGLArea::isGLFeatureAvailable(const SoFlGLArea::GLFormat& format,
                                  int feature) {
     bool res = false;
 
@@ -167,14 +167,14 @@ SoWxGLArea::isGLFeatureAvailable(const SoWxGLArea::GLFormat& format,
 }
 
 bool
-SoWxGLArea::areEqual(const SoWxGLArea::GLFormat &format1,
-                     const SoWxGLArea::GLFormat &format2) {
+SoFlGLArea::areEqual(const SoFlGLArea::GLFormat &format1,
+                     const SoFlGLArea::GLFormat &format2) {
     SOWX_STUB();
     return (false);
 }
 
 bool ConvertWXAttrsWxGLFormat(const int *wxattrs,
-                              SoWxGLArea::GLFormat  &format)
+                              SoFlGLArea::GLFormat  &format)
 {
     if (!wxattrs)
         return true;

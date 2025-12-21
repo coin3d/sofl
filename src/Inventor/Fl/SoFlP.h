@@ -37,18 +37,18 @@
 #error this is a private header file
 #endif /* !SOWX_INTERNAL */
 
-#include <Inventor/Wx/SoGuiP.h>
-#include <wx/timer.h>
-#include <wx/app.h>
-#include <wx/window.h>
+#include <Inventor/Fl/SoGuiP.h>
+#include <fl/timer.h>
+#include <fl/app.h>
+#include <fl/window.h>
 
-class SoWxP : public SoGuiP {
+class SoFlP : public SoGuiP {
 
 public:
 
     bool init;
     wxWindow* main_frame;
-    SoWxP();
+    SoFlP();
     bool is_a_sowwp_app;
     wxAppConsole*  main_app;
     static wxTimer *timerqueuetimer;
@@ -57,7 +57,7 @@ public:
     static void initTimers();
     static void stopTimers();
 
-    static SoWxP* instance();
+    static SoFlP* instance();
     bool isInitialized() const;
     void setInitialize(bool);
 

@@ -32,43 +32,43 @@
 
 #define BOOST_TEST_NO_LIB 1
 #include <boost/test/unit_test.hpp>
-#include "Inventor/Wx/widgets/SoWxGLArea.h"
+#include "Inventor/Fl/widgets/SoFlGLArea.h"
 
-BOOST_AUTO_TEST_SUITE(TestSoWxGLArea);
+BOOST_AUTO_TEST_SUITE(TestSoFlGLArea);
 
 BOOST_AUTO_TEST_CASE(shouldFailIf_isGLFeatureAvailable_Empty) {
-    SoWxGLArea::GLFormat format;
-    BOOST_CHECK(!SoWxGLArea::isGLFeatureAvailable(format,
+    SoFlGLArea::GLFormat format;
+    BOOST_CHECK(!SoFlGLArea::isGLFeatureAvailable(format,
                                                   WX_GL_DOUBLEBUFFER));
     format.push_back(0);
-    BOOST_CHECK(!SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(!SoFlGLArea::isGLFeatureAvailable(format,
                                                   WX_GL_DOUBLEBUFFER));
 }
 
 BOOST_AUTO_TEST_CASE(isGLFeatureAvailable) {
-    SoWxGLArea::GLFormat format;
+    SoFlGLArea::GLFormat format;
     format.push_back(WX_GL_DOUBLEBUFFER);
     format.push_back(0);
-    BOOST_CHECK(SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(SoFlGLArea::isGLFeatureAvailable(format,
                                      WX_GL_DOUBLEBUFFER));
 
-    BOOST_CHECK(!SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(!SoFlGLArea::isGLFeatureAvailable(format,
                                                 WX_GL_STEREO));
 }
 
 BOOST_AUTO_TEST_CASE(shouldFindFormatWithParameter) {
-    SoWxGLArea::GLFormat format;
+    SoFlGLArea::GLFormat format;
     format.push_back(WX_GL_DOUBLEBUFFER);
     format.push_back(WX_GL_BUFFER_SIZE);
     // Wrong I'm adding GL_STEREO as parameter for format BUFFER_SIZE
     // this is just for checking that does not confuse format with parameters
     format.push_back(WX_GL_STEREO);
     format.push_back(0);
-    BOOST_CHECK(!SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(!SoFlGLArea::isGLFeatureAvailable(format,
                                                   WX_GL_STEREO));
-    BOOST_CHECK(SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(SoFlGLArea::isGLFeatureAvailable(format,
                                                   WX_GL_DOUBLEBUFFER));
-    BOOST_CHECK(SoWxGLArea::isGLFeatureAvailable(format,
+    BOOST_CHECK(SoFlGLArea::isGLFeatureAvailable(format,
                                                   WX_GL_BUFFER_SIZE));
 }
 

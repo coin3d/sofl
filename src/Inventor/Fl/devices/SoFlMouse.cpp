@@ -38,46 +38,46 @@
 #include <Inventor/events/SoLocation2Event.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
 
-#include <Inventor/Wx/devices/SoWxMouse.h>
-#include "Inventor/Wx/devices/SoGuiMouseP.h"
+#include <Inventor/Fl/devices/SoFlMouse.h>
+#include "Inventor/Fl/devices/SoGuiMouseP.h"
 #include "sowxdefs.h"
 
 #define PRIVATE(p) (p->pimpl)
 #define PUBLIC(p) (p->pub)
 
-class SoWxMouseP : public SoGuiMouseP {
+class SoFlMouseP : public SoGuiMouseP {
 public:
-    SoWxMouseP(SoWxMouse * p) : SoGuiMouseP(p) { }
+    SoFlMouseP(SoFlMouse * p) : SoGuiMouseP(p) { }
 
     //SoLocation2Event * makeLocationEvent(XMotionEvent * event);
     //SoMouseButtonEvent * makeButtonEvent(XButtonEvent * event, SoButtonEvent::State state);
 };
 
-SoWxMouse::SoWxMouse(int mask ) {
-    PRIVATE(this) = new SoWxMouseP(this);
+SoFlMouse::SoFlMouse(int mask ) {
+    PRIVATE(this) = new SoFlMouseP(this);
     PRIVATE(this)->eventmask = mask;
 }
 
-SoWxMouse::~SoWxMouse(void) {
+SoFlMouse::~SoFlMouse(void) {
     delete PRIVATE(this);
 }
 
-void SoWxMouse::enable(wxWindow* widget, SoWxEventHandler * handler, void * closure)    {
+void SoFlMouse::enable(wxWindow* widget, SoFlEventHandler * handler, void * closure)    {
     // Nothing to do, already managed by callback in GLArea
 }
 
-void SoWxMouse::disable(wxWindow* widget, SoWxEventHandler * handler, void * closure) {
+void SoFlMouse::disable(wxWindow* widget, SoFlEventHandler * handler, void * closure) {
     // Nothing to do, already managed by callback in GLArea
 }
 
-const SoEvent * SoWxMouse::translateEvent(wxEvent& event) {
+const SoEvent * SoFlMouse::translateEvent(wxEvent& event) {
 
     SoEvent * conv = NULL;
 
     wxMouseEvent* mouse_event = dynamic_cast<wxMouseEvent*>(&event);
     if(!mouse_event) {
 #if SOWX_DEBUG && 0
-        SoDebugError::postWarning("SoWxMouse::translateEvent",
+        SoDebugError::postWarning("SoFlMouse::translateEvent",
                                   "is not a mouse event!");
 #endif
         return (conv);

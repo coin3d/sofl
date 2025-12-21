@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxInternal.h"
+#include "Inventor/Fl/SoFlInternal.h"
 
 #include <sstream>
 

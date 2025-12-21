@@ -34,7 +34,7 @@
 #define SOWX_SOWXLINUXJOYSTICK_H
 
 
-class SoWxLinuxJoystick {
+class SoFlLinuxJoystick {
 
 };
 

@@ -30,78 +30,78 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxDirectionalLightEditor.h"
+#include "Inventor/Fl/SoFlDirectionalLightEditor.h"
 
 #include "sowxdefs.h"
 
-SOWX_OBJECT_SOURCE(SoWxDirectionalLightEditor);
+SOWX_OBJECT_SOURCE(SoFlDirectionalLightEditor);
 
-SoWxDirectionalLightEditor::SoWxDirectionalLightEditor(wxWindow *parent, const char *const name, SbBool embed)
-        : SoWxComponent(parent, name, embed) {
+SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(wxWindow *parent, const char *const name, SbBool embed)
+        : SoFlComponent(parent, name, embed) {
 
 }
 
-SoWxDirectionalLightEditor::SoWxDirectionalLightEditor(wxWindow *parent, const char *const name, SbBool embed,
+SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(wxWindow *parent, const char *const name, SbBool embed,
                                                        SbBool build) {
     SOWX_STUB();
 }
 
-SoWxDirectionalLightEditor::~SoWxDirectionalLightEditor() {
+SoFlDirectionalLightEditor::~SoFlDirectionalLightEditor() {
 
 }
 
 
-void SoWxDirectionalLightEditor::attach(SoPath *pathToLight) {
+void SoFlDirectionalLightEditor::attach(SoPath *pathToLight) {
     SOWX_STUB();
 }
 
-void SoWxDirectionalLightEditor::detach() {
+void SoFlDirectionalLightEditor::detach() {
     SOWX_STUB();
 }
 
-SbBool SoWxDirectionalLightEditor::isAttached() {
+SbBool SoFlDirectionalLightEditor::isAttached() {
     SOWX_STUB();
     return 0;
 }
 
-void SoWxDirectionalLightEditor::setLight(const SoDirectionalLight &newLight) {
+void SoFlDirectionalLightEditor::setLight(const SoDirectionalLight &newLight) {
     SOWX_STUB();
 }
 
-const SoDirectionalLight &SoWxDirectionalLightEditor::getLight() const {
+const SoDirectionalLight &SoFlDirectionalLightEditor::getLight() const {
     SOWX_STUB();
     static SoDirectionalLight* light = 0;
     return (*light);
 }
 
-void SoWxDirectionalLightEditor::addLightChangedCallback(SoWxDirectionalLightEditorCB *f, void *userData) {
+void SoFlDirectionalLightEditor::addLightChangedCallback(SoFlDirectionalLightEditorCB *f, void *userData) {
     SOWX_STUB();
 }
 
-void SoWxDirectionalLightEditor::removeLightChangedCallback(SoWxDirectionalLightEditorCB *f, void *userData) {
+void SoFlDirectionalLightEditor::removeLightChangedCallback(SoFlDirectionalLightEditorCB *f, void *userData) {
     SOWX_STUB();
 }
 
-void SoWxDirectionalLightEditor::show() {
+void SoFlDirectionalLightEditor::show() {
     SOWX_STUB();
 }
 
-void SoWxDirectionalLightEditor::hide() {
+void SoFlDirectionalLightEditor::hide() {
     SOWX_STUB();
 }
 
 
-const char *SoWxDirectionalLightEditor::getDefaultWidgetName(void) const {
-    SOWX_STUB();
-    return ("");
-}
-
-const char *SoWxDirectionalLightEditor::getDefaultTitle(void) const {
+const char *SoFlDirectionalLightEditor::getDefaultWidgetName(void) const {
     SOWX_STUB();
     return ("");
 }
 
-const char *SoWxDirectionalLightEditor::getDefaultIconTitle(void) const {
+const char *SoFlDirectionalLightEditor::getDefaultTitle(void) const {
+    SOWX_STUB();
+    return ("");
+}
+
+const char *SoFlDirectionalLightEditor::getDefaultIconTitle(void) const {
     SOWX_STUB();
     return ("");
 }

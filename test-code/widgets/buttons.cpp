@@ -30,18 +30,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "wx/wx.h"
-#include "wx/button.h"
-#include "wx/gbsizer.h"
+#include "fl/fl.h"
+#include "fl/button.h"
+#include "fl/gbsizer.h"
 
 #include "common/SimpleFrame.h"
 
-#include <Inventor/Wx/common/pixmaps/pick.xpm>
-#include <Inventor/Wx/common/pixmaps/view.xpm>
-#include <Inventor/Wx/common/pixmaps/home.xpm>
-#include <Inventor/Wx/common/pixmaps/set_home.xpm>
-#include <Inventor/Wx/common/pixmaps/view_all.xpm>
-#include <Inventor/Wx/common/pixmaps/seek.xpm>
+#include <Inventor/Fl/common/pixmaps/pick.xpm>
+#include <Inventor/Fl/common/pixmaps/view.xpm>
+#include <Inventor/Fl/common/pixmaps/home.xpm>
+#include <Inventor/Fl/common/pixmaps/set_home.xpm>
+#include <Inventor/Fl/common/pixmaps/view_all.xpm>
+#include <Inventor/Fl/common/pixmaps/seek.xpm>
 
 wxButton* addButton(wxWindow* parent,
                     const char** xpm) {

@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxP.h"
+#include "Inventor/Fl/SoFlP.h"
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SbTime.h>
@@ -38,10 +38,10 @@
 #include <Inventor/sensors/SoSensorManager.h>
 
 #include <iostream>
-#include <wx/sizer.h>
+#include <fl/sizer.h>
 #include <sstream>
 
-class SoWxApp : public  wxApp {
+class SoFlApp : public  wxApp {
 public:
 
     virtual bool
@@ -54,16 +54,16 @@ public:
     virtual void
     CleanUp()  {
 #if SOWX_DEBUG
-        SoDebugError::postInfo("SoWxApp::CleanUp",
+        SoDebugError::postInfo("SoFlApp::CleanUp",
                                "done!");
 #endif
     }
 };
 
-wxTimer * SoWxP::timerqueuetimer = 0;
-wxTimer * SoWxP::delaytimeouttimer = 0;
+wxTimer * SoFlP::timerqueuetimer = 0;
+wxTimer * SoFlP::delaytimeouttimer = 0;
 
-SoWxP::SoWxP() {
+SoFlP::SoFlP() {
     init = false;
     main_frame = 0;
     main_app = 0;
@@ -71,24 +71,24 @@ SoWxP::SoWxP() {
 }
 
 void
-SoWxP::buildWxApp() {
+SoFlP::buildWxApp() {
     if(!main_app) {
         is_a_sowwp_app = true;
-        setWxApp( new SoWxApp);
+        setWxApp( new SoFlApp);
     } else if (SOWX_DEBUG){
-        SoDebugError::postWarning("SoWxP::buildWxApp",
+        SoDebugError::postWarning("SoFlP::buildWxApp",
                                "wxApp already built");
     }
 }
 
 void
-SoWxP::setWxApp(wxAppConsole* app) {
+SoFlP::setWxApp(wxAppConsole* app) {
     main_app = app;
 }
 
 void
 SoGuiP::sensorQueueChanged(void *) {
-    SoWxP::instance()->sensorQueueChanged();
+    SoFlP::instance()->sensorQueueChanged();
 }
 
 class TimerQueueTimer : public wxTimer {
@@ -139,28 +139,28 @@ public:
 };
 
 void
-SoWxP::sensorQueueChanged(void) {
+SoFlP::sensorQueueChanged(void) {
     // We need three different mechanisms to interface Coin sensor
     // handling with wxWidgets event handling, which are:
     //
     // 1. Detect when the application is idle and then empty the
     // delay-queue completely for delay-sensors -- handled by
-    // SoWxP::onIdle.
+    // SoFlP::onIdle.
     //
     // 2. Detect when one or more timer-sensors are ripe and trigger
-    // those -- handled by SoWxP::timerqueuetimer.
+    // those -- handled by SoFlP::timerqueuetimer.
     //
     // 3. On the "delay-sensor timeout interval", empty all highest
     // priority delay-queue sensors to avoid complete starvation in
     // continually busy applications -- handled by
-    // SoWxP::delaytimeouttimer.
+    // SoFlP::delaytimeouttimer.
 
 
-    // Allocate wx timers on first call.
-    SoWxP::initTimers();
+    // Allocate fl timers on first call.
+    SoFlP::initTimers();
 
     SoSensorManager * sm = SoDB::getSensorManager();
-    if (SoWxP::timerqueuetimer) {
+    if (SoFlP::timerqueuetimer) {
         // Set up timer queue timeout if necessary.
         SbTime t;
         if (sm->isTimerSensorPending(t)) {
@@ -174,68 +174,68 @@ SoWxP::sensorQueueChanged(void) {
             if (interval.getValue() <= 0.0) { interval.setValue(1.0 / 5000.0); }
 
 #if SOWX_DEBUG && 0
-                SoDebugError::postInfo("SoWxP::sensorQueueChanged",
+                SoDebugError::postInfo("SoFlP::sensorQueueChanged",
                     "timersensor pending, interval %f",
                     interval.getValue());
 #endif
 
             // Change interval of timerqueuetimer when head node of the
             // timer-sensor queue of SoSensorManager changes.
-            SoWxP::timerqueuetimer->Start((int)interval.getMsecValue(), true);
+            SoFlP::timerqueuetimer->Start((int)interval.getMsecValue(), true);
         }
         // Stop timerqueuetimer if queue is completely empty.
-        else if (SoWxP::timerqueuetimer->IsRunning()) {
-            SoWxP::timerqueuetimer->Stop();
+        else if (SoFlP::timerqueuetimer->IsRunning()) {
+            SoFlP::timerqueuetimer->Stop();
         }
     }
 
 
     // Set up idle notification for delay queue processing if necessary.
-    if (SoWxP::delaytimeouttimer) {
+    if (SoFlP::delaytimeouttimer) {
         if (sm->isDelaySensorPending()) {
             if (SOWX_DEBUG && 0) { // debug
-                SoDebugError::postInfo("SoWxP::sensorQueueChanged",
+                SoDebugError::postInfo("SoFlP::sensorQueueChanged",
                     "delaysensor pending");
             }
 
-            if (!SoWxP::delaytimeouttimer->IsRunning()) {
+            if (!SoFlP::delaytimeouttimer->IsRunning()) {
                 const SbTime& delaySensorTimeout = SoDB::getDelaySensorTimeout();
                 if (delaySensorTimeout != SbTime::zero()) {
                     unsigned long timeout = delaySensorTimeout.getMsecValue();
-                    SoWxP::delaytimeouttimer->Start((int)timeout, true);
+                    SoFlP::delaytimeouttimer->Start((int)timeout, true);
                 }
             }
         }
         else {
-            if (SoWxP::delaytimeouttimer->IsRunning())
-                SoWxP::delaytimeouttimer->Stop();
+            if (SoFlP::delaytimeouttimer->IsRunning())
+                SoFlP::delaytimeouttimer->Stop();
         }
     }
 }
 
-SoWxP *
-SoWxP::instance() {
-    static SoWxP singleton;
+SoFlP *
+SoFlP::instance() {
+    static SoFlP singleton;
     return (&singleton);
 }
 
 bool
-SoWxP::isInitialized() const {
+SoFlP::isInitialized() const {
     return (init);
 }
 
 void
-SoWxP::setInitialize(bool i) {
+SoFlP::setInitialize(bool i) {
     init = i;
 }
 
 wxWindow *
-SoWxP::getMainFrame() const {
+SoFlP::getMainFrame() const {
     return (main_frame);
 }
 
 void
-SoWxP::setMainFrame(wxWindow * frame) {
+SoFlP::setMainFrame(wxWindow * frame) {
     main_frame = frame;
 }
 
@@ -246,12 +246,12 @@ SoWxP::setMainFrame(wxWindow * frame) {
     assert(timer_name != 0)
 
 void
-SoWxP::initTimers() {
+SoFlP::initTimers() {
     static bool are_initialized = false;
 
     if(!are_initialized) {
-        INIT_TIMER(SoWxP::timerqueuetimer, TimerQueueTimer);
-        INIT_TIMER(SoWxP::delaytimeouttimer, DelayTimeoutTimer);
+        INIT_TIMER(SoFlP::timerqueuetimer, TimerQueueTimer);
+        INIT_TIMER(SoFlP::delaytimeouttimer, DelayTimeoutTimer);
         are_initialized = true;
     }
 }
@@ -261,36 +261,36 @@ SoWxP::initTimers() {
 #define STOP_TIMER(timer_name) if(timer_name) timer_name->Stop()
 
 void
-SoWxP::stopTimers() {
-    STOP_TIMER(SoWxP::timerqueuetimer);
-    wxDELETE(SoWxP::timerqueuetimer);
-    STOP_TIMER(SoWxP::delaytimeouttimer);
-    wxDELETE(SoWxP::delaytimeouttimer);
+SoFlP::stopTimers() {
+    STOP_TIMER(SoFlP::timerqueuetimer);
+    wxDELETE(SoFlP::timerqueuetimer);
+    STOP_TIMER(SoFlP::delaytimeouttimer);
+    wxDELETE(SoFlP::delaytimeouttimer);
 }
 
 #undef STOP_TIMER
 
 void
-SoWxP::finish() {
+SoFlP::finish() {
 #ifdef SOWX_DEBUG
-    SoDebugError::postInfo("SoWxP::finish",
+    SoDebugError::postInfo("SoFlP::finish",
                            "remove all internal resources");
 #endif
-    wxTheApp->Unbind(wxEVT_IDLE, &SoWxP::onIdle, SoWxP::instance());
+    wxTheApp->Unbind(wxEVT_IDLE, &SoFlP::onIdle, SoFlP::instance());
 
     stopTimers();
 
-    // only if app is built by SoWx perform exit and cleanup
-    if(SoWxP::instance()->is_a_sowwp_app) {
+    // only if app is built by SoFl perform exit and cleanup
+    if(SoFlP::instance()->is_a_sowwp_app) {
         wxTheApp->OnExit();
         wxEntryCleanup();
     }
 }
 
 void
-SoWxP::onIdle(wxIdleEvent& WXUNUSED(event)) {
+SoFlP::onIdle(wxIdleEvent& WXUNUSED(event)) {
 #if SOWX_DEBUG && 0
-    SoDebugError::postInfo("SoWxP::onIdle",
+    SoDebugError::postInfo("SoFlP::onIdle",
                                "idlesensor pending");
 #endif
 
@@ -304,14 +304,14 @@ SoWxP::onIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 
 void
-SoWxP::onClose(wxCloseEvent& event) {
+SoFlP::onClose(wxCloseEvent& event) {
 #if SOWX_DEBUG
-    SoDebugError::postInfo("SoWxP::onClose",
+    SoDebugError::postInfo("SoFlP::onClose",
                            "clean up in progress!");
 #endif
 
     // turn off timers
-    SoWxP::instance()->stopTimers();
+    SoFlP::instance()->stopTimers();
 
     // To avoid getting any further invocations of
     // SoGuiP::sensorQueueChanged() (which would re-allocate the timers

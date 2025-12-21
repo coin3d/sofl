@@ -50,8 +50,8 @@
 #include <Inventor/SoInput.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoCone.h>
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #ifdef sun
 #include <Inventor/nodes/SoColorIndex.h>
 #include <Inventor/actions/SoSearchAction.h>
@@ -90,8 +90,8 @@ Separator { \
 int
 main(int , char **argv)
 {
-    // Initialize Inventor and Wx
-    wxWindow* myWindow = SoWx::init(argv[0]);
+    // Initialize Inventor and Fl
+    wxWindow* myWindow = SoFl::init(argv[0]);
 
     // read the scene graph in
     SoNode *scene;
@@ -106,7 +106,7 @@ main(int , char **argv)
     // Allocate the viewer, set the overlay scene and
     // load the overlay color map with the wanted color.
     SbColor color(.5, 1, .5);
-    SoWxExaminerViewer *myViewer = new SoWxExaminerViewer(myWindow);
+    SoFlExaminerViewer *myViewer = new SoFlExaminerViewer(myWindow);
 
 #ifdef sun
     if (!glXIsOverlayTGS)
@@ -160,9 +160,9 @@ main(int , char **argv)
     // Show the viewer and loop forever
     myViewer->show();
     //WxRealizeWidget(myWindow);
-    SoWx::mainLoop();
+    SoFl::mainLoop();
     scene->unref();
     delete myViewer;
-    SoWx::done();
+    SoFl::done();
     return 0;
 }

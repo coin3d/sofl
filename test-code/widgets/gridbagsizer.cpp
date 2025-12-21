@@ -30,9 +30,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "wx/wx.h"
-#include "wx/button.h"
-#include "wx/gbsizer.h"
+#include "fl/fl.h"
+#include "fl/button.h"
+#include "fl/gbsizer.h"
 
 #include "common/SimpleFrame.h"
 

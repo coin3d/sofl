@@ -7,21 +7,21 @@
 
 #pragma once
 
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/statusbr.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
-#include <wx/panel.h>
-#include <wx/sizer.h>
-#include <wx/frame.h>
+#include <fl/artprov.h>
+#include <fl/xrc/xmlres.h>
+#include <fl/statusbr.h>
+#include <fl/gdicmn.h>
+#include <fl/font.h>
+#include <fl/colour.h>
+#include <fl/settings.h>
+#include <fl/string.h>
+#include <fl/bitmap.h>
+#include <fl/image.h>
+#include <fl/icon.h>
+#include <fl/menu.h>
+#include <fl/panel.h>
+#include <fl/sizer.h>
+#include <fl/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
 

@@ -37,14 +37,14 @@
 #error this is a private header file
 #endif /* !SOWX_INTERNAL */
 
-#include "Inventor/Wx/devices/SoGuiKeyboardP.h"
+#include "Inventor/Fl/devices/SoGuiKeyboardP.h"
 #include <Inventor/events/SoKeyboardEvent.h>
-#include <wx/event.h>
+#include <fl/event.h>
 
-class SoWxKeyboardP : public SoGuiKeyboardP {
+class SoFlKeyboardP : public SoGuiKeyboardP {
 public:
     struct key1map {
-        wxKeyCode from;                // Wx val
+        wxKeyCode from;                // Fl val
         SoKeyboardEvent::Key to; // So val
         char printable;
     };

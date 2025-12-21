@@ -30,8 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -41,13 +41,13 @@
 
 /*
   This is a simple example, demonstrating proper behaviour for a
-  SoWxRenderArea when built with the 'embed' flag set to TRUE.
+  SoFlRenderArea when built with the 'embed' flag set to TRUE.
 */
 
 int
 main(int argc, char ** argv)
 {
-    wxWindow * window = SoWx::init("renderarea");
+    wxWindow * window = SoFl::init("renderarea");
 
     SoSeparator * root = new SoSeparator;
     root->ref();
@@ -57,17 +57,17 @@ main(int argc, char ** argv)
     SoSeparator * userroot = get_scene_graph();
     root->addChild(userroot);
 
-    SoWxRenderArea * renderarea = new SoWxRenderArea(window);
+    SoFlRenderArea * renderarea = new SoFlRenderArea(window);
     camera->viewAll( userroot, renderarea->getViewportRegion() );
     renderarea->setSceneGraph(root);
     renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
     renderarea->show();
 
-    SoWx::show(window);
-    SoWx::mainLoop();
+    SoFl::show(window);
+    SoFl::mainLoop();
 
     delete renderarea;
     root->unref();
-    SoWx::done();
+    SoFl::done();
     return 0;
 }

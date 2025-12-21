@@ -41,8 +41,8 @@
  *  Use the trackball manipulator to edit/rotate a red cone
  *------------------------------------------------------------*/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
 #include <Inventor/manips/SoTrackballManip.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
@@ -54,7 +54,7 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   wxWindow* myWindow = SoWx::init(argv[0]);
+   wxWindow* myWindow = SoFl::init(argv[0]);
    if (myWindow == NULL) exit(1);
 
    SoSeparator *root = new SoSeparator;
@@ -70,14 +70,14 @@ main(int , char **argv)
    root->addChild(myMaterial);
    root->addChild(new SoCone);
 
-   SoWxRenderArea *myRenderArea = new SoWxRenderArea(myWindow);
+   SoFlRenderArea *myRenderArea = new SoFlRenderArea(myWindow);
    myCamera->viewAll(root, myRenderArea->getViewportRegion());
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("Trackball");
    myRenderArea->show();
 
-   SoWx::show(myWindow);
-   SoWx::mainLoop();
+   SoFl::show(myWindow);
+   SoFl::mainLoop();
 
    delete myRenderArea;
    root->unref();

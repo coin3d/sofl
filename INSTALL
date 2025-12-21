@@ -16,8 +16,8 @@ Cookbook Procedure
     -DCMAKE_PREFIX_PATH=</path/to/wxWidgets>
 
     e.g.:
-    cmake -DCMAKE_INSTALL_PREFIX=/opt/SoWx -DCMAKE_PREFIX_PATH=/opt/wxWidgets ..
-    This will install sowx in /opt/SoWx and will use the wxWidgets at /opt/wxWidgets
+    cmake -DCMAKE_INSTALL_PREFIX=/opt/SoFl -DCMAKE_PREFIX_PATH=/opt/wxWidgets ..
+    This will install sowx in /opt/SoFl and will use the wxWidgets at /opt/wxWidgets
 
   4) compile and install
 

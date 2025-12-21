@@ -30,13 +30,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/viewers/SoWxPlaneViewer.h"
-#include "Inventor/Wx/viewers/SoWxPlaneViewerP.h"
-#include "Inventor/Wx/common/pixmaps/ortho.xpm"
-#include "Inventor/Wx/common/pixmaps/perspective.xpm"
-#include "Inventor/Wx/common/pixmaps/x.xpm"
-#include "Inventor/Wx/common/pixmaps/y.xpm"
-#include "Inventor/Wx/common/pixmaps/z.xpm"
+#include "Inventor/Fl/viewers/SoFlPlaneViewer.h"
+#include "Inventor/Fl/viewers/SoFlPlaneViewerP.h"
+#include "Inventor/Fl/common/pixmaps/ortho.xpm"
+#include "Inventor/Fl/common/pixmaps/perspective.xpm"
+#include "Inventor/Fl/common/pixmaps/x.xpm"
+#include "Inventor/Fl/common/pixmaps/y.xpm"
+#include "Inventor/Fl/common/pixmaps/z.xpm"
 #include "Inventor/nodes/SoOrthographicCamera.h"
 #include "Inventor/nodes/SoPerspectiveCamera.h"
 
@@ -47,12 +47,12 @@
 #define PRIVATE(o) (o->pimpl)
 
 wxWindow*
-SoWxPlaneViewer::buildWidget(wxWindow* parent) {
+SoFlPlaneViewer::buildWidget(wxWindow* parent) {
     return inherited::buildWidget(parent);
 }
 
 void
-SoWxPlaneViewer::createViewerButtons(wxWindow* parent,
+SoFlPlaneViewer::createViewerButtons(wxWindow* parent,
                                      SbPList * buttons) {
     inherited::createViewerButtons(parent, buttons);
 
@@ -87,7 +87,7 @@ SoWxPlaneViewer::createViewerButtons(wxWindow* parent,
 }
 
 void
-SoWxPlaneViewer::setCamera( SoCamera* camera) {
+SoFlPlaneViewer::setCamera( SoCamera* camera) {
     if (camera) {
         SoType type = camera->getTypeId();
         SbBool orthogonal =
@@ -112,18 +112,18 @@ SoWxPlaneViewer::setCamera( SoCamera* camera) {
 }
 
 
-SoWxPlaneViewerP::SoWxPlaneViewerP(SoWxPlaneViewer *v)
+SoFlPlaneViewerP::SoFlPlaneViewerP(SoFlPlaneViewer *v)
         : SoGuiPlaneViewerP(v){
 
 }
 
-void SoWxPlaneViewerP::constructor(SbBool buildnow) {
+void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     this->commonConstructor(); // init generic stuff
 
     this->pixmaps.orthogonal = new wxImage((const char **) ortho_xpm);
     this->pixmaps.perspective = new wxImage((const char **) perspective_xpm);
 
-    PUBLIC(this)->setClassName("SoWxPlaneViewer");
+    PUBLIC(this)->setClassName("SoFlPlaneViewer");
     PUBLIC(this)->setLeftWheelString("transY");
     PUBLIC(this)->setBottomWheelString("transX");
 
@@ -134,36 +134,36 @@ void SoWxPlaneViewerP::constructor(SbBool buildnow) {
     PUBLIC(this)->setBaseWidget(viewer);
 
     viewer->Bind(wxEVT_BUTTON,
-                 &SoWxPlaneViewerP::cameraToggleClicked,
+                 &SoFlPlaneViewerP::cameraToggleClicked,
                  this,
                  CAMERA_BUTTON);
     viewer->Bind(wxEVT_BUTTON,
-                 &SoWxPlaneViewerP::xClicked,
+                 &SoFlPlaneViewerP::xClicked,
                  this,
                  X_BUTTON);
     viewer->Bind(wxEVT_BUTTON,
-                 &SoWxPlaneViewerP::yClicked,
+                 &SoFlPlaneViewerP::yClicked,
                  this,
                  Y_BUTTON);
     viewer->Bind(wxEVT_BUTTON,
-                 &SoWxPlaneViewerP::zClicked,
+                 &SoFlPlaneViewerP::zClicked,
                  this,
                  Z_BUTTON);
 }
 
-void SoWxPlaneViewerP::xClicked(wxEvent &) {
+void SoFlPlaneViewerP::xClicked(wxEvent &) {
     this->viewPlaneX();
 }
 
-void SoWxPlaneViewerP::yClicked(wxEvent &) {
+void SoFlPlaneViewerP::yClicked(wxEvent &) {
     this->viewPlaneY();
 }
 
-void SoWxPlaneViewerP::zClicked(wxEvent &) {
+void SoFlPlaneViewerP::zClicked(wxEvent &) {
     this->viewPlaneZ();
 }
 
-void SoWxPlaneViewerP::cameraToggleClicked(wxEvent &) {
+void SoFlPlaneViewerP::cameraToggleClicked(wxEvent &) {
     PUBLIC(this)->toggleCameraType();
 }
 

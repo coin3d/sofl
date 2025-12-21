@@ -38,17 +38,17 @@
 #endif
 
 #include <Inventor/SbBasic.h>
-#include "Inventor/Wx/viewers/SoGuiExaminerViewerP.h"
+#include "Inventor/Fl/viewers/SoGuiExaminerViewerP.h"
 
-#include "wx/image.h"
-#include "wx/button.h"
-#include "wx/frame.h"
+#include "fl/image.h"
+#include "fl/button.h"
+#include "fl/frame.h"
 
-class SoWxExaminerViewerP :  public SoGuiExaminerViewerP {
+class SoFlExaminerViewerP :  public SoGuiExaminerViewerP {
 
 public:
-    explicit SoWxExaminerViewerP(SoWxExaminerViewer *publ);
-    virtual ~SoWxExaminerViewerP();
+    explicit SoFlExaminerViewerP(SoFlExaminerViewer *publ);
+    virtual ~SoFlExaminerViewerP();
     void constructor(const SbBool build);
 
     wxImage orthopixmap;

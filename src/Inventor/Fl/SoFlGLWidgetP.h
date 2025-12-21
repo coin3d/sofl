@@ -32,32 +32,32 @@
 #ifndef SOWX_SOWXGLWIDGETP_H
 #define SOWX_SOWXGLWIDGETP_H
 
-#include "Inventor/Wx/SoGuiGLWidgetP.h"
-#include "Inventor/Wx/SoWxGLWidget.h"
+#include "Inventor/Fl/SoGuiGLWidgetP.h"
+#include "Inventor/Fl/SoFlGLWidget.h"
 
 #include <Inventor/SbVec2s.h>
 
-#include <wx/glcanvas.h>
-#include <wx/wx.h>
-#include <wx/timer.h>
+#include <fl/glcanvas.h>
+#include <fl/fl.h>
+#include <fl/timer.h>
 
 #include <set>
 #include <vector>
 
-class SoWxGLArea;
+class SoFlGLArea;
 
-class SoWxGLWidgetP :  public SoGuiGLWidgetP
+class SoFlGLWidgetP :  public SoGuiGLWidgetP
 {
 public:
 
-    explicit SoWxGLWidgetP(SoWxGLWidget * publ);
+    explicit SoFlGLWidgetP(SoFlGLWidget * publ);
 
-    virtual ~SoWxGLWidgetP();
+    virtual ~SoFlGLWidgetP();
 
     void initGLModes(int);
 
     std::vector<int> gl_attributes;
-    SoWxGLArea* buildGLWidget();
+    SoFlGLArea* buildGLWidget();
 
     SbVec2s glSize;
     SbVec2s glSizeUnscaled;
@@ -65,8 +65,8 @@ public:
 
     wxWindow * currentglwidget;
     wxWindow * previousglwidget;
-    SoWxGLArea * currentglarea;
-    SoWxGLArea * previousglarea;
+    SoFlGLArea * currentglarea;
+    SoFlGLArea * previousglarea;
     wxWindow * glparent;
 
     int borderthickness;

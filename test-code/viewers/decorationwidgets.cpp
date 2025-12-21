@@ -30,17 +30,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
+#include <Inventor/Fl/SoFl.h>
 
 #define protected public
-#include <Inventor/Wx/viewers/SoWxFullViewer.h>
+#include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #undef protected
 
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 #include "common/SimpleFrame.h"
 
 // Define a new application type
@@ -51,13 +51,13 @@ public:
         if ( !wxApp::OnInit() )
             return false;
 
-        wxWindow* window = SoWx::init("renderarea");
+        wxWindow* window = SoFl::init("renderarea");
 
-                new SoWxFullViewer(window,
+                new SoFlFullViewer(window,
                                    "Renderarea demonstration",
                                    FALSE,
-                                   SoWxFullViewer::BUILD_ALL,
-                                   SoWxViewer::BROWSER,
+                                   SoFlFullViewer::BUILD_ALL,
+                                   SoFlViewer::BROWSER,
                                    FALSE);
 
         SimpleFrame* asimpleframe = new SimpleFrame(0,

@@ -36,9 +36,9 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
-#include <Inventor/Wx/SoWxComponent.h>
+#include <Inventor/Fl/SoFlComponent.h>
 
-typedef void 	SoWxDirectionalLightEditorCB (void *userData, const SoDirectionalLight *light);
+typedef void 	SoFlDirectionalLightEditorCB (void *userData, const SoDirectionalLight *light);
 
 class SoPath;
 class SoSeparator;
@@ -47,26 +47,26 @@ class SoPerspectiveCamera;
 class SoNodeSensor;
 class SoDirectionalLightManip;
 class SoCallbackList;
-class SoWxClipboard;
-class SoWxRenderArea;
-class _SoWxColorEditor;
-class _SoWxColorSlider;
+class SoFlClipboard;
+class SoFlRenderArea;
+class _SoFlColorEditor;
+class _SoFlColorSlider;
 
 // *************************************************************************
 
-typedef void SoWxDirectionalLightEditorCB(
+typedef void SoFlDirectionalLightEditorCB(
         void * user, const SoDirectionalLight * light);
 
-class SOWX_DLL_API SoWxDirectionalLightEditor : public SoWxComponent {
+class SOWX_DLL_API SoFlDirectionalLightEditor : public SoFlComponent {
 
-SOWX_OBJECT_HEADER(SoWxDirectionalLightEditor, SoWxComponent);
+SOWX_OBJECT_HEADER(SoFlDirectionalLightEditor, SoFlComponent);
 
 public:
-    SoWxDirectionalLightEditor(
+    SoFlDirectionalLightEditor(
             wxWindow* parent = NULL,
             const char * const name = NULL,
             SbBool embed = TRUE);
-    ~SoWxDirectionalLightEditor();
+    ~SoFlDirectionalLightEditor();
 
     void attach(SoPath * pathToLight);
     void detach(void);
@@ -76,15 +76,15 @@ public:
     const SoDirectionalLight & getLight(void) const;
 
     void addLightChangedCallback(
-            SoWxDirectionalLightEditorCB * callback, void * user = NULL);
+            SoFlDirectionalLightEditorCB * callback, void * user = NULL);
     void removeLightChangedCallback(
-            SoWxDirectionalLightEditorCB * callback, void * user = NULL);
+            SoFlDirectionalLightEditorCB * callback, void * user = NULL);
 
     virtual void show(void);
     virtual void hide(void);
 
 protected:
-    SoWxDirectionalLightEditor(
+    SoFlDirectionalLightEditor(
             wxWindow* parent,
             const char * const name,
             SbBool embed,
@@ -101,9 +101,9 @@ protected:
     SoPerspectiveCamera * myCamera;
     SoCamera * cameraToWatch;
 
-    _SoWxColorEditor * colorEditor;
-    _SoWxColorSlider * intensitySlider;
-    SoWxRenderArea * renderArea;
+    _SoFlColorEditor * colorEditor;
+    _SoFlColorSlider * intensitySlider;
+    SoFlRenderArea * renderArea;
     SoNodeSensor * lightSensor;
     SoNodeSensor * cameraSensor;
     SoDirectionalLightManip * dirLightManip;
@@ -111,7 +111,7 @@ protected:
     SbBool ignoreCallback;
     SoCallbackList * callbackList;
 
-    SoWxClipboard * clipboard;
+    SoFlClipboard * clipboard;
 
     void copyLight(SoDirectionalLight * dst, const SoDirectionalLight * src);
     void updateLocalComponents(void);
@@ -120,6 +120,6 @@ private:
     wxWindow* buildWidget(wxWindow* parent);
     void constructor(SbBool build);
 
-}; // class SoWxDirectionalLightEditor
+}; // class SoFlDirectionalLightEditor
 
 #endif //SOWX_SOWXDIRECTIONALLIGHTEDITOR_H

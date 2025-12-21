@@ -30,13 +30,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "wx/wx.h"
-#include <wx/glcanvas.h>
+#include "fl/fl.h"
+#include <fl/glcanvas.h>
 
-class SoWxGLArea : public wxGLCanvas
+class SoFlGLArea : public wxGLCanvas
 {
 public:
-    SoWxGLArea(wxWindow *parent,
+    SoFlGLArea(wxWindow *parent,
                wxGLAttributes& attributes)
 #if 0
             : wxGLCanvas(parent,
@@ -57,7 +57,7 @@ public:
     }
 
 
-    virtual ~SoWxGLArea() {
+    virtual ~SoFlGLArea() {
         delete gl_real_context;
     }
 
@@ -98,14 +98,14 @@ private:
     bool is_gl_initialized;
     wxGLContext* gl_real_context;
 
-wxDECLARE_NO_COPY_CLASS(SoWxGLArea);
+wxDECLARE_NO_COPY_CLASS(SoFlGLArea);
 wxDECLARE_EVENT_TABLE();
 };
 
-wxBEGIN_EVENT_TABLE(SoWxGLArea, wxGLCanvas)
-                EVT_PAINT(SoWxGLArea::OnPaint)
-                EVT_ERASE_BACKGROUND(SoWxGLArea::OnEraseBackground)
-                EVT_SIZE(SoWxGLArea::OnSize)
+wxBEGIN_EVENT_TABLE(SoFlGLArea, wxGLCanvas)
+                EVT_PAINT(SoFlGLArea::OnPaint)
+                EVT_ERASE_BACKGROUND(SoFlGLArea::OnEraseBackground)
+                EVT_SIZE(SoFlGLArea::OnSize)
 wxEND_EVENT_TABLE()
 
 #define USE_PANEL 1
@@ -133,11 +133,11 @@ public:
         attributes.RGBA();
         attributes.EndList();
 #if USE_PANEL
-        SoWxGLArea* area = new SoWxGLArea(panel, attributes);
+        SoFlGLArea* area = new SoFlGLArea(panel, attributes);
         sizer->Add(area, 0, wxEXPAND|wxALL, 0);
         sizer->Layout();
 #else
-        SoWxGLArea* area = new SoWxGLArea(w, attributes);
+        SoFlGLArea* area = new SoFlGLArea(w, attributes);
 #endif
         area->SetBackgroundColour(wxColour(0,255,0));
 

@@ -30,11 +30,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "SoWxKeyboardP.h"
+#include "SoFlKeyboardP.h"
 
-SbDict * SoWxKeyboardP::translatetable = NULL;
+SbDict * SoFlKeyboardP::translatetable = NULL;
 
-struct SoWxKeyboardP::key1map SoWxKeyboardP::wxToSoMapping[] = {
+struct SoFlKeyboardP::key1map SoFlKeyboardP::wxToSoMapping[] = {
         {WXK_ESCAPE, SoKeyboardEvent::ESCAPE, '.'},
         {WXK_TAB, SoKeyboardEvent::TAB, '.'},
         {WXK_BACK, SoKeyboardEvent::BACKSPACE, '.'},
@@ -154,15 +154,15 @@ struct SoWxKeyboardP::key1map SoWxKeyboardP::wxToSoMapping[] = {
 };
 
 void
-SoWxKeyboardP::make_translation_table(void)
+SoFlKeyboardP::make_translation_table(void)
 {
-    assert(SoWxKeyboardP::translatetable == NULL);
-    SoWxKeyboardP::translatetable = new SbDict;
+    assert(SoFlKeyboardP::translatetable == NULL);
+    SoFlKeyboardP::translatetable = new SbDict;
 
     int i = 0;
-    while ( SoWxKeyboardP::wxToSoMapping[i].from != WXK_NONE) {
-        SoWxKeyboardP::translatetable->enter((unsigned long)SoWxKeyboardP::wxToSoMapping[i].from,
-                                             (void *)&SoWxKeyboardP::wxToSoMapping[i]);
+    while ( SoFlKeyboardP::wxToSoMapping[i].from != WXK_NONE) {
+        SoFlKeyboardP::translatetable->enter((unsigned long)SoFlKeyboardP::wxToSoMapping[i].from,
+                                             (void *)&SoFlKeyboardP::wxToSoMapping[i]);
         i++;
     }
 }

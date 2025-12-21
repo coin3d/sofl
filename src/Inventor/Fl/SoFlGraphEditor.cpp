@@ -46,13 +46,13 @@
 
 #include <sowxdefs.h>
 
-#include <Inventor/Wx/SoWxGraphEditor.h>
+#include <Inventor/Fl/SoFlGraphEditor.h>
 
 // *************************************************************************
 
 /*!
-  \class SoWxGraphEditor Inventor/Wx/SoWxGraphEditor.h
-  \brief The SoWxGraphEditor class is a component for viewing and editing
+  \class SoFlGraphEditor Inventor/Fl/SoFlGraphEditor.h
+  \brief The SoFlGraphEditor class is a component for viewing and editing
   the Inventor scene graph of a model.
   \ingroup editors
 
@@ -60,33 +60,33 @@
 */
 
 /*!
-  \enum SoWxGraphEditor::BuildFlag
+  \enum SoFlGraphEditor::BuildFlag
   FIXME: write doc
 */
 
 /*!
-  \var SoWxGraphEditor::BuildFlag SoWxGraphEditor::MENUBAR
+  \var SoFlGraphEditor::BuildFlag SoFlGraphEditor::MENUBAR
   FIXME: write doc
 */
 
 /*!
-  \var SoWxGraphEditor::BuildFlag SoWxGraphEditor::GRAPHEDITOR
+  \var SoFlGraphEditor::BuildFlag SoFlGraphEditor::GRAPHEDITOR
   FIXME: write doc
 */
 
 /*!
-  \var SoWxGraphEditor::BuildFlag SoWxGraphEditor::STATUSBAR
+  \var SoFlGraphEditor::BuildFlag SoFlGraphEditor::STATUSBAR
   FIXME: write doc
 */
 
 /*!
-  \var SoWxGraphEditor::BuildFlag SoWxGraphEditor::EVERYTHING
+  \var SoFlGraphEditor::BuildFlag SoFlGraphEditor::EVERYTHING
   FIXME: write doc
 */
 
 // *************************************************************************
 
-SOWX_OBJECT_SOURCE(SoWxGraphEditor);
+SOWX_OBJECT_SOURCE(SoFlGraphEditor);
 
 // *************************************************************************
 
@@ -94,7 +94,7 @@ SOWX_OBJECT_SOURCE(SoWxGraphEditor);
   Public constructor.
 */
 
-SoWxGraphEditor::SoWxGraphEditor(
+SoFlGraphEditor::SoFlGraphEditor(
   wxWindow * const parent,
   const char * const name,
   const SbBool embed,
@@ -102,13 +102,13 @@ SoWxGraphEditor::SoWxGraphEditor(
 : inherited(parent, name, embed)
 {
   this->constructor(TRUE, parts);
-} // SoWxGraphEditor()
+} // SoFlGraphEditor()
 
 /*!
   Protected constructor.
 */
 
-SoWxGraphEditor::SoWxGraphEditor(
+SoFlGraphEditor::SoFlGraphEditor(
   wxWindow * const parent,
   const char * const name,
   const SbBool embed,
@@ -117,14 +117,14 @@ SoWxGraphEditor::SoWxGraphEditor(
 : inherited(parent, name, embed)
 {
   this->constructor(build, parts);
-} // SoWxGraphEditor()
+} // SoFlGraphEditor()
 
 /*!
   Common constructor code.
 */
 
 void
-SoWxGraphEditor::constructor(
+SoFlGraphEditor::constructor(
   const SbBool build,
   const int parts)
 {
@@ -142,7 +142,7 @@ SoWxGraphEditor::constructor(
   this->horizontal = (WxAdjustment *) NULL;
   this->vertical = (WxAdjustment *) NULL;
 
-  this->setClassName("SoWxGraphEditor");
+  this->setClassName("SoFlGraphEditor");
 
   if (! build) return;
   this->setSize(SbVec2s(350, 450));
@@ -155,10 +155,10 @@ SoWxGraphEditor::constructor(
   Destructor.
 */
 
-SoWxGraphEditor::~SoWxGraphEditor(
+SoFlGraphEditor::~SoFlGraphEditor(
   void)
 {
-} // ~SoWxGraphEditor()
+} // ~SoFlGraphEditor()
 
 // *************************************************************************
 
@@ -167,7 +167,7 @@ SoWxGraphEditor::~SoWxGraphEditor(
 */
 
 void
-SoWxGraphEditor::setSceneGraph(// virtual
+SoFlGraphEditor::setSceneGraph(// virtual
   SoNode * root)
 {
   if (this->scenegraph) {
@@ -186,7 +186,7 @@ SoWxGraphEditor::setSceneGraph(// virtual
 */
 
 SoNode *
-SoWxGraphEditor::getSceneGraph(
+SoFlGraphEditor::getSceneGraph(
   void) const
 {
   return this->scenegraph;
@@ -197,7 +197,7 @@ SoWxGraphEditor::getSceneGraph(
 */
 
 wxWindow *
-SoWxGraphEditor::buildSubGraph(
+SoFlGraphEditor::buildSubGraph(
   wxWindow * parent,
   SoNode * node)
 {
@@ -217,7 +217,7 @@ SoWxGraphEditor::buildSubGraph(
   ww_widget_show(root);
   ww_tree_append(WX_TREE(parent), root);
   ww_signal_connect(WX_OBJECT(root), "select",
-    WX_SIGNAL_FUNC(SoWxGraphEditor::selectionCB), (gpointer) this);
+    WX_SIGNAL_FUNC(SoFlGraphEditor::selectionCB), (gpointer) this);
 
   wxWindow * substuff = WX_WIDGET(ww_tree_new());
   ww_tree_item_set_subtree(WX_TREE_ITEM(root), substuff);
@@ -240,14 +240,14 @@ SoWxGraphEditor::buildSubGraph(
       ww_widget_show(fieldwidget);
       ww_tree_append(WX_TREE(fieldstree), fieldwidget);
       ww_signal_connect(WX_OBJECT(fieldwidget), "select",
-        WX_SIGNAL_FUNC(SoWxGraphEditor::selectionCB), (gpointer) this);
+        WX_SIGNAL_FUNC(SoFlGraphEditor::selectionCB), (gpointer) this);
     }
   }
 
   SoChildList * children = node->getChildren();
   if (children != NULL && children->getLength() > 0) {
     for (int i = 0; i < children->getLength(); i++)
-      wxWindow * kid = SoWxGraphEditor::buildSubGraph(substuff, (SoNode *) children->get(i));
+      wxWindow * kid = SoFlGraphEditor::buildSubGraph(substuff, (SoNode *) children->get(i));
   }
   return root;
 }
@@ -257,7 +257,7 @@ SoWxGraphEditor::buildSubGraph(
 */
 
 void
-SoWxGraphEditor::buildSceneGraphTree(// virtual, protected
+SoFlGraphEditor::buildSceneGraphTree(// virtual, protected
   void)
 {
   wxWindow * graph = this->buildSubGraph(this->graphroot, this->scenegraph);
@@ -269,10 +269,10 @@ SoWxGraphEditor::buildSceneGraphTree(// virtual, protected
 */
 
 void
-SoWxGraphEditor::clearSceneGraphTree(// virtual, protected
+SoFlGraphEditor::clearSceneGraphTree(// virtual, protected
   void)
 {
-  SoDebugError::postInfo("SoWxGraphEditor::clearSceneGraphTree", 
+  SoDebugError::postInfo("SoFlGraphEditor::clearSceneGraphTree",
     _("[not implemented]"));
 } // clearSceneGraphTree()
 
@@ -281,7 +281,7 @@ SoWxGraphEditor::clearSceneGraphTree(// virtual, protected
 */
 
 void
-SoWxGraphEditor::saveSceneGraph(// virtual, protected
+SoFlGraphEditor::saveSceneGraph(// virtual, protected
   void)
 {
   if (! this->scenegraph) {
@@ -307,7 +307,7 @@ SoWxGraphEditor::saveSceneGraph(// virtual, protected
 */
 
 wxWindow *
-SoWxGraphEditor::buildWidget(// virtual, protected
+SoFlGraphEditor::buildWidget(// virtual, protected
   wxWindow * parent)
 {
   this->editorbase = WX_WIDGET(ww_vbox_new(FALSE, 0));
@@ -336,7 +336,7 @@ SoWxGraphEditor::buildWidget(// virtual, protected
 */
 
 wxWindow *
-SoWxGraphEditor::buildMenuBarWidget(// virtual, protected
+SoFlGraphEditor::buildMenuBarWidget(// virtual, protected
   wxWindow * parent)
 {
   wxWindow * menubar = WX_WIDGET(ww_menu_bar_new());
@@ -349,12 +349,12 @@ SoWxGraphEditor::buildMenuBarWidget(// virtual, protected
   ww_widget_show(saveitem);
   ww_menu_append(WX_MENU(filemenu), WX_WIDGET(saveitem));
   ww_signal_connect(WX_OBJECT(saveitem), "activate",
-    WX_SIGNAL_FUNC(SoWxGraphEditor::saveCB), (gpointer) this);
+    WX_SIGNAL_FUNC(SoFlGraphEditor::saveCB), (gpointer) this);
   wxWindow * closeitem = ww_menu_item_new_with_label(_("Close"));
   ww_widget_show(closeitem);
   ww_menu_append(WX_MENU(filemenu), WX_WIDGET(closeitem));
   ww_signal_connect(WX_OBJECT(closeitem), "activate",
-    WX_SIGNAL_FUNC(SoWxGraphEditor::closeCB), (gpointer) this);
+    WX_SIGNAL_FUNC(SoFlGraphEditor::closeCB), (gpointer) this);
   ww_menu_item_set_submenu(WX_MENU_ITEM(filemenuitem), WX_WIDGET(filemenu));
   return menubar;
 } // buildMenuBarWidget()
@@ -364,7 +364,7 @@ SoWxGraphEditor::buildMenuBarWidget(// virtual, protected
 */
 
 wxWindow *
-SoWxGraphEditor::buildGraphEditorWidget(// virtual, protected
+SoFlGraphEditor::buildGraphEditorWidget(// virtual, protected
   wxWindow * parent)
 {
   /* value, lower, upper, step_increment, page_increment, page_size */
@@ -387,7 +387,7 @@ SoWxGraphEditor::buildGraphEditorWidget(// virtual, protected
 */
 
 wxWindow *
-SoWxGraphEditor::buildStatusBarWidget(// virtual, protected
+SoFlGraphEditor::buildStatusBarWidget(// virtual, protected
   wxWindow * parent)
 {
   wxWindow * statusframe = WX_WIDGET(ww_frame_new((gchar *) NULL));
@@ -415,7 +415,7 @@ SoWxGraphEditor::buildStatusBarWidget(// virtual, protected
 */
 
 void
-SoWxGraphEditor::nodeSelection(// virtual, protected
+SoFlGraphEditor::nodeSelection(// virtual, protected
   wxWindow * treeitem,
   SoNode * node)
 {
@@ -427,7 +427,7 @@ SoWxGraphEditor::nodeSelection(// virtual, protected
 */
 
 void
-SoWxGraphEditor::fieldSelection(// virtual, protected
+SoFlGraphEditor::fieldSelection(// virtual, protected
   wxWindow * treeitem,
   SoNode * node,
   SoField * field)
@@ -439,7 +439,7 @@ SoWxGraphEditor::fieldSelection(// virtual, protected
 
 // doc in super
 void
-SoWxGraphEditor::sizeChanged(const SbVec2s & size)
+SoFlGraphEditor::sizeChanged(const SbVec2s & size)
 {
   // inherited::sizeChanged(size);
 } // sizeChanged()
@@ -451,12 +451,12 @@ SoWxGraphEditor::sizeChanged(const SbVec2s & size)
 */
 
 void
-SoWxGraphEditor::saveCB(// static, private
+SoFlGraphEditor::saveCB(// static, private
   WxObject * obj,
   gpointer closure)
 {
   assert(closure != NULL);
-  SoWxGraphEditor * editor = (SoWxGraphEditor *) closure;
+  SoFlGraphEditor * editor = (SoFlGraphEditor *) closure;
   editor->saveSceneGraph();
 } // saveCB()
 
@@ -465,12 +465,12 @@ SoWxGraphEditor::saveCB(// static, private
 */
 
 void
-SoWxGraphEditor::closeCB(// static, private
+SoFlGraphEditor::closeCB(// static, private
   WxObject * obj,
   gpointer closure)
 {
   assert(closure != NULL);
-  SoWxGraphEditor * editor = (SoWxGraphEditor *) closure;
+  SoFlGraphEditor * editor = (SoFlGraphEditor *) closure;
   editor->hide();
 } // closeCB()
 
@@ -481,7 +481,7 @@ SoWxGraphEditor::closeCB(// static, private
 */
 
 void
-SoWxGraphEditor::setStatusMessage(// virtual, protected
+SoFlGraphEditor::setStatusMessage(// virtual, protected
   const char * message)
 {
   ww_label_set_text(WX_LABEL(this->statusmessage), message);
@@ -494,12 +494,12 @@ SoWxGraphEditor::setStatusMessage(// virtual, protected
 */
 
 void
-SoWxGraphEditor::selectionCB(
+SoFlGraphEditor::selectionCB(
   WxObject * object,
   gpointer closure)
 {
   assert(closure != NULL);
-  SoWxGraphEditor * editor = (SoWxGraphEditor *) closure;
+  SoFlGraphEditor * editor = (SoFlGraphEditor *) closure;
   SoNode * node = (SoNode *) ww_object_get_data(WX_OBJECT(object), "SoNode");
   SoField * field = (SoField *) ww_object_get_data(WX_OBJECT(object), "SoField");
   if (node && ! field)
@@ -507,7 +507,7 @@ SoWxGraphEditor::selectionCB(
   else if (node && field)
     editor->fieldSelection(WX_WIDGET(object), node, field);
   else
-    SoDebugError::postInfo("SoWxGraphEditor::selectionCB", "[invalid selection data]");
+    SoDebugError::postInfo("SoFlGraphEditor::selectionCB", "[invalid selection data]");
 } // selectionCB()
 
 // *************************************************************************
@@ -517,10 +517,10 @@ SoWxGraphEditor::selectionCB(
 */
 
 const char *
-SoWxGraphEditor::getDefaultWidgetName(// virtual, protected
+SoFlGraphEditor::getDefaultWidgetName(// virtual, protected
   void) const
 {
-  static const char defaultWidgetName[] = "SoWxGraphEditor";
+  static const char defaultWidgetName[] = "SoFlGraphEditor";
   return defaultWidgetName;
 } // getDefaultWidgetName()
 
@@ -529,7 +529,7 @@ SoWxGraphEditor::getDefaultWidgetName(// virtual, protected
 */
 
 const char *
-SoWxGraphEditor::getDefaultTitle(// virtual, protected
+SoFlGraphEditor::getDefaultTitle(// virtual, protected
   void) const
 {
   static const char defaultTitle[] = N_("Graph Editor");
@@ -541,7 +541,7 @@ SoWxGraphEditor::getDefaultTitle(// virtual, protected
 */
 
 const char *
-SoWxGraphEditor::getDefaultIconTitle(// virtual, protected
+SoFlGraphEditor::getDefaultIconTitle(// virtual, protected
   void) const
 {
   static const char defaultIconTitle[] = N_("Graph Editor");

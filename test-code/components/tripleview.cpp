@@ -32,12 +32,12 @@
 
 /*
   This is just a simple test application to check that we can have
-  SoWxComponent derived objects within other widgets.
+  SoFlComponent derived objects within other widgets.
 
   It also demonstrates having multiple views on a scene from multiple
-  SoWxRenderArea instances.
+  SoFlRenderArea instances.
 
-  Note that this example doesn't work correctly with SoWx + TGS'
+  Note that this example doesn't work correctly with SoFl + TGS'
   Inventor for some reason. Looks like a TGS' Inventor bug to me. See
   also Bugzilla #20.
 
@@ -46,9 +46,9 @@
 
 /***********************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxRenderArea.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlRenderArea.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoCube.h>
@@ -62,11 +62,11 @@
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/sensors/SoTimerSensor.h>
 #include <Inventor/actions/SoGLRenderAction.h>
-#include <wx/gbsizer.h>
+#include <fl/gbsizer.h>
 
-#include "wx/wx.h"
+#include "fl/fl.h"
 
-#include "Inventor/Wx/SoWxInternal.h"
+#include "Inventor/Fl/SoFlInternal.h"
 
 /***********************************************************************/
 
@@ -85,7 +85,7 @@ timer_callback(void * data, SoSensor * sensor)
     scenerotate->rotation.setValue(rotx * roty * rotz);
 }
 
-// Make a Wx renderarea as a child widget of viewparent, adding the
+// Make a Fl renderarea as a child widget of viewparent, adding the
 // scene under common and a camera with the given orientation.
 void
 add_view(wxWindow * viewparent, SoGroup * common, SbRotation cameraorientation)
@@ -102,8 +102,8 @@ add_view(wxWindow * viewparent, SoGroup * common, SbRotation cameraorientation)
     std::cerr<<dumpWindowData(viewparent)<<std::endl;
     std::cerr<<"-----------------------------------\n";
 
-    SoWxRenderArea * area = new SoWxRenderArea(viewparent);
-    // SoWxExaminerViewer * area = new SoWxExaminerViewer(viewparent);
+    SoFlRenderArea * area = new SoFlRenderArea(viewparent);
+    // SoFlExaminerViewer * area = new SoFlExaminerViewer(viewparent);
     area->setSceneGraph(root);
     std::cerr<<"-------AFTER-----------------\n";
     std::cerr<<dumpWindowData(viewparent)<<std::endl;
@@ -134,7 +134,7 @@ public:
         // Initialize system.
 
         wxWindow * parent = new wxFrame(0,wxID_ANY, "");
-        SoWx::init(parent);
+        SoFl::init(parent);
 
         wxPanel* view0;
         wxPanel* view1;
@@ -216,8 +216,8 @@ public:
         parent->SetSizer( gbSizer2 );
         parent->Layout();
 
-        SoWx::show(parent);
-        SoWx::mainLoop();
+        SoFl::show(parent);
+        SoFl::mainLoop();
         exit(0);  // TODO: check error on exit!
         return true;
     }

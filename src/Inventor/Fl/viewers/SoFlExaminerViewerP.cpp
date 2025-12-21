@@ -30,26 +30,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/viewers/SoWxExaminerViewerP.h"
-#include "Inventor/Wx/viewers/SoWxExaminerViewer.h"
-#include "Inventor/Wx/common/pixmaps/ortho.xpm"
-#include "Inventor/Wx/common/pixmaps/perspective.xpm"
+#include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
+#include "Inventor/Fl/common/pixmaps/ortho.xpm"
+#include "Inventor/Fl/common/pixmaps/perspective.xpm"
 #include "ButtonIndexValues.h"
 
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SoWxExaminerViewerP::SoWxExaminerViewerP(SoWxExaminerViewer *publ)
+SoFlExaminerViewerP::SoFlExaminerViewerP(SoFlExaminerViewer *publ)
         : SoGuiExaminerViewerP(publ) {
 
 }
 
-SoWxExaminerViewerP::~SoWxExaminerViewerP() {
+SoFlExaminerViewerP::~SoFlExaminerViewerP() {
     this->genericDestructor();
 }
 
 void
-SoWxExaminerViewerP::constructor(const SbBool build) {
+SoFlExaminerViewerP::constructor(const SbBool build) {
     this->genericConstructor();
 
     this->cameratogglebutton = NULL;
@@ -58,7 +58,7 @@ SoWxExaminerViewerP::constructor(const SbBool build) {
     this->perspectivepixmap = wxImage((const char **) perspective_xpm);
     assert(this->orthopixmap.GetSize() == this->perspectivepixmap.GetSize());
 
-    PUBLIC(this)->setClassName("SoWxExaminerViewer");
+    PUBLIC(this)->setClassName("SoFlExaminerViewer");
     PUBLIC(this)->setPopupMenuString("Examiner Viewer");
     PUBLIC(this)->setLeftWheelString("RotX");
     PUBLIC(this)->setBottomWheelString("RotY");
@@ -66,7 +66,7 @@ SoWxExaminerViewerP::constructor(const SbBool build) {
     if (build) {
         wxWindow *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
         widget->Bind( wxEVT_BUTTON,
-                      &SoWxExaminerViewerP::cameratoggleClicked,
+                      &SoFlExaminerViewerP::cameratoggleClicked,
                       this,
                       CAMERA_BUTTON);
         PUBLIC(this)->setBaseWidget(widget);
@@ -76,7 +76,7 @@ SoWxExaminerViewerP::constructor(const SbBool build) {
 }
 
 void
-SoWxExaminerViewerP::cameratoggleClicked(wxCommandEvent&) {
+SoFlExaminerViewerP::cameratoggleClicked(wxCommandEvent&) {
     if (PUBLIC(this)->getCamera())
         PUBLIC(this)->toggleCameraType();
 }

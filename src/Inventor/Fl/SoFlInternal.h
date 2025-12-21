@@ -32,9 +32,9 @@
 #ifndef SOWX_SOWXINTERNAL_H
 #define SOWX_SOWXINTERNAL_H
 
-#include <wx/wx.h>
+#include <fl/fl.h>
 
-class SoWxInternal {
+class SoFlInternal {
 
 };
 

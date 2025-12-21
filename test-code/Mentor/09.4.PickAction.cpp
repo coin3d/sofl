@@ -49,8 +49,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/actions/SoRayPickAction.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
@@ -115,7 +115,7 @@ main(int, char **argv)
     SoMouseButtonEvent  myMouseEvent;
 
     // Initialize Inventor and Xt
-    wxWindow* myWindow = SoWx::init(argv[0]);
+    wxWindow* myWindow = SoFl::init(argv[0]);
     if (myWindow == NULL) exit(1);
 
     SoSeparator *root = new SoSeparator;
@@ -153,7 +153,7 @@ main(int, char **argv)
     root->addChild(starObject);  // second star object
 
     // Create a render area in which to see our scene graph.
-    SoWxExaminerViewer *myViewer = new SoWxExaminerViewer(myWindow);
+    SoFlExaminerViewer *myViewer = new SoFlExaminerViewer(myWindow);
 
     // Turn off viewing to allow picking
     myViewer->setViewing(FALSE);
@@ -171,8 +171,8 @@ main(int, char **argv)
             myMousePressCB,
             myViewer->getSceneManager()->getSceneGraph());
 
-    SoWx::show(myWindow);
-    SoWx::mainLoop();
+    SoFl::show(myWindow);
+    SoFl::mainLoop();
 
     // FIXME: deallocate resources. 20000412 mortene.
 

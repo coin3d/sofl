@@ -30,4 +30,4 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "SoWxMaterialEditor.h"
+#include "SoFlMaterialEditor.h"

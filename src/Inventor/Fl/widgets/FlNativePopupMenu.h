@@ -33,15 +33,15 @@
 #ifndef SOWX_WXNATIVEPOPUPMENU_H
 #define SOWX_WXNATIVEPOPUPMENU_H
 
-#include <Inventor/Wx/widgets/SoWxPopupMenu.h>
+#include <Inventor/Fl/widgets/SoFlPopupMenu.h>
 
 struct MenuRecord;
 struct ItemRecord;
 
 class WxNativePopupMenu
-        : public SoWxPopupMenu
+        : public SoFlPopupMenu
         , public  wxEvtHandler{
-    typedef SoWxPopupMenu inherited;
+    typedef SoFlPopupMenu inherited;
 public:
     WxNativePopupMenu(void);
     virtual ~WxNativePopupMenu();

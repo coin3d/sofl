@@ -30,9 +30,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxGraphEditor.h>
-// #include <Inventor/Wx/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlGraphEditor.h>
+// #include <Inventor/Fl/SoFlExaminerViewer.h>
 
 #include "computils.h"
 
@@ -43,22 +43,22 @@ main(
   int argc,
   char ** argv )
 {
-  wxWidget * window = SoWx::init( argv[0] );
+  wxWidget * window = SoFl::init( argv[0] );
 
   SoNode * root = get_scene_graph( argc, argv );
   if ( ! root )
     return -1;
 
-//  SoWxExaminerViewer * examinerviewer = new SoWxExaminerViewer( window );
+//  SoFlExaminerViewer * examinerviewer = new SoFlExaminerViewer( window );
 //  examinerviewer->setSceneGraph( root );
 //  examinerviewer->show();
 
-  SoWxGraphEditor * grapheditor = new SoWxGraphEditor;
+  SoFlGraphEditor * grapheditor = new SoFlGraphEditor;
   grapheditor->setSceneGraph( root );
   grapheditor->show();
 
-//  SoWx::show( window );
-  SoWx::mainLoop();
+//  SoFl::show( window );
+  SoFl::mainLoop();
 
 //  delete examinerviewer;
   delete grapheditor;

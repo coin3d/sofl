@@ -33,23 +33,23 @@
 #ifndef SOWX_SOWXGLAREA_H
 #define SOWX_SOWXGLAREA_H
 
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
-#include <wx/timer.h>
+#include <fl/fl.h>
+#include <fl/glcanvas.h>
+#include <fl/timer.h>
 #include <vector>
 
-class SoWxGLWidgetP;
+class SoFlGLWidgetP;
 
-class SoWxGLArea : public wxGLCanvas
+class SoFlGLArea : public wxGLCanvas
 {
 public:
 
     typedef std::vector<int> GLFormat;
 
-    SoWxGLArea(wxWindow *parent,
+    SoFlGLArea(wxWindow *parent,
                const GLFormat& );
 
-    virtual ~SoWxGLArea();
+    virtual ~SoFlGLArea();
 
     const wxGLContext *context();
 
@@ -73,7 +73,7 @@ private:
     GLFormat gl_format;
     //wxGLAttributes  gl_attributes;
 
-wxDECLARE_NO_COPY_CLASS(SoWxGLArea);
+wxDECLARE_NO_COPY_CLASS(SoFlGLArea);
 wxDECLARE_EVENT_TABLE();
 };
 

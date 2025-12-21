@@ -69,7 +69,7 @@
 #error this is a private header file
 #endif
 
-#include "wx/event.h"
+#include "fl/event.h"
 
 wxDECLARE_EVENT(SO_WX_MOUSE_WHEEL_PRESSED, wxCommandEvent);
 wxDECLARE_EVENT(SO_WX_MOUSE_WHEEL_RELEASED, wxCommandEvent);

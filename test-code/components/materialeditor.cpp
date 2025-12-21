@@ -4,9 +4,9 @@
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/nodes/SoRotationXYZ.h>
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/SoWxMaterialEditor.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/SoFlMaterialEditor.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 
 static SoMaterial * material;
 
@@ -25,8 +25,8 @@ makescene(void)
 int
 main(int argc, char ** argv)
 {
-  wxWindow* w = SoWx::init(argc, argv, "SoWxMaterialEditor");
-  SoWxExaminerViewer * viewer = new SoWxExaminerViewer(w);
+  wxWindow* w = SoFl::init(argc, argv, "SoFlMaterialEditor");
+  SoFlExaminerViewer * viewer = new SoFlExaminerViewer(w);
   SoSeparator * root;
   viewer->setSceneGraph(root = makescene());
   viewer->show();
@@ -52,13 +52,13 @@ main(int argc, char ** argv)
   root->insertChild(editorscene, 0);
 
 #else
-  SoWxMaterialEditor * editor = new SoWxMaterialEditor;
+  SoFlMaterialEditor * editor = new SoFlMaterialEditor;
   editor->attach(material);
   editor->show();
 #endif
 
-  SoWx::show(w);
-  SoWx::mainLoop();
+  SoFl::show(w);
+  SoFl::mainLoop();
   return 0;
 }
 

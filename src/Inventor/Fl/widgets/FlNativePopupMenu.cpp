@@ -31,7 +31,7 @@
 \**************************************************************************/
 
 /*!
-  \class WxNativePopupMenu Inventor/Wx/widgets/WxNativePopupMenu.h
+  \class WxNativePopupMenu Inventor/Fl/widgets/WxNativePopupMenu.h
   \brief The WxNativePopupMenu class implements a common interface for pop-up
   menu management for all the Coin GUI toolkit libraries.
 */

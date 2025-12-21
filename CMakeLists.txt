@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.15)
 
-set(gui wx)
-set(Gui Wx)
-set(GUI WX)
+set(gui fl)
+set(Gui Fl)
+set(GUI FL)
 set(WIDGET wxWindow*)
 set(EVENT wxEvent&)
 
@@ -45,7 +45,7 @@ string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
 # ############################################################################
 # these will be removed after upgrading CMake minimum version to 3.9.6
-set(PROJECT_DESCRIPTION   "SoWx is a wxWidgets Gui-toolkit binding for Coin")
+set(PROJECT_DESCRIPTION   "SoFl is a wxWidgets Gui-toolkit binding for Coin")
 # ############################################################################
  
 string(TIMESTAMP SO${GUI}_BUILD_YEAR "%Y")
@@ -119,13 +119,24 @@ report_prepare(
 )
 
 # ############################################################################
-# Find all necessary and optional SoWx dependencies
+# Find all necessary and optional SoFl dependencies
 # ############################################################################
 
 # Fail early if one of the required packages cannot be found
 
 find_package(OpenGL REQUIRED)
-find_package(wxWidgets REQUIRED gl core base)
+
+include(FetchContent)
+
+FetchContent_Declare(FLTK
+        GIT_REPOSITORY  https://github.com/fltk/fltk
+        GIT_TAG         release-1.4.4
+        GIT_SHALLOW     TRUE
+)
+
+message(STATUS "Download and build FLTK if necessary, please wait...")
+FetchContent_MakeAvailable(FLTK)
+message(STATUS "Download and build FLTK - done.")
 
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native
@@ -235,9 +246,9 @@ elseif(APPLE)
 
   if(SO${GUI}_BUILD_MAC_FRAMEWORK)
     set(SO${GUI}_MAC_FRAMEWORK ${SO${GUI}_BUILD_MAC_FRAMEWORK})
-    set(SO${GUI}_MAC_FRAMEWORK_NAME "SoWx")
+    set(SO${GUI}_MAC_FRAMEWORK_NAME "SoFl")
     set(SO${GUI}_MAC_FRAMEWORK_PREFIX "${CMAKE_INSTALL_PREFIX}")
-    set(SO${GUI}_MAC_FRAMEWORK_VERSION "A") # SoWx2 will be "B", to allow parallel installations of SoWx1
+    set(SO${GUI}_MAC_FRAMEWORK_VERSION "A") # SoFl2 will be "B", to allow parallel installations of SoFl1
     set(PACKAGING_FRAMEWORK_NAME "${SO${GUI}_MAC_FRAMEWORK_NAME}")
 
     # package config *.pc entries

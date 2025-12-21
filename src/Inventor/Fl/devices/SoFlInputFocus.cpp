@@ -30,8 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/devices/SoWxInputFocus.h"
-#include "Inventor/Wx/devices/SoGuiInputFocusP.h"
+#include "Inventor/Fl/devices/SoFlInputFocus.h"
+#include "Inventor/Fl/devices/SoGuiInputFocusP.h"
 #include "sowxdefs.h"
 
 #define PRIVATE(p) (p->pimpl)
@@ -39,31 +39,31 @@
 
 // *************************************************************************
 
-class SoWxInputFocusP : public SoGuiInputFocusP {
+class SoFlInputFocusP : public SoGuiInputFocusP {
 public:
-    SoWxInputFocusP(SoWxInputFocus * p) : SoGuiInputFocusP(p) { }
+    SoFlInputFocusP(SoFlInputFocus * p) : SoGuiInputFocusP(p) { }
 };
 
-SoWxInputFocus::SoWxInputFocus(int mask) {
-    PRIVATE(this) = new SoWxInputFocusP(this);
+SoFlInputFocus::SoFlInputFocus(int mask) {
+    PRIVATE(this) = new SoFlInputFocusP(this);
 }
 
-SoWxInputFocus::~SoWxInputFocus() {
+SoFlInputFocus::~SoFlInputFocus() {
 
 }
 
 void 
-SoWxInputFocus::enable(wxWindow* widget, SoWxEventHandler * handler, void * closure) {
+SoFlInputFocus::enable(wxWindow* widget, SoFlEventHandler * handler, void * closure) {
     SOWX_STUB();
 }
 
 void 
-SoWxInputFocus::disable(wxWindow* widget, SoWxEventHandler * handler, void * closure){
+SoFlInputFocus::disable(wxWindow* widget, SoFlEventHandler * handler, void * closure){
     SOWX_STUB();
 }
 
 const SoEvent * 
-SoWxInputFocus::translateEvent(wxEvent& event) {
+SoFlInputFocus::translateEvent(wxEvent& event) {
     SOWX_STUB();
     return (0);
 }

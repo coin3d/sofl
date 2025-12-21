@@ -2,8 +2,8 @@
 // Created by fmorciano on 1/22/23.
 //
 
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
+#include <fl/fl.h>
+#include <fl/glcanvas.h>
 
 class MyCanvas : public wxGLCanvas {
 public:

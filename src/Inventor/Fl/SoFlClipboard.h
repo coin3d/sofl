@@ -33,7 +33,7 @@
 #define SOWX_SOWXCLIPBOARD_H
 
 
-class SoWxClipboard {
+class SoFlClipboard {
 
 };
 

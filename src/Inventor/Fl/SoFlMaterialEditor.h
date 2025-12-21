@@ -33,7 +33,7 @@
 #define SOWX_SOWXMATERIALEDITOR_H
 
 
-class SoWxMaterialEditor {
+class SoFlMaterialEditor {
 
 };
 

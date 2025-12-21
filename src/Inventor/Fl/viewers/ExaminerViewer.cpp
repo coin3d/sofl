@@ -30,10 +30,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/viewers/SoWxExaminerViewer.h"
-#include "Inventor/Wx/viewers/SoWxExaminerViewerP.h"
-#include "Inventor/Wx/viewers/SoWxViewer.h"
-#include "Inventor/Wx/viewers/SoWxFullViewer.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
+#include "Inventor/Fl/viewers/SoFlViewer.h"
+#include "Inventor/Fl/viewers/SoFlFullViewer.h"
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 
@@ -42,42 +42,42 @@
 
 
 #if HAVE_LIBXPM
-#include <Inventor/Wx/common/pixmaps/ortho.xpm>
+#include <Inventor/Fl/common/pixmaps/ortho.xpm>
 #include <Inventor/We/common/pixmaps/perspective.xpm>
 #endif // HAVE_LIBXPM
 
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SOWX_OBJECT_SOURCE(SoWxExaminerViewer);
+SOWX_OBJECT_SOURCE(SoFlExaminerViewer);
 
-SoWxExaminerViewer::SoWxExaminerViewer(wxWindow* parent,
+SoFlExaminerViewer::SoFlExaminerViewer(wxWindow* parent,
                                        char const* name,
                                        int embed,
-                                       SoWxFullViewer::BuildFlag flag,
-                                       SoWxViewer::Type type)
+                                       SoFlFullViewer::BuildFlag flag,
+                                       SoFlViewer::Type type)
         : inherited(parent, name, embed, flag, type, FALSE) {
-    PRIVATE(this) = new SoWxExaminerViewerP(this);
+    PRIVATE(this) = new SoFlExaminerViewerP(this);
     PRIVATE(this)->constructor(TRUE);
 }
 
-SoWxExaminerViewer::SoWxExaminerViewer(wxWindow *parent,
+SoFlExaminerViewer::SoFlExaminerViewer(wxWindow *parent,
                                        const char *name,
                                        SbBool embed,
-                                       SoWxFullViewer::BuildFlag flag,
-                                       SoWxViewer::Type type,
+                                       SoFlFullViewer::BuildFlag flag,
+                                       SoFlViewer::Type type,
                                        SbBool build)
     : inherited(parent, name, embed, flag, type, build) {
-    PRIVATE(this) = new SoWxExaminerViewerP(this);
+    PRIVATE(this) = new SoFlExaminerViewerP(this);
     PRIVATE(this)->constructor(build);
 }
 
-SoWxExaminerViewer::~SoWxExaminerViewer() {
+SoFlExaminerViewer::~SoFlExaminerViewer() {
     delete PRIVATE(this);
 }
 
 void
-SoWxExaminerViewer::setCamera(SoCamera * newCamera) {
+SoFlExaminerViewer::setCamera(SoCamera * newCamera) {
     // This method overridden from parent class to toggle the camera
     // type selection button pixmap and string of the zoom/dolly
     // thumbwheel.
@@ -108,7 +108,7 @@ SoWxExaminerViewer::setCamera(SoCamera * newCamera) {
 }
 
 void
-SoWxExaminerViewer::createViewerButtons(wxWindow* parent,
+SoFlExaminerViewer::createViewerButtons(wxWindow* parent,
                                         SbPList * buttonlist) {
 
     inherited::createViewerButtons(parent, buttonlist);

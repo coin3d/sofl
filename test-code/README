@@ -1,7 +1,7 @@
 The example sources found in the subdirectories of this directory is
-small, self-contained Wx- or SoWx-specific tests.
+small, self-contained Fl- or SoFl-specific tests.
 
-Compilation after a correct SoWx-installation on your system is done
+Compilation after a correct SoFl-installation on your system is done
 by executing
 
         $ sowx-config --build <executable name> <sourcefile.cpp>

@@ -32,11 +32,11 @@
 #ifndef SOWX_SOWXDEVICEP_H
 #define SOWX_SOWXDEVICEP_H
 
-#include "Inventor/Wx/devices/SoGuiDeviceP.h"
+#include "Inventor/Fl/devices/SoGuiDeviceP.h"
 
-class SoWxDeviceP : public SoGuiDeviceP {
+class SoFlDeviceP : public SoGuiDeviceP {
 public:
-    explicit SoWxDeviceP(SoWxDevice *p)  : SoGuiDeviceP(p) { }
+    explicit SoFlDeviceP(SoFlDevice *p)  : SoGuiDeviceP(p) { }
 
     SbVec2s widgetsize;
 };

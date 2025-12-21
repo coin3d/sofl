@@ -34,8 +34,8 @@
 #include <Inventor/events/SoKeyboardEvent.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#include "Inventor/Wx/devices/SoWxKeyboard.h"
-#include "SoWxKeyboardP.h"
+#include "Inventor/Fl/devices/SoFlKeyboard.h"
+#include "SoFlKeyboardP.h"
 #include "sowxdefs.h"
 
 #define PRIVATE(p) (p->pimpl)
@@ -44,33 +44,33 @@
 // *************************************************************************
 
 
-SoWxKeyboard::SoWxKeyboard(int eventmask ) {
-    PRIVATE(this) = new SoWxKeyboardP;
+SoFlKeyboard::SoFlKeyboard(int eventmask ) {
+    PRIVATE(this) = new SoFlKeyboardP;
     PRIVATE(this)->eventmask = eventmask;
 }
 
-SoWxKeyboard::~SoWxKeyboard(void) {
+SoFlKeyboard::~SoFlKeyboard(void) {
     delete PRIVATE(this);
 }
 
 void
-SoWxKeyboard::enable(wxWindow* widget, SoWxEventHandler * handler, void * closure) {
+SoFlKeyboard::enable(wxWindow* widget, SoFlEventHandler * handler, void * closure) {
     SOWX_STUB();
 }
 
 void
-SoWxKeyboard::disable(wxWindow* widget, SoWxEventHandler * handler, void * closure) {
+SoFlKeyboard::disable(wxWindow* widget, SoFlEventHandler * handler, void * closure) {
     SOWX_STUB();
 }
 
 const SoEvent *
-SoWxKeyboard::translateEvent(wxEvent& event) {
+SoFlKeyboard::translateEvent(wxEvent& event) {
 
     wxKeyEvent* key_event = dynamic_cast<wxKeyEvent*>(&event);
 
     if(!key_event) {
 #ifdef SOWX_DEBUG
-        SoDebugError::postWarning("SoWxKeyboard::translateEvent",
+        SoDebugError::postWarning("SoFlKeyboard::translateEvent",
                                   "is not a key event!");
 #endif
         return (0);
@@ -83,8 +83,8 @@ SoWxKeyboard::translateEvent(wxEvent& event) {
 
     if (keyevent && (PRIVATE(this)->eventmask & (KEY_PRESS | KEY_RELEASE))) {
 
-        if (!SoWxKeyboardP::translatetable)
-            SoWxKeyboardP::make_translation_table();
+        if (!SoFlKeyboardP::translatetable)
+            SoFlKeyboardP::make_translation_table();
 
         int key = key_event->GetKeyCode();
         // Key code / sequence unknown.
@@ -95,10 +95,10 @@ SoWxKeyboard::translateEvent(wxEvent& event) {
 
         PRIVATE(this)->kbdevent->setPrintableCharacter( key );
 
-        // Translate keycode wx -> So
+        // Translate keycode fl -> So
         void *table;
-        if (SoWxKeyboardP::translatetable->find(key, table)) {
-            struct SoWxKeyboardP::key1map *map = (struct SoWxKeyboardP::key1map *) table;
+        if (SoFlKeyboardP::translatetable->find(key, table)) {
+            struct SoFlKeyboardP::key1map *map = (struct SoFlKeyboardP::key1map *) table;
             PRIVATE(this)->kbdevent->setKey(map->to);
         } else {
             return NULL;

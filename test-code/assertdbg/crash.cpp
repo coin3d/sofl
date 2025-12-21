@@ -37,8 +37,8 @@
  * Jotted down 2002-01-11 by Lars J. Aas <larsa@sim.no>
  */
 
-#include <Inventor/Wx/SoWx.h>
-#include <Inventor/Wx/viewers/SoWxExaminerViewer.h>
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoCallback.h>
@@ -66,10 +66,10 @@ callback(void * closure, SoAction * action)
 int
 main(int argc, char ** argv)
 {
-  wxWindow * win = SoWx::init("Debug Test");
-  SoWxExaminerViewer * viewer = new SoWxExaminerViewer(win);
+  wxWindow * win = SoFl::init("Debug Test");
+  SoFlExaminerViewer * viewer = new SoFlExaminerViewer(win);
   viewer->show();
-  SoWx::show(win);
+  SoFl::show(win);
   SoSeparator * sep = new SoSeparator;
   SoCallback * cb = new SoCallback;
   cb->setCallback(callback, sep);
@@ -77,7 +77,7 @@ main(int argc, char ** argv)
   sep->addChild(new SoCube);
   viewer->setSceneGraph(sep);
   viewer->setViewing(FALSE);
-  SoWx::mainLoop();
+  SoFl::mainLoop();
   viewer->hide();
   // delete viewer;
   return 0;

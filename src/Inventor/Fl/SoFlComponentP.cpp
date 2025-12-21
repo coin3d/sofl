@@ -30,23 +30,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "Inventor/Wx/SoWxComponentP.h"
+#include "Inventor/Fl/SoFlComponentP.h"
 #include "sowxdefs.h"
-#include "Inventor/Wx/SoAny.h"
+#include "Inventor/Fl/SoAny.h"
 
 #define PRIVATE(obj) (obj)
 #define PUBLIC(obj) ((obj)->pub)
 
-SbDict * SoWxComponentP::cursordict = NULL;
+SbDict * SoFlComponentP::cursordict = NULL;
 
-SoWxComponentP::SoWxComponentP(SoWxComponent *o)
+SoFlComponentP::SoFlComponentP(SoFlComponent *o)
         : SoGuiComponentP(o)
         , classname("")
         , widgetname("") {
 
 }
 
-SoWxComponentP::~SoWxComponentP() {
+SoFlComponentP::~SoFlComponentP() {
 
 }
 
@@ -56,37 +56,37 @@ delete_dict_value(SbDict::Key key, void * value) {
 }
 
 void
-SoWxComponentP::atexit_cleanup() {
+SoFlComponentP::atexit_cleanup() {
     SOWX_STUB();
-    if (SoWxComponentP::cursordict) {
-        SoWxComponentP::cursordict->applyToAll(delete_dict_value);
-        delete SoWxComponentP::cursordict;
-        SoWxComponentP::cursordict = NULL;
+    if (SoFlComponentP::cursordict) {
+        SoFlComponentP::cursordict->applyToAll(delete_dict_value);
+        delete SoFlComponentP::cursordict;
+        SoFlComponentP::cursordict = NULL;
     }
 }
 
 void
-SoWxComponentP::fatalerrorHandler(void *userdata) {
+SoFlComponentP::fatalerrorHandler(void *userdata) {
     SOWX_STUB();
-    SoWxComponentP * that = (SoWxComponentP *)userdata;
+    SoFlComponentP * that = (SoFlComponentP *)userdata;
     (void*)(that); // unused for the time being
 }
 
 void
-SoWxComponentP::widgetClosed(void) {
+SoFlComponentP::widgetClosed(void) {
     SOWX_STUB();
     if (this->closeCB) { this->closeCB(this->closeCBdata, PUBLIC(this)); }
 }
 
 wxCursor *
-SoWxComponentP::getNativeCursor(const SoWxCursor::CustomCursor *cc) {
-    if (SoWxComponentP::cursordict == NULL) { // first call, initialize
-        SoWxComponentP::cursordict = new SbDict;
-        SoAny::atexit((SoAny::atexit_f*)SoWxComponentP::atexit_cleanup, 0);
+SoFlComponentP::getNativeCursor(const SoFlCursor::CustomCursor *cc) {
+    if (SoFlComponentP::cursordict == NULL) { // first call, initialize
+        SoFlComponentP::cursordict = new SbDict;
+        SoAny::atexit((SoAny::atexit_f*)SoFlComponentP::atexit_cleanup, 0);
     }
 
     void * qc;
-    SbBool b = SoWxComponentP::cursordict->find((uintptr_t)cc, qc);
+    SbBool b = SoFlComponentP::cursordict->find((uintptr_t)cc, qc);
     if (b) {
         return (wxCursor *)qc;
     }
@@ -131,7 +131,7 @@ SoWxComponentP::getNativeCursor(const SoWxCursor::CustomCursor *cc) {
 #else
 #error "To be tested"
 #endif
-    SoWxComponentP::cursordict->enter((uintptr_t)cc, c);
+    SoFlComponentP::cursordict->enter((uintptr_t)cc, c);
     return c;
 }
 
