@@ -374,7 +374,14 @@ SoFlComponent::getSize() const {
 
 void
 SoFlComponent::setTitle(const char * const title) {
-    SoFl::getShellWidget(this->getWidget())->label(title);
+    auto shell = SoFl::getShellWidget(this->getWidget());
+    if (shell)
+        shell->label(title);
+    else {
+        SoDebugError::postWarning("SoFlComponent::setTitle",
+                                  "No shell widget for %p",
+                                  this->getWidget());
+    }
 }
 
 const char *

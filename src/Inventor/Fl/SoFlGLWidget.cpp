@@ -60,11 +60,11 @@ SoFlGLWidget::SoFlGLWidget(Fl_Widget* const parent ,
     PRIVATE(this)->glSizeUnscaled = SbVec2s(0, 0);
     PRIVATE(this)->wasresized = false;
 
-    PRIVATE(this)->glparent = NULL;
-    PRIVATE(this)->currentglwidget = NULL;
-    PRIVATE(this)->previousglwidget = NULL;
-    PRIVATE(this)->currentglarea = NULL;
-    PRIVATE(this)->previousglarea = NULL;
+    PRIVATE(this)->glparent = nullptr;
+    PRIVATE(this)->currentglwidget = nullptr;
+    PRIVATE(this)->previousglwidget = nullptr;
+    PRIVATE(this)->currentglarea = nullptr;
+    PRIVATE(this)->previousglarea = nullptr;
 
     if (! build) {
         return;
@@ -140,7 +140,7 @@ SoFlGLWidget::isRGBMode(void){
 
 void
 SoFlGLWidget::glLockNormal(void){
-    assert(PRIVATE(this)->currentglarea != NULL);
+    assert(PRIVATE(this)->currentglarea != nullptr);
     PRIVATE(this)->currentglarea->makeCurrent();
 }
 

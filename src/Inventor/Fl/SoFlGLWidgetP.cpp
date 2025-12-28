@@ -45,7 +45,7 @@
 SoFlGLWidgetP::SoFlGLWidgetP(SoFlGLWidget * o)
         : SoGuiGLWidgetP(o) {
     this->borderthickness = 0;
-    this->oldcontext = NULL;
+    this->oldcontext = nullptr;
 }
 
 SoFlGLWidgetP::~SoFlGLWidgetP() {
@@ -184,8 +184,8 @@ SoFlGLWidgetP::buildGLWidget(void) {
         SoFlGLArea *wascurrentarea = this->currentglarea;
         SoFlGLArea *waspreviousarea = this->previousglarea;
 
-        void *display = NULL;
-        void *screen = NULL;
+        void *display = nullptr;
+        void *screen = nullptr;
 
         if (wascurrent) {
             // Do _not_ turn off mousetracking or remove the eventfilter, as
@@ -312,7 +312,7 @@ const GLContext
 SoFlGLWidgetP::getNormalContext(void) {
     SoFlGLArea * w = this->currentglarea;
     if (w) return w->context();
-    return NULL;
+    return nullptr;
 }
 
 // Returns the overlay GL context.
@@ -320,7 +320,7 @@ const GLContext
 SoFlGLWidgetP::getOverlayContext(void) {
     SoFlGLArea * w = this->currentglarea;
     // TODO: if (w) { return QGLWidget_overlayContext(w); }
-    return NULL;
+    return nullptr;
 }
 
 SbBool
@@ -364,7 +364,7 @@ SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, int event, b
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
                            "");
 #endif
-    assert(closure != NULL);
+    assert(closure != nullptr);
     SoFlGLWidget * component = ((SoFlGLWidgetP *) closure)->pub;
     component->processEvent(event);
 }

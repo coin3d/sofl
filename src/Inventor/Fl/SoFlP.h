@@ -46,6 +46,7 @@ public:
 
     bool init;
     Fl_Widget* main_frame;
+    Fl_Window* main_app;
     SoFlP();
     bool is_a_soflp_app;
 
@@ -61,10 +62,8 @@ public:
     void onIdle(int event);
     void onClose(int event);
 
-    /*
-    void buildWxApp();
-    void setWxApp(wxAppConsole*);
-    */
+    void build_fl_window();
+    //void setWxApp(wxAppConsole*);
 
     void setMainFrame(Fl_Widget*);
     Fl_Widget* getMainFrame() const;

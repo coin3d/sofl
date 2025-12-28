@@ -32,7 +32,9 @@
 
 #include "Inventor/Fl/SoFl.h"
 
+#include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 
 #include "Inventor/Fl/SoFlP.h"
 #include "Inventor/Fl/SoFlInternal.h"
@@ -56,32 +58,29 @@ SoFl::init(int & argc,
     // Call all the code for initializing Coin data
     SoFlP::commonInit();
 
-#if 0
-    // if wxApp is not already created
-    if (wxApp::GetInstance() == nullptr) {
+    // if Fl_Windows is not already created
+    if (Fl::first_window() == nullptr) {
         // Set up the QApplication instance which we have derived into a
         // subclass to catch spaceball events.
-        SoFlP::instance()->buildWxApp();
-        wxApp::SetInstance(SoFlP::instance()->main_app);
-        wxEntryStart( argc, argv );
-        wxTheApp->CallOnInit();
+        SoFlP::instance()->build_fl_window();
+        //wxApp::SetInstance(SoFlP::instance()->main_app);
+        Fl::args(argc, argv);
     }
     else {
         // The user already set one up for us.
         // so nothing to do
-        SoFlP::instance()->setWxApp(wxApp::GetInstance());
+        // SoFlP::instance()->setWxApp(wxApp::GetInstance());
     }
 
-    SoFlP::instance()->setMainFrame( new wxFrame(0,
+/*    SoFlP::instance()->setMainFrame( new wxFrame(0,
                                                    wxID_ANY,
-                                                   appname));
+                                                   appname));*/
 
     assert(SoFlP::instance());
-    assert(wxTheApp);
-    wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
-    SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose,  SoFlP::instance());
-#endif
-    
+    //assert(wxTheApp);
+    // wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
+    // SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose,  SoFlP::instance());
+
     SoDB::getSensorManager()->setChangedCallback(SoGuiP::sensorQueueChanged,
                                                  nullptr);
 
@@ -114,7 +113,7 @@ SoFl::init(Fl_Widget* toplevelwidget) {
 #if 0
     // if wxApp is not already created
     if (wxApp::GetInstance() == nullptr) {
-        SoFlP::instance()->buildWxApp();
+        SoFlP::instance()->build_fl_window();
         wxApp::SetInstance(SoFlP::instance()->main_app);
         static const char * dummyargv[1];
         dummyargv[0] = "SoFl";
@@ -154,6 +153,7 @@ SoFl::init(Fl_Widget* toplevelwidget) {
 void
 SoFl::mainLoop(void) {
     // wxTheApp->OnRun();
+    Fl::run();
 }
 
 
@@ -198,15 +198,13 @@ getTopLevelWidget(void) {
 
 Fl_Widget*
 SoFl::getShellWidget(const Fl_Widget* w) {
-#if 0
-    return (wxGetTopLevelParent((Fl_WidgetBase *) w));
-#else
+    return (Fl::first_window());
+
 #if SOFL_DEBUG && 0 // debug
     SoDebugError::postInfo("SoFl::getShellWidget",
                          "couldn't find shell for widget at %p", widget);
 #endif // debug
     return (nullptr);
-#endif
 }
 
 void

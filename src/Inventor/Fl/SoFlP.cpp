@@ -37,22 +37,11 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/sensors/SoSensorManager.h>
 
-#include <iostream>
-#include <sstream>
 #include <FL/Fl_Window.H>
 
-class SoFlApp : public  Fl_Window {
-public:
+#include <iostream>
+#include <sstream>
 
-
-    virtual void
-    CleanUp()  {
-#if SOFL_DEBUG
-        SoDebugError::postInfo("SoFlApp::CleanUp",
-                               "done!");
-#endif
-    }
-};
 /*
 wxTimer * SoFlP::timerqueuetimer = 0;
 wxTimer * SoFlP::delaytimeouttimer = 0;
@@ -60,22 +49,22 @@ wxTimer * SoFlP::delaytimeouttimer = 0;
 SoFlP::SoFlP() {
     init = false;
     main_frame = 0;
-    //main_app = 0;
+    main_app = 0;
     is_a_soflp_app = false;
 }
 
-    /*
+
 void
-SoFlP::buildWxApp() {
+SoFlP::build_fl_window() {
     if(!main_app) {
         is_a_soflp_app = true;
-        setWxApp( new SoFlApp);
+        main_frame = main_app = new Fl_Window(640, 480);
     } else if (SOFL_DEBUG){
-        SoDebugError::postWarning("SoFlP::buildWxApp",
-                               "wxApp already built");
+        SoDebugError::postWarning("SoFlP::build_fl_window",
+                               "Fl_Window already built");
     }
 }
-*/
+
 
 
 void
