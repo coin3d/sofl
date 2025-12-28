@@ -1,3 +1,5 @@
+RETURN()
+
 enable_testing()
 
 include_directories(

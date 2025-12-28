@@ -32,6 +32,3 @@
 
 #include "WheelEvents.h"
 
-wxDEFINE_EVENT(SO_WX_MOUSE_WHEEL_PRESSED, wxCommandEvent);
-wxDEFINE_EVENT(SO_WX_MOUSE_WHEEL_RELEASED, wxCommandEvent);
-wxDEFINE_EVENT(SO_WX_MOUSE_WHEEL_MOVED, wxCommandEvent);

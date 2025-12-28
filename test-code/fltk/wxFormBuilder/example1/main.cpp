@@ -42,7 +42,7 @@
 #include "common/get_scene_graph.h"
 #include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
 
-void add_view(Fl_Window* window) {
+void add_view(Fl_Widget* window) {
 
     SoFl::init(window);
 

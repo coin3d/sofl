@@ -52,7 +52,7 @@ SoFlComponentP::~SoFlComponentP() {
 
 static void
 delete_dict_value(SbDict::Key key, void * value) {
-    delete (wxCursor*)value;
+    delete (Fl_Cursor*)value;
 }
 
 void
@@ -78,17 +78,17 @@ SoFlComponentP::widgetClosed(void) {
     if (this->closeCB) { this->closeCB(this->closeCBdata, PUBLIC(this)); }
 }
 
-wxCursor *
+Fl_Cursor
 SoFlComponentP::getNativeCursor(const SoFlCursor::CustomCursor *cc) {
     if (SoFlComponentP::cursordict == NULL) { // first call, initialize
         SoFlComponentP::cursordict = new SbDict;
         SoAny::atexit((SoAny::atexit_f*)SoFlComponentP::atexit_cleanup, 0);
     }
-
+#if 0
     void * qc;
     SbBool b = SoFlComponentP::cursordict->find((uintptr_t)cc, qc);
     if (b) {
-        return (wxCursor *)qc;
+        return (Fl_Cursor *)qc;
     }
 
 #define MAXBITMAPWIDTH 32
@@ -117,21 +117,10 @@ SoFlComponentP::getNativeCursor(const SoFlCursor::CustomCursor *cc) {
         }
     }
 
-#ifdef __WXMSW__
-    wxBitmap down_bitmap(down_bits, 32, 32);
-    wxBitmap down_mask_bitmap(down_mask, 32, 32);
-    down_bitmap.SetMask(new wxMask(down_mask_bitmap));
-    wxImage down_image = down_bitmap.ConvertToImage();
-    down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 6);
-    down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 14);
-    wxCursor down_cursor = wxCursor(down_image);
-#elif defined(__WXGTK__) or defined(__WXMOTIF__) or defined(__WXQT__)
-    wxCursor * c = new wxCursor(reinterpret_cast<const char *>(cursorbitmap), 32, 32, 6, 14,
-                                    reinterpret_cast<const char *>(cursormask), wxWHITE, wxBLACK);
-#else
-#error "To be tested"
 #endif
-    SoFlComponentP::cursordict->enter((uintptr_t)cc, c);
+
+    Fl_Cursor c = FL_CURSOR_DEFAULT;
+    SoFlComponentP::cursordict->enter((uintptr_t)cc, &c);
     return c;
 }
 

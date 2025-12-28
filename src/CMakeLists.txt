@@ -10,7 +10,7 @@ file(GLOB_RECURSE COMMON_SRCS ${CMAKE_CURRENT_BINARY_DIR}/*.cpp)
 set(HDRS
   Inventor/${Gui}/So${Gui}Clipboard.h               # added
   Inventor/${Gui}/So${Gui}ComponentP.h
-  Inventor/${Gui}/So${Gui}DirectionalLightEditor.h  # added
+#  Inventor/${Gui}/So${Gui}DirectionalLightEditor.h  # added
   Inventor/${Gui}/So${Gui}GLWidgetP.h
   #Inventor/${Gui}/So${Gui}ImageReader.h            # missing
   Inventor/${Gui}/So${Gui}Internal.h
@@ -20,7 +20,6 @@ set(HDRS
   Inventor/${Gui}/So${Gui}SliderSetBase.h           # added
   Inventor/${Gui}/So${Gui}SliderSet.h               # added
   Inventor/${Gui}/So${Gui}TransformSliderSet.h      # added
-  Inventor/${Gui}/So${Gui}DirectionalLightEditor.h  # added
   Inventor/${Gui}/devices/6DOFEvents.h
   Inventor/${Gui}/devices/So${Gui}DeviceP.h
   Inventor/${Gui}/devices/So${Gui}SpacenavDevice.h
@@ -28,7 +27,7 @@ set(HDRS
   Inventor/${Gui}/viewers/So${Gui}FullViewerP.h
   Inventor/${Gui}/viewers/So${Gui}PlaneViewerP.h
   Inventor/${Gui}/widgets/So${Gui}GLArea.h
-  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
+#  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
   Inventor/${Gui}/widgets/So${Gui}Slider.h          # added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.h
   Inventor/${Gui}/widgets/WheelEvents.h     # added
@@ -40,7 +39,7 @@ set(SRCS
   Inventor/${Gui}/So${Gui}Clipboard.cpp #added
   Inventor/${Gui}/So${Gui}Component.cpp
   Inventor/${Gui}/So${Gui}ComponentP.cpp #added
-  Inventor/${Gui}/So${Gui}DirectionalLightEditor.cpp #added
+#  Inventor/${Gui}/So${Gui}DirectionalLightEditor.cpp #added
   Inventor/${Gui}/So${Gui}GLWidget.cpp
   Inventor/${Gui}/So${Gui}GLWidgetP.cpp #added
   Inventor/${Gui}/So${Gui}Internal.cpp #added
@@ -67,7 +66,7 @@ set(SRCS
   Inventor/${Gui}/widgets/So${Gui}GLArea.cpp
   Inventor/${Gui}/widgets/So${Gui}Slider.cpp #added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.cpp
-  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
+#  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
   Inventor/${Gui}/widgets/WheelEvents.cpp     # added
 )
 
@@ -252,7 +251,7 @@ set(INST_HDRS
   "${CMAKE_CURRENT_BINARY_DIR}/Inventor/${Gui}/So${Gui}Object.h"
   "${CMAKE_CURRENT_BINARY_DIR}/Inventor/${Gui}/So${Gui}RenderArea.h"
   Inventor/${Gui}/So${Gui}Clipboard.h
-  Inventor/${Gui}/So${Gui}DirectionalLightEditor.h
+#  Inventor/${Gui}/So${Gui}DirectionalLightEditor.h
   Inventor/${Gui}/So${Gui}LightSliderSet.h
   Inventor/${Gui}/So${Gui}MaterialSliderSet.h
   # Inventor/${Gui}/So${Gui}PrintDialog.h

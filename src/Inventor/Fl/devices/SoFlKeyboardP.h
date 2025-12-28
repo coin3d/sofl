@@ -39,12 +39,11 @@
 
 #include "Inventor/Fl/devices/SoGuiKeyboardP.h"
 #include <Inventor/events/SoKeyboardEvent.h>
-#include <FL/Fl.H>
 
 class SoFlKeyboardP : public SoGuiKeyboardP {
 public:
     struct key1map {
-        // wxKeyCode from;                // Fl val
+        int from;                // Fl val
         SoKeyboardEvent::Key to; // So val
         char printable;
     };

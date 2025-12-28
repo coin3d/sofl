@@ -24,7 +24,7 @@
 class MyExaminerViewer : public SoFlExaminerViewer {
 
 public:
-    MyExaminerViewer(Fl_Window* parent, const char * filename);
+    MyExaminerViewer(Fl_Widget* parent, const char * filename);
     ~MyExaminerViewer();
 
 protected:
@@ -36,7 +36,7 @@ private:
     SoRotationXYZ * arrowrotation;
 };
 
-MyExaminerViewer::MyExaminerViewer(Fl_Window* parent, const char * filename)
+MyExaminerViewer::MyExaminerViewer(Fl_Widget* parent, const char * filename)
         : SoFlExaminerViewer(parent)
 {
     // Coin should not clear the pixel-buffer, so the background image
@@ -153,7 +153,7 @@ main(int argc, char ** argv)
         exit(1);
     }
 
-    Fl_Window* window = SoFl::init(argv[0]);
+    Fl_Widget* window = SoFl::init(argv[0]);
 
     MyExaminerViewer * viewer = new MyExaminerViewer(window, argv[1]);
 

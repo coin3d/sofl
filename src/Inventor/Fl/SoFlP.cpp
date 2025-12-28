@@ -39,16 +39,11 @@
 
 #include <iostream>
 #include <sstream>
+#include <FL/Fl_Window.H>
 
-class SoFlApp : public  wxApp {
+class SoFlApp : public  Fl_Window {
 public:
 
-    virtual bool
-    OnInit()  {
-        if ( !wxApp::OnInit() )
-            return false;
-        return true;
-    }
 
     virtual void
     CleanUp()  {
@@ -58,17 +53,18 @@ public:
 #endif
     }
 };
-
+/*
 wxTimer * SoFlP::timerqueuetimer = 0;
 wxTimer * SoFlP::delaytimeouttimer = 0;
-
+*/
 SoFlP::SoFlP() {
     init = false;
     main_frame = 0;
-    main_app = 0;
+    //main_app = 0;
     is_a_soflp_app = false;
 }
 
+    /*
 void
 SoFlP::buildWxApp() {
     if(!main_app) {
@@ -79,18 +75,15 @@ SoFlP::buildWxApp() {
                                "wxApp already built");
     }
 }
+*/
 
-void
-SoFlP::setWxApp(wxAppConsole* app) {
-    main_app = app;
-}
 
 void
 SoGuiP::sensorQueueChanged(void *) {
     SoFlP::instance()->sensorQueueChanged();
 }
 
-class TimerQueueTimer : public wxTimer {
+class TimerQueueTimer  {
 public:
     virtual void
     Notify() {
@@ -115,7 +108,7 @@ public:
 // The delay sensor timeout point has been reached, so process the
 // delay queue even though the system is not idle (to avoid
 // starvation).
-class DelayTimeoutTimer : public wxTimer {
+class DelayTimeoutTimer  {
 public:
     virtual void
     Notify() {
@@ -159,6 +152,7 @@ SoFlP::sensorQueueChanged(void) {
     SoFlP::initTimers();
 
     SoSensorManager * sm = SoDB::getSensorManager();
+#if 0
     if (SoFlP::timerqueuetimer) {
         // Set up timer queue timeout if necessary.
         SbTime t;
@@ -210,6 +204,8 @@ SoFlP::sensorQueueChanged(void) {
                 SoFlP::delaytimeouttimer->Stop();
         }
     }
+#endif
+
 }
 
 SoFlP *
@@ -228,13 +224,13 @@ SoFlP::setInitialize(bool i) {
     init = i;
 }
 
-Fl_Window *
+Fl_Widget *
 SoFlP::getMainFrame() const {
     return (main_frame);
 }
 
 void
-SoFlP::setMainFrame(Fl_Window * frame) {
+SoFlP::setMainFrame(Fl_Widget * frame) {
     main_frame = frame;
 }
 
@@ -249,8 +245,11 @@ SoFlP::initTimers() {
     static bool are_initialized = false;
 
     if(!are_initialized) {
+#if 0
         INIT_TIMER(SoFlP::timerqueuetimer, TimerQueueTimer);
         INIT_TIMER(SoFlP::delaytimeouttimer, DelayTimeoutTimer);
+#endif
+
         are_initialized = true;
     }
 }
@@ -261,10 +260,11 @@ SoFlP::initTimers() {
 
 void
 SoFlP::stopTimers() {
+#if 0
     STOP_TIMER(SoFlP::timerqueuetimer);
-    wxDELETE(SoFlP::timerqueuetimer);
     STOP_TIMER(SoFlP::delaytimeouttimer);
-    wxDELETE(SoFlP::delaytimeouttimer);
+#endif
+
 }
 
 #undef STOP_TIMER
@@ -275,19 +275,19 @@ SoFlP::finish() {
     SoDebugError::postInfo("SoFlP::finish",
                            "remove all internal resources");
 #endif
-    wxTheApp->Unbind(wxEVT_IDLE, &SoFlP::onIdle, SoFlP::instance());
+    // wxTheApp->Unbind(wxEVT_IDLE, &SoFlP::onIdle, SoFlP::instance());
 
     stopTimers();
 
     // only if app is built by SoFl perform exit and cleanup
     if(SoFlP::instance()->is_a_soflp_app) {
-        wxTheApp->OnExit();
-        wxEntryCleanup();
+        // wxTheApp->OnExit();
+        // wxEntryCleanup();
     }
 }
 
 void
-SoFlP::onIdle(wxIdleEvent& WXUNUSED(event)) {
+SoFlP::onIdle(int event) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlP::onIdle",
                                "idlesensor pending");
@@ -303,7 +303,7 @@ SoFlP::onIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 
 void
-SoFlP::onClose(wxCloseEvent& event) {
+SoFlP::onClose(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlP::onClose",
                            "clean up in progress!");
@@ -318,6 +318,4 @@ SoFlP::onClose(wxCloseEvent& event) {
     // de-coupling the scenegraph camera, triggering a notification
     // chain through the scenegraph.
     SoDB::getSensorManager()->setChangedCallback(NULL, NULL);
-
-    event.Skip(); // perform destroy
 }

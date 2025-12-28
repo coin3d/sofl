@@ -37,7 +37,7 @@
 
 #include <Inventor/SbVec2s.h>
 
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Widget.H>
 
 #include <set>
 #include <vector>
@@ -61,24 +61,23 @@ public:
     SbVec2s glSizeUnscaled;
     SbBool wasresized;
 
-    Fl_Window * currentglwidget;
-    Fl_Window * previousglwidget;
+    Fl_Widget * currentglwidget;
+    Fl_Widget * previousglwidget;
     SoFlGLArea * currentglarea;
     SoFlGLArea * previousglarea;
-    Fl_Window * glparent;
+    Fl_Widget * glparent;
 
     int borderthickness;
 
-    /*
-    const wxGLContext * oldcontext;
+    const GLContext * oldcontext;
 
-    void gl_init(wxCommandEvent&);
-    void gl_reshape(wxSizeEvent&);
-    void gl_exposed(wxCommandEvent&);
-    void onMouse(wxMouseEvent&);
-    void onKey(wxKeyEvent&);
-*/
-    static bool isAPanel(Fl_Window*);
+    void gl_init(int);
+    void gl_reshape(int);
+    void gl_exposed(int);
+    void onMouse(int);
+    void onKey(int);
+
+    static bool isAPanel(Fl_Widget*);
     void addSizer();
 
     bool hasZBuffer() const;
@@ -86,14 +85,14 @@ public:
 
     /*
     // Required by the common code
-    static void eventHandler(Fl_Window*, void*, wxEvent&, bool*);
+    static void eventHandler(Fl_Widget*, void*, int, bool*);
 */
 protected:
     virtual SbBool isDirectRendering(void);
 
     /*
-    const wxGLContext *getOverlayContext(void);
-    const wxGLContext *getNormalContext(void);
+    const GLContext *getOverlayContext(void);
+    const GLContext *getNormalContext(void);
     */
 };
 

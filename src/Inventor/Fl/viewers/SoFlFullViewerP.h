@@ -38,27 +38,26 @@
 
 #include "Inventor/Fl/viewers/SoGuiFullViewerP.h"
 #include "Inventor/Fl/viewers/SoFlFullViewer.h"
-#include <FL/tglbtn.h>
 #include <string>
 #include <map>
 
-class SoFlFullViewerP : public SoGuiFullViewerP, public wxEvtHandler {
+class SoFlFullViewerP : public SoGuiFullViewerP/*, public wxEvtHandler */{
 public:
 
     explicit SoFlFullViewerP(SoFlFullViewer *pViewer);
     ~SoFlFullViewerP();
 
     std::string popupmenutitle;
-    Fl_Window * viewerwidget;
-    Fl_Window * canvas;
-    wxToggleButton * interactbutton;
-    wxToggleButton * viewbutton;
+    Fl_Widget * viewerwidget;
+    Fl_Widget * canvas;
+    // wxToggleButton * interactbutton;
+    // wxToggleButton * viewbutton;
     SbBool decorations;
     SbString menutitle;
     SbBool menuenabled;
-    wxSizer* mainlayout;
-    wxBoxSizer * appbuttonlayout;
-    Fl_Window* appbuttonform;
+    // wxSizer* mainlayout;
+    // wxBoxSizer * appbuttonlayout;
+    Fl_Widget* appbuttonform;
     SbPList * appbuttonlist;
     SbPList * viewerbuttons;
 
@@ -80,29 +79,29 @@ public:
         VoidFuncOnePar onMove;
     };
 
-    typedef std::map<Fl_Window*, WheelFunctions> MapEvent;
+    typedef std::map<Fl_Widget*, WheelFunctions> MapEvent;
     MapEvent objectMap;
     void initThumbWheelEventMap();
 
     void setLeftWheelValue(const float value);
-    static void setThumbWheelValue(Fl_Window*, float value);
+    static void setThumbWheelValue(Fl_Widget*, float value);
     void showDecorationWidgets(SbBool onOff);
-
     // Thumbwheels.
-    void wheelPressed(wxCommandEvent&);
-    void wheelReleased(wxCommandEvent&);
-    void wheelMoved(wxCommandEvent&);
+    void wheelPressed(int);
+    void wheelReleased(int);
+    void wheelMoved(int);
 
+    /*
 
     // Button row.
-    void interactbuttonClicked(wxCommandEvent & );
-    void viewbuttonClicked(wxCommandEvent & );
-    void homebuttonClicked(wxCommandEvent & );
-    void sethomebuttonClicked(wxCommandEvent & );
-    void viewallbuttonClicked(wxCommandEvent & );
-    void seekbuttonClicked(wxCommandEvent & );
+    void interactbuttonClicked(int );
+    void viewbuttonClicked(int );
+    void homebuttonClicked(int );
+    void sethomebuttonClicked(int );
+    void viewallbuttonClicked(int );
+    void seekbuttonClicked(int );
     void seekbuttonClicked();
-
+*/
     // Menu items.
     void selectedViewing();
     void selectedDecoration();
@@ -112,14 +111,14 @@ public:
     void increaseInteractiveCount();
     void decreaseInteractiveCount();
 
-    void bindEvents(Fl_Window*);
+    void bindEvents(Fl_Widget*);
 
+    /*
     // Return pointer to pushbutton in right-side decoration bar.
     wxAnyButton * getViewerbutton(const int idx) {
         return (wxAnyButton *)this->viewerbuttons->get(idx);
-    }
+    }*/
 
-wxDECLARE_EVENT_TABLE();
 };
 
 

@@ -46,35 +46,35 @@
 #define PUBLIC(o) (o->pub)
 #define PRIVATE(o) (o->pimpl)
 
-Fl_Window*
-SoFlPlaneViewer::buildWidget(Fl_Window* parent) {
+Fl_Widget*
+SoFlPlaneViewer::buildWidget(Fl_Widget* parent) {
     return inherited::buildWidget(parent);
 }
 
 void
-SoFlPlaneViewer::createViewerButtons(Fl_Window* parent,
+SoFlPlaneViewer::createViewerButtons(Fl_Widget* parent,
                                      SbPList * buttons) {
     inherited::createViewerButtons(parent, buttons);
-
+#if 0
     // add X, Y, Z viewpoint buttons
-    PRIVATE(this)->buttons.x = new wxButton(parent, X_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
-    PRIVATE(this)->buttons.x->SetBitmap(wxImage(x_xpm));
+    PRIVATE(this)->buttons.x = new Fl_Button(parent, X_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
+    PRIVATE(this)->buttons.x->SetBitmap(Fl_Image(x_xpm));
     buttons->append(PRIVATE(this)->buttons.x);
 
-    PRIVATE(this)->buttons.y = new wxButton(parent, Y_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
-    PRIVATE(this)->buttons.y->SetBitmap(wxImage(y_xpm));
+    PRIVATE(this)->buttons.y = new Fl_Button(parent, Y_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
+    PRIVATE(this)->buttons.y->SetBitmap(Fl_Image(y_xpm));
     buttons->append(PRIVATE(this)->buttons.y);
 
-    PRIVATE(this)->buttons.z =  new wxButton(parent, Z_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
-    PRIVATE(this)->buttons.z->SetBitmap(wxImage(z_xpm));
+    PRIVATE(this)->buttons.z =  new Fl_Button(parent, Z_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
+    PRIVATE(this)->buttons.z->SetBitmap(Fl_Image(z_xpm));
     buttons->append(PRIVATE(this)->buttons.z);
 
     // add camera toggle button
     assert(PRIVATE(this)->pixmaps.perspective != NULL);
     assert(PRIVATE(this)->pixmaps.orthogonal != NULL);
-    PRIVATE(this)->buttons.camera = new wxButton(parent, CAMERA_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
+    PRIVATE(this)->buttons.camera = new Fl_Button(parent, CAMERA_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);;
 
-    wxImage * pixmap = NULL;
+    Fl_Image * pixmap = NULL;
     SoType t = this->getCameraType();
     if (t.isDerivedFrom(SoOrthographicCamera::getClassTypeId()))
         pixmap = PRIVATE(this)->pixmaps.orthogonal;
@@ -84,6 +84,8 @@ SoFlPlaneViewer::createViewerButtons(Fl_Window* parent,
 
     PRIVATE(this)->buttons.camera->SetBitmap( wxBitmap(*pixmap));
     buttons->append(PRIVATE(this)->buttons.camera);
+#endif
+
 }
 
 void
@@ -102,10 +104,13 @@ SoFlPlaneViewer::setCamera( SoCamera* camera) {
                 this->setRightWheelString("Dolly");
         }
         if (PRIVATE(this)->buttons.camera) {
+#if 0
             PRIVATE(this)->buttons.camera->SetBitmap(
                     orthogonal ?
                     *(PRIVATE(this)->pixmaps.orthogonal) :
                     *(PRIVATE(this)->pixmaps.perspective));
+#endif
+
         }
     }
     inherited::setCamera(camera);
@@ -119,9 +124,9 @@ SoFlPlaneViewerP::SoFlPlaneViewerP(SoFlPlaneViewer *v)
 
 void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     this->commonConstructor(); // init generic stuff
-
-    this->pixmaps.orthogonal = new wxImage((const char **) ortho_xpm);
-    this->pixmaps.perspective = new wxImage((const char **) perspective_xpm);
+#if 0
+    this->pixmaps.orthogonal = new Fl_Image((const char **) ortho_xpm);
+    this->pixmaps.perspective = new Fl_Image((const char **) perspective_xpm);
 
     PUBLIC(this)->setClassName("SoFlPlaneViewer");
     PUBLIC(this)->setLeftWheelString("transY");
@@ -130,7 +135,7 @@ void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     if (!buildnow) return;
 
     PUBLIC(this)->setSize(SbVec2s(550, 490)); // extra buttons -> more height
-    Fl_Window * viewer = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
+    Fl_Widget * viewer = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
     PUBLIC(this)->setBaseWidget(viewer);
 
     viewer->Bind(wxEVT_BUTTON,
@@ -149,21 +154,23 @@ void SoFlPlaneViewerP::constructor(SbBool buildnow) {
                  &SoFlPlaneViewerP::zClicked,
                  this,
                  Z_BUTTON);
+#endif
+
 }
 
-void SoFlPlaneViewerP::xClicked(wxEvent &) {
+void SoFlPlaneViewerP::xClicked(int) {
     this->viewPlaneX();
 }
 
-void SoFlPlaneViewerP::yClicked(wxEvent &) {
+void SoFlPlaneViewerP::yClicked(int) {
     this->viewPlaneY();
 }
 
-void SoFlPlaneViewerP::zClicked(wxEvent &) {
+void SoFlPlaneViewerP::zClicked(int) {
     this->viewPlaneZ();
 }
 
-void SoFlPlaneViewerP::cameraToggleClicked(wxEvent &) {
+void SoFlPlaneViewerP::cameraToggleClicked(int) {
     PUBLIC(this)->toggleCameraType();
 }
 

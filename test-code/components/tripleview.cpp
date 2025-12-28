@@ -88,7 +88,7 @@ timer_callback(void * data, SoSensor * sensor)
 // Make a Fl renderarea as a child widget of viewparent, adding the
 // scene under common and a camera with the given orientation.
 void
-add_view(Fl_Window * viewparent, SoGroup * common, SbRotation cameraorientation)
+add_view(Fl_Widget * viewparent, SoGroup * common, SbRotation cameraorientation)
 {
     SoSeparator * root = new SoSeparator;
 
@@ -133,7 +133,7 @@ public:
 
         // Initialize system.
 
-        Fl_Window * parent = new wxFrame(0,wxID_ANY, "");
+        Fl_Widget * parent = new wxFrame(0,wxID_ANY, "");
         SoFl::init(parent);
 
         wxPanel* view0;

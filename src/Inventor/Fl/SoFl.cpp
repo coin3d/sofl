@@ -31,11 +31,14 @@
 \**************************************************************************/
 
 #include "Inventor/Fl/SoFl.h"
+
+#include <FL/Fl_Widget.H>
+
 #include "Inventor/Fl/SoFlP.h"
 #include "Inventor/Fl/SoFlInternal.h"
 #include "sofldefs.h"
 
-Fl_Window*
+Fl_Widget*
 SoFl::init(int & argc,
            char ** argv,
            const char * appname,
@@ -53,8 +56,9 @@ SoFl::init(int & argc,
     // Call all the code for initializing Coin data
     SoFlP::commonInit();
 
+#if 0
     // if wxApp is not already created
-    if (wxApp::GetInstance() == NULL) {
+    if (wxApp::GetInstance() == nullptr) {
         // Set up the QApplication instance which we have derived into a
         // subclass to catch spaceball events.
         SoFlP::instance()->buildWxApp();
@@ -76,9 +80,10 @@ SoFl::init(int & argc,
     assert(wxTheApp);
     wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
     SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose,  SoFlP::instance());
-
+#endif
+    
     SoDB::getSensorManager()->setChangedCallback(SoGuiP::sensorQueueChanged,
-                                                 NULL);
+                                                 nullptr);
 
     SoFlP::instance()->setInitialize(true);
 #ifdef SOFL_DEBUG
@@ -90,7 +95,7 @@ SoFl::init(int & argc,
 }
 
 void
-SoFl::init(Fl_Window* toplevelwidget) {
+SoFl::init(Fl_Widget* toplevelwidget) {
 #ifdef COIN_IV_EXTENSIONS
 #define COIN_IV_EXTENSION(ext) ext::initClass();
     COIN_IV_EXTENSIONS
@@ -106,8 +111,9 @@ SoFl::init(Fl_Window* toplevelwidget) {
     // Call all the code for initializing Coin data
     SoFlP::commonInit();
 
+#if 0
     // if wxApp is not already created
-    if (wxApp::GetInstance() == NULL) {
+    if (wxApp::GetInstance() == nullptr) {
         SoFlP::instance()->buildWxApp();
         wxApp::SetInstance(SoFlP::instance()->main_app);
         static const char * dummyargv[1];
@@ -123,12 +129,15 @@ SoFl::init(Fl_Window* toplevelwidget) {
     }
 
     wxTheApp->Bind(wxEVT_IDLE, &SoFlP::onIdle,  SoFlP::instance());
+    
     if(toplevelwidget) {
         SoFlP::instance()->setMainFrame(toplevelwidget);
         SoFlP::instance()->getMainFrame()->Bind(wxEVT_CLOSE_WINDOW, &SoFlP::onClose, SoFlP::instance());
     }
+#endif
+    
     SoDB::getSensorManager()->setChangedCallback(SoGuiP::sensorQueueChanged,
-                                                 NULL);
+                                                 nullptr);
 
     SoFlP::instance()->setInitialize(true);
 #ifdef SOFL_DEBUG
@@ -144,13 +153,13 @@ SoFl::init(Fl_Window* toplevelwidget) {
  */
 void
 SoFl::mainLoop(void) {
-    wxTheApp->OnRun();
+    // wxTheApp->OnRun();
 }
 
 
 void
 SoFl::exitMainLoop(void)  {
-    wxExit();
+    // wxExit();
 }
 
 void
@@ -165,54 +174,46 @@ SoFl::done() {
 }
 
 void
-SoFl::show(Fl_Window* const widget) {
-    widget->Show();
+SoFl::show(Fl_Widget* const widget) {
+    widget->show();
 }
 
 void
-SoFl::hide(Fl_Window* const widget) {
-    widget->Hide();
+SoFl::hide(Fl_Widget* const widget) {
+    widget->hide();
 }
 
 void
-SoFl::createSimpleErrorDialog(Fl_Window* widget,
+SoFl::createSimpleErrorDialog(Fl_Widget* widget,
                               const char * title,
                               const char * string1,
                               const char * string2 ) {
     SOFL_STUB();
 }
 
-Fl_Window*
+Fl_Widget*
 getTopLevelWidget(void) {
-    return (wxTheApp->GetTopWindow());
+    return (nullptr);
 }
 
-Fl_Window*
-SoFl::getShellWidget(const Fl_Window* w) {
+Fl_Widget*
+SoFl::getShellWidget(const Fl_Widget* w) {
 #if 0
-    return (wxGetTopLevelParent((Fl_WindowBase *) w));
+    return (wxGetTopLevelParent((Fl_WidgetBase *) w));
 #else
-    Fl_Window* p = const_cast<Fl_Window*>(w);
-    while (p !=  NULL) {
-        wxFrame* top_frame = dynamic_cast<wxFrame*>(p);
-        if ( top_frame ) {
-            return p;
-        }
-        p = p->GetParent();
-    }
 #if SOFL_DEBUG && 0 // debug
     SoDebugError::postInfo("SoFl::getShellWidget",
                          "couldn't find shell for widget at %p", widget);
 #endif // debug
-    return (NULL);
+    return (nullptr);
 #endif
 }
 
 void
-SoFl::setWidgetSize(Fl_Window* const widget, const SbVec2s size) {
+SoFl::setWidgetSize(Fl_Widget* const widget, const SbVec2s size) {
     assert(widget != 0 && "widget can not be null");
     if ( widget ) {
-        widget->SetSize(size[0], size[1]);
+        // widget->w() = sSetSize(size[0], size[1]);
     }
 #if SOFL_DEBUG
     else  {
@@ -225,13 +226,12 @@ SoFl::setWidgetSize(Fl_Window* const widget, const SbVec2s size) {
 
 
 SbVec2s
-SoFl::getWidgetSize(const Fl_Window* widget) {
-    assert(widget != 0 && "widget can not be null");
+SoFl::getWidgetSize(const Fl_Widget* widget) {
+    assert(widget != nullptr && "widget can not be null");
     SbVec2s size(-1,-1);
     if ( widget ) {
-        wxSize wx_size = widget->GetSize();
-        size[0] = wx_size.GetWidth();
-        size[1] = wx_size.GetHeight();
+        size[0] = widget->w();
+        size[1] = widget->h();
     }
 #if SOFL_DEBUG
     else  {

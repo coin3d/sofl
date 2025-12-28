@@ -54,20 +54,20 @@ SoFlKeyboard::~SoFlKeyboard(void) {
 }
 
 void
-SoFlKeyboard::enable(Fl_Window* widget, SoFlEventHandler * handler, void * closure) {
+SoFlKeyboard::enable(Fl_Widget* widget, SoFlEventHandler * handler, void * closure) {
     SOFL_STUB();
 }
 
 void
-SoFlKeyboard::disable(Fl_Window* widget, SoFlEventHandler * handler, void * closure) {
+SoFlKeyboard::disable(Fl_Widget* widget, SoFlEventHandler * handler, void * closure) {
     SOFL_STUB();
 }
 
 const SoEvent *
-SoFlKeyboard::translateEvent(wxEvent& event) {
+SoFlKeyboard::translateEvent(int event) {
 
-    wxKeyEvent* key_event = dynamic_cast<wxKeyEvent*>(&event);
-
+    int key_event = 0;
+#if 0
     if(!key_event) {
 #ifdef SOFL_DEBUG
         SoDebugError::postWarning("SoFlKeyboard::translateEvent",
@@ -88,7 +88,7 @@ SoFlKeyboard::translateEvent(wxEvent& event) {
 
         int key = key_event->GetKeyCode();
         // Key code / sequence unknown.
-        if (key == 0) return NULL;
+        if (key == 0) return nullptr;
 
         // Allocate system-neutral event object once and reuse.
         if (!PRIVATE(this)->kbdevent) PRIVATE(this)->kbdevent = new SoKeyboardEvent;
@@ -101,7 +101,7 @@ SoFlKeyboard::translateEvent(wxEvent& event) {
             struct SoFlKeyboardP::key1map *map = (struct SoFlKeyboardP::key1map *) table;
             PRIVATE(this)->kbdevent->setKey(map->to);
         } else {
-            return NULL;
+            return nullptr;
         }
 
         // Press or release?
@@ -120,6 +120,6 @@ SoFlKeyboard::translateEvent(wxEvent& event) {
         PRIVATE(this)->kbdevent->setTime(SbTime::getTimeOfDay());
         return PRIVATE(this)->kbdevent;
     }
-
-    return (NULL);
+#endif
+    return (nullptr);
 }

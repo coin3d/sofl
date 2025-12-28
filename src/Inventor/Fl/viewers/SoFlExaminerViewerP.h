@@ -40,9 +40,9 @@
 #include <Inventor/SbBasic.h>
 #include "Inventor/Fl/viewers/SoGuiExaminerViewerP.h"
 
-#include "FL/image.h"
-#include "FL/button.h"
-#include "FL/frame.h"
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Image.H>
+
 
 class SoFlExaminerViewerP :  public SoGuiExaminerViewerP {
 
@@ -51,11 +51,11 @@ public:
     virtual ~SoFlExaminerViewerP();
     void constructor(const SbBool build);
 
-    wxImage orthopixmap;
-    wxImage perspectivepixmap;
-    wxButton * cameratogglebutton;
+    Fl_Image *orthopixmap;
+    Fl_Image *perspectivepixmap;
+    Fl_Button * cameratogglebutton;
 
-    void cameratoggleClicked(wxCommandEvent & );
+    void cameratoggleClicked(int );
 
 };
 

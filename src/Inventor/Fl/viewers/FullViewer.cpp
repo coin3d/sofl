@@ -47,8 +47,6 @@
 #include <Inventor/Fl/common/pixmaps/view_all.xpm>
 #include <Inventor/Fl/common/pixmaps/seek.xpm>
 
-#include <FL/stattext.h>
-#include <FL/sizer.h>
 
 #define PUBLIC(o) (o->pub)
 #define PRIVATE(o) (o->pimpl)
@@ -57,7 +55,7 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlFullViewer);
 
 const int XPM_BUTTON_SIZE = 24;
 
-SoFlFullViewer::SoFlFullViewer(Fl_Window* parent,
+SoFlFullViewer::SoFlFullViewer(Fl_Widget* parent,
                                const char * name,
                                SbBool embed,
                                BuildFlag buildFlag,
@@ -116,7 +114,7 @@ SoFlFullViewer::SoFlFullViewer(Fl_Window* parent,
     if (! build) return;
 
     this->setClassName("SoFlFullViewer");
-    Fl_Window * viewer = this->buildWidget(this->getParentWidget());
+    Fl_Widget * viewer = this->buildWidget(this->getParentWidget());
     this->setBaseWidget(viewer);
 }
 
@@ -129,8 +127,8 @@ SoFlFullViewer::~SoFlFullViewer() {
     delete PRIVATE(this);
 }
 
-Fl_Window*
-SoFlFullViewer::buildWidget(Fl_Window* parent) {
+Fl_Widget*
+SoFlFullViewer::buildWidget(Fl_Widget* parent) {
     // This will build the main view widgets, along with the decorations
     // widgets and popup menu if they are enabled.
 #if SOFL_DEBUG && 0
@@ -213,29 +211,29 @@ SoFlFullViewer::isPopupMenuEnabled(void) const{
     return (PRIVATE(this)->menuenabled);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlFullViewer::getAppPushButtonParent(void) const {
     SOFL_STUB();
     return (0);
 }
 
 void
-SoFlFullViewer::addAppPushButton(Fl_Window* newButton)  {
+SoFlFullViewer::addAppPushButton(Fl_Widget* newButton)  {
     SOFL_STUB();
 }
 
 void
-SoFlFullViewer::insertAppPushButton(Fl_Window* newButton, int index) {
+SoFlFullViewer::insertAppPushButton(Fl_Widget* newButton, int index) {
     SOFL_STUB();
 }
 
 void
-SoFlFullViewer::removeAppPushButton(Fl_Window* oldButton) {
+SoFlFullViewer::removeAppPushButton(Fl_Widget* oldButton) {
     SOFL_STUB();
 }
 
 int
-SoFlFullViewer::findAppPushButton(Fl_Window* oldButton) const {
+SoFlFullViewer::findAppPushButton(Fl_Widget* oldButton) const {
     SOFL_STUB();
     return (0);
 }
@@ -246,7 +244,7 @@ SoFlFullViewer::lengthAppPushButton(void) const {
     return (0);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlFullViewer::getRenderAreaWidget(void) const {
     return (PRIVATE(this)->canvas);
 }
@@ -269,13 +267,13 @@ SoFlFullViewer::setViewing(SbBool enable) {
     if (PRIVATE(this)->viewerbuttons->getLength() > 0) {
         ((wxToggleButton*)(PRIVATE(this))->getViewerbutton(EXAMINE_BUTTON))->SetValue(enable);
         ((wxToggleButton*)(PRIVATE(this))->getViewerbutton(INTERACT_BUTTON))->SetValue(enable ? FALSE : TRUE);
-        ((wxButton*)PRIVATE(this)->getViewerbutton(SEEK_BUTTON))->Enable(enable);
+        ((Fl_Button*)PRIVATE(this)->getViewerbutton(SEEK_BUTTON))->Enable(enable);
     }
 }
 
 
 void
-SoFlFullViewer::buildDecoration(Fl_Window* parent) {
+SoFlFullViewer::buildDecoration(Fl_Widget* parent) {
     this->leftDecoration = this->buildLeftTrim(parent);
 #if SOFL_DEBUG && 0
     this->leftDecoration->SetBackgroundColour(wxColour(255, 0, 0));
@@ -298,8 +296,8 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
     PRIVATE(this)->initThumbWheelEventMap();
 }
 
-Fl_Window*
-SoFlFullViewer::buildLeftTrim(Fl_Window* parent){
+Fl_Widget*
+SoFlFullViewer::buildLeftTrim(Fl_Widget* parent){
     wxPanel* p = new wxPanel(parent);
     p->SetName("leftTrim");
     p->SetMinSize(wxSize(24,100));
@@ -324,9 +322,9 @@ SoFlFullViewer::buildLeftTrim(Fl_Window* parent){
     return p;
 }
 
-Fl_Window*
-SoFlFullViewer::buildBottomTrim(Fl_Window* parent) {
-    Fl_Window * w = new wxPanel(parent);
+Fl_Widget*
+SoFlFullViewer::buildBottomTrim(Fl_Widget* parent) {
+    Fl_Widget * w = new wxPanel(parent);
     w->SetName("bottomTrim");
     w->SetMinSize(wxSize(100,24));
     wxStaticText* label = new wxStaticText( w, wxID_ANY, this->leftWheelStr);
@@ -377,8 +375,8 @@ SoFlFullViewer::buildBottomTrim(Fl_Window* parent) {
     return w;
 }
 
-Fl_Window*
-SoFlFullViewer::buildRightTrim(Fl_Window* parent) {
+Fl_Widget*
+SoFlFullViewer::buildRightTrim(Fl_Widget* parent) {
     wxPanel* p = new wxPanel(parent);
     p->SetName("rightTrim");
 #if SOFL_DEBUG && 0
@@ -404,14 +402,14 @@ SoFlFullViewer::buildRightTrim(Fl_Window* parent) {
     return p;
 }
 
-Fl_Window*
-SoFlFullViewer::buildAppButtons(Fl_Window* parent) {
+Fl_Widget*
+SoFlFullViewer::buildAppButtons(Fl_Widget* parent) {
     SOFL_STUB();
     return (0);
 }
 
-Fl_Window*
-SoFlFullViewer::buildViewerButtons(Fl_Window* parent) {
+Fl_Widget*
+SoFlFullViewer::buildViewerButtons(Fl_Widget* parent) {
     wxPanel * w = new wxPanel(parent);
     w->SetName("viewerButtons");
 #if SOFL_DEBUG && 0
@@ -431,10 +429,10 @@ SoFlFullViewer::buildViewerButtons(Fl_Window* parent) {
 }
 
 void
-SoFlFullViewer::createViewerButtons(Fl_Window* parent,
+SoFlFullViewer::createViewerButtons(Fl_Widget* parent,
                                     SbPList * button_list) {
     for (int i=0; i <= SEEK_BUTTON; i++) {
-        wxAnyButton *p = new wxButton(parent, i);
+        wxAnyButton *p = new Fl_Button(parent, i);
 
         switch (i) {
             case INTERACT_BUTTON: {
@@ -442,7 +440,7 @@ SoFlFullViewer::createViewerButtons(Fl_Window* parent,
                 delete p;
                 PRIVATE(this)->interactbutton = new wxToggleButton(parent, i, wxEmptyString);
                 p = PRIVATE(this)->interactbutton;
-                p->SetBitmap(wxImage(pick_xpm));
+                p->SetBitmap(Fl_Image(pick_xpm));
                 p->SetName("INTERACT");
                 PRIVATE(this)->interactbutton->SetValue(this->isViewing() ? FALSE : TRUE);
             }
@@ -455,26 +453,26 @@ SoFlFullViewer::createViewerButtons(Fl_Window* parent,
                 p = PRIVATE(this)->viewbutton;
                 PRIVATE(this)->viewbutton->SetValue(this->isViewing());
                 p->SetName("EXAMINE");
-                p->SetBitmap(wxImage(view_xpm));
+                p->SetBitmap(Fl_Image(view_xpm));
             }
                 break;
             case HOME_BUTTON: {
-                p->SetBitmap(wxImage(home_xpm));
+                p->SetBitmap(Fl_Image(home_xpm));
                 p->SetName("HOME");
             }
                 break;
             case SET_HOME_BUTTON: {
-                p->SetBitmap(wxImage(set_home_xpm));
+                p->SetBitmap(Fl_Image(set_home_xpm));
                 p->SetName("SET_HOME");
             }
                 break;
             case VIEW_ALL_BUTTON: {
-                p->SetBitmap(wxImage (view_all_xpm));
+                p->SetBitmap(Fl_Image (view_all_xpm));
                 p->SetName("VIEW_ALL");
             }
                 break;
             case SEEK_BUTTON: {
-                p->SetBitmap(wxImage(seek_xpm));
+                p->SetBitmap(Fl_Image(seek_xpm));
                 p->SetName("SEEK");
             }
                 break;

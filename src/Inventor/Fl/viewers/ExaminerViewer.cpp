@@ -51,7 +51,7 @@
 
 SOFL_OBJECT_SOURCE(SoFlExaminerViewer);
 
-SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
+SoFlExaminerViewer::SoFlExaminerViewer(Fl_Widget* parent,
                                        char const* name,
                                        int embed,
                                        SoFlFullViewer::BuildFlag flag,
@@ -61,7 +61,7 @@ SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
     PRIVATE(this)->constructor(TRUE);
 }
 
-SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window *parent,
+SoFlExaminerViewer::SoFlExaminerViewer(Fl_Widget *parent,
                                        const char *name,
                                        SbBool embed,
                                        SoFlFullViewer::BuildFlag flag,
@@ -97,10 +97,14 @@ SoFlExaminerViewer::setCamera(SoCamera * newCamera) {
                 this->setRightWheelString("Dolly");
         }
         if (PRIVATE(this)->cameratogglebutton) {
+            // TODO:
+#if 0
             PRIVATE(this)->cameratogglebutton->SetBitmap(
                     orthogonal ?
                     (PRIVATE(this)->orthopixmap) :
                     (PRIVATE(this)->perspectivepixmap));
+#endif
+
         }
     }
 
@@ -108,14 +112,15 @@ SoFlExaminerViewer::setCamera(SoCamera * newCamera) {
 }
 
 void
-SoFlExaminerViewer::createViewerButtons(Fl_Window* parent,
+SoFlExaminerViewer::createViewerButtons(Fl_Widget* parent,
                                         SbPList * buttonlist) {
 
     inherited::createViewerButtons(parent, buttonlist);
-    PRIVATE(this)->cameratogglebutton = new wxButton(parent, CAMERA_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    /*
+    PRIVATE(this)->cameratogglebutton = new Fl_Button(parent, CAMERA_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     PRIVATE(this)->cameratogglebutton->SetName("CAMERA");
 
-    wxImage * p = NULL;
+    Fl_Image * p = NULL;
     SoType t = this->getCameraType();
     if (t.isDerivedFrom(SoOrthographicCamera::getClassTypeId()))
         p = &PRIVATE(this)->orthopixmap;
@@ -124,7 +129,7 @@ SoFlExaminerViewer::createViewerButtons(Fl_Window* parent,
     else assert(0 && "unsupported cameratype");
 
     PRIVATE(this)->cameratogglebutton->SetBitmap(*p);
-
+*/
     buttonlist->append(PRIVATE(this)->cameratogglebutton);
 }
 

@@ -39,6 +39,7 @@
 
 #include <Inventor/SbBasic.h>
 #include "Inventor/Fl/viewers/SoGuiPlaneViewerP.h"
+#include <FL/Fl_Button.H>
 
 class SoFlPlaneViewerP : public SoGuiPlaneViewerP {
 public:
@@ -46,18 +47,18 @@ public:
     void constructor(SbBool buildnow);
 
     struct {
-        class wxButton * x, * y, * z;
-        class wxButton * camera;
+        Fl_Button * x, * y, * z;
+        Fl_Button * camera;
     } buttons;
 
     struct {
-        class wxImage * orthogonal, * perspective;
+        Fl_Image * orthogonal, * perspective;
     } pixmaps;
 
-    void xClicked(wxEvent&);
-    void yClicked(wxEvent&);
-    void zClicked(wxEvent&);
-    void cameraToggleClicked(wxEvent&);
+    void xClicked(int);
+    void yClicked(int);
+    void zClicked(int);
+    void cameraToggleClicked(int);
 };
 
 

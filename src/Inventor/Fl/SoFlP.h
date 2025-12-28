@@ -45,14 +45,10 @@ class SoFlP : public SoGuiP {
 public:
 
     bool init;
-    Fl_Window* main_frame;
+    Fl_Widget* main_frame;
     SoFlP();
     bool is_a_soflp_app;
-    /*
-    wxAppConsole*  main_app;
-    static wxTimer *timerqueuetimer;
-    static wxTimer *delaytimeouttimer;
-*/
+
     static void initTimers();
     static void stopTimers();
 
@@ -61,15 +57,17 @@ public:
     void setInitialize(bool);
 
     static void sensorQueueChanged();
-    /*
-    void onIdle(wxIdleEvent& event);
-    void onClose(wxCloseEvent& event);
 
+    void onIdle(int event);
+    void onClose(int event);
+
+    /*
     void buildWxApp();
     void setWxApp(wxAppConsole*);
-*/
-    void setMainFrame(Fl_Window*);
-    Fl_Window* getMainFrame() const;
+    */
+
+    void setMainFrame(Fl_Widget*);
+    Fl_Widget* getMainFrame() const;
 
     void finish();
 };

@@ -69,10 +69,5 @@
 #error this is a private header file
 #endif
 
-#include "FL/event.h"
-
-wxDECLARE_EVENT(SO_WX_MOUSE_WHEEL_PRESSED, wxCommandEvent);
-wxDECLARE_EVENT(SO_WX_MOUSE_WHEEL_RELEASED, wxCommandEvent);
-wxDECLARE_EVENT(SO_WX_MOUSE_WHEEL_MOVED, wxCommandEvent);
 
 #endif //SOFL_WHEELEVENTS_H

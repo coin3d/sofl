@@ -38,7 +38,7 @@
 // calling setDecoration( TRUE ) works.
 int main(int argc, char ** argv)
 {
-  Fl_Window * window = SoFl::init(argc, argv, argv[0]);
+  Fl_Widget * window = SoFl::init(argc, argv, argv[0]);
 
   SoFlExaminerViewer * viewer = new SoFlExaminerViewer
     (window, "Examiner Viewer" ,TRUE,

@@ -44,18 +44,18 @@ MyFrame::getPanel() {
 }
 
 void
-MyFrame::on_size( wxSizeEvent& event ) {
+MyFrame::on_size( int event ) {
     std::cerr<<"MyFrame::on_size"<<std::endl;
     event.Skip();
 }
 
 void
-MyFrame::on_about( wxCommandEvent& event ) {
+MyFrame::on_about( int event ) {
     wxMessageBox("wxFrameBuilder Sample (c) Fabrizio Morciano");
     event.Skip();
 }
 
 void
-MyFrame::on_quit( wxCommandEvent& event ) {
+MyFrame::on_quit( int event ) {
     Close(true);
 }

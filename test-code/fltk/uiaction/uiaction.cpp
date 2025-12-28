@@ -5,7 +5,7 @@
 // Created:     04/01/98
 // Copyright:   (c) 2010 Kevin Ollivier, Steven Lamerton
 //              (c) 2016 Vadim Zeitlin
-// Licence:     Fl_Windows licence
+// Licence:     Fl_Widgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -74,15 +74,15 @@ public:
     // ctor(s)
     MyFrame(const wxString& title);
 
-    void OnButtonPressed(wxCommandEvent& event);
-    void OnNew(wxCommandEvent& event);
-    void OnRunSimulation(wxCommandEvent& event);
-    void OnSimulateText(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& WXUNUSED(event)) { Close(); }
-    void OnAbout(wxCommandEvent& event);
+    void OnButtonPressed(int event);
+    void OnNew(int event);
+    void OnRunSimulation(int event);
+    void OnSimulateText(int event);
+    void OnExit(int WXUNUSED(event)) { Close(); }
+    void OnAbout(int event);
 
 private:
-    wxButton* m_button;
+    Fl_Button* m_button;
     wxTextCtrl* m_text;
 
 wxDECLARE_EVENT_TABLE();
@@ -165,7 +165,7 @@ MyFrame::MyFrame(const wxString& title)
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(sizer);
 
-    m_button = new wxButton(panel, wxID_ANY, "&Button");
+    m_button = new Fl_Button(panel, wxID_ANY, "&Button");
     sizer->Add(m_button, wxSizerFlags().Centre().Border());
 
     m_text = new wxTextCtrl(panel, wxID_ANY, "",
@@ -177,12 +177,12 @@ MyFrame::MyFrame(const wxString& title)
 
 // event handlers
 
-void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnNew(int WXUNUSED(event))
 {
     m_text->AppendText("\"New\" menu item was selected\n");
 }
 
-void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnRunSimulation(int WXUNUSED(event))
 {
     m_text->SetValue("=== Starting the simulation "
                      "(release any pressed keys) ===\n");
@@ -228,7 +228,7 @@ void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
     m_text->AppendText(wxString::Format("\n=== Done in %ldms ===\n", sw.Time()));
 }
 
-void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSimulateText(int WXUNUSED(event))
 {
     static wxString s_text;
     const wxString text = wxGetTextFromUser
@@ -248,12 +248,12 @@ void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
     sim.Text(s_text.c_str());
 }
 
-void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnButtonPressed(int WXUNUSED(event))
 {
     m_text->AppendText("Button pressed.\n");
 }
 
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnAbout(int WXUNUSED(event))
 {
     wxMessageBox
             (

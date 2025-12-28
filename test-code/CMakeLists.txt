@@ -1,5 +1,4 @@
 # TODO
-RETURN()
 
 function(executable executable_name)
     set(multiValueArgs SOURCES LIBS)
@@ -27,9 +26,9 @@ include_directories(
         ${fltk_INCLUDE_DIRS}
 )
 
-add_subdirectory(assertdbg)
-add_subdirectory(components)
+#add_subdirectory(assertdbg)
+#add_subdirectory(components)
 add_subdirectory(Mentor)
-add_subdirectory(viewers)
-add_subdirectory(widgets)
-add_subdirectory(fltk)
+#add_subdirectory(viewers)
+#add_subdirectory(widgets)
+#add_subdirectory(fltk)

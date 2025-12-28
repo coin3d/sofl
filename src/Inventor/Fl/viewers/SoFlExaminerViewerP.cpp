@@ -54,9 +54,12 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
 
     this->cameratogglebutton = NULL;
 
-    this->orthopixmap = wxImage((const char **) ortho_xpm);
-    this->perspectivepixmap = wxImage((const char **) perspective_xpm);
+    // TODO:
+#if 0
+    this->orthopixmap = Fl_Image((const char **) ortho_xpm);
+    this->perspectivepixmap = Fl_Image((const char **) perspective_xpm);
     assert(this->orthopixmap.GetSize() == this->perspectivepixmap.GetSize());
+#endif
 
     PUBLIC(this)->setClassName("SoFlExaminerViewer");
     PUBLIC(this)->setPopupMenuString("Examiner Viewer");
@@ -64,19 +67,21 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
     PUBLIC(this)->setBottomWheelString("RotY");
 
     if (build) {
-        Fl_Window *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
+        Fl_Widget *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
+#if 0
         widget->Bind( wxEVT_BUTTON,
                       &SoFlExaminerViewerP::cameratoggleClicked,
                       this,
                       CAMERA_BUTTON);
         PUBLIC(this)->setBaseWidget(widget);
         widget->SetMinSize(wxSize(500,300));
+#endif
         PUBLIC(this)->setSize(SbVec2s(500, 300));
     }
 }
 
 void
-SoFlExaminerViewerP::cameratoggleClicked(wxCommandEvent&) {
+SoFlExaminerViewerP::cameratoggleClicked(int) {
     if (PUBLIC(this)->getCamera())
         PUBLIC(this)->toggleCameraType();
 }

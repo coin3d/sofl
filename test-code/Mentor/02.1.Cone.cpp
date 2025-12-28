@@ -1,6 +1,6 @@
 /*
- *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+*
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,32 +18,30 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
 
 /*--------------------------------------------------------------
  *  This is an example from the Inventor Mentor,
- *  chapter 2, example 3.
+ *  chapter 2, example 1.
  *
- *  Use the trackball manipulator to edit/rotate a red cone
+ *  Hello Cone example program; draws a red cone in a window.
  *------------------------------------------------------------*/
-
 #include <Inventor/Fl/SoFl.h>
 #include <Inventor/Fl/SoFlRenderArea.h>
-#include <Inventor/manips/SoTrackballManip.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -53,34 +51,39 @@
 int
 main(int , char **argv)
 {
-   // Initialize Inventor and Xt
-   Fl_Widget* myWindow = SoFl::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+    // Initialize Inventor. This returns a main window to use.
+    // If unsuccessful, exit.
+    Fl_Widget*  myWindow = SoFl::init(argv[0]); // pass the app name
+    if (myWindow == NULL) exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
+    // Make a scene containing a red cone
+    SoSeparator *root = new SoSeparator;
+    SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+    SoMaterial *myMaterial = new SoMaterial;
+    root->ref();
+    root->addChild(myCamera);
+    root->addChild(new SoDirectionalLight);
+    myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);   // Red
+    root->addChild(myMaterial);
+    root->addChild(new SoCone);
 
-   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
-   root->addChild(myCamera);               // child 0
-   root->addChild(new SoDirectionalLight); // child 1
-   root->addChild(new SoTrackballManip);   // child 2
+    // Create a renderArea in which to see our scene graph.
+    // The render area will appear within the main window.
+    SoFlRenderArea *myRenderArea = new SoFlRenderArea(myWindow);
 
-   SoMaterial *myMaterial = new SoMaterial;
-   myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);
-   root->addChild(myMaterial);
-   root->addChild(new SoCone);
+    // Make myCamera see everything.
+    myCamera->viewAll(root, myRenderArea->getViewportRegion());
 
-   SoFlRenderArea *myRenderArea = new SoFlRenderArea(myWindow);
-   myCamera->viewAll(root, myRenderArea->getViewportRegion());
-   myRenderArea->setSceneGraph(root);
-   myRenderArea->setTitle("Trackball");
-   myRenderArea->show();
+    // Put our scene in myRenderArea, change the title
+    myRenderArea->setSceneGraph(root);
+    myRenderArea->setTitle("Hello Cone");
+    myRenderArea->show();
 
-   SoFl::show(myWindow);
-   SoFl::mainLoop();
+    SoFl::show(myWindow);  // Display main window
+    SoFl::mainLoop();      // Main Inventor event loop
 
-   delete myRenderArea;
-   root->unref();
+    delete myRenderArea;
+    root->unref();
 
-   return 0;
+    return 0;
 }

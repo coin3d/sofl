@@ -31,6 +31,9 @@
 \**************************************************************************/
 
 #include "Inventor/Fl/SoFlGLWidget.h"
+
+#include <GL/gl.h>
+
 #include "Inventor/Fl/SoFlGLWidgetP.h"
 #include "Inventor/Fl/widgets/SoFlGLArea.h"
 #include "sofldefs.h"
@@ -41,7 +44,7 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlGLWidget);
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SoFlGLWidget::SoFlGLWidget(Fl_Window* const parent ,
+SoFlGLWidget::SoFlGLWidget(Fl_Widget* const parent ,
                            const char * const name ,
                            const SbBool embed ,
                            const int glmodes ,
@@ -68,8 +71,8 @@ SoFlGLWidget::SoFlGLWidget(Fl_Window* const parent ,
     }
 
     this->setClassName("SoFlGLWidget");
-    Fl_Window* parent_widget = this->getParentWidget();
-    Fl_Window* widget = this->buildWidget(parent_widget);
+    Fl_Widget* parent_widget = this->getParentWidget();
+    Fl_Widget* widget = this->buildWidget(parent_widget);
     this->setBaseWidget(widget);
 }
 
@@ -112,11 +115,6 @@ SoFlGLWidget::setGLSize(const SbVec2s size){
     }
 }
 
-template <typename T>
-T
-toSbVec2(const wxSize& wx_size) {
-    return (T(wx_size.GetX(), wx_size.GetY()));
-}
 
 SbVec2s
 SoFlGLWidget::getGLSize(void) const{
@@ -125,14 +123,13 @@ SoFlGLWidget::getGLSize(void) const{
 
 float
 SoFlGLWidget::getGLAspectRatio(void) const{
-    SbVec2f v2(toSbVec2<SbVec2f>(PRIVATE(this)->currentglwidget->GetSize()));
+    SbVec2f v2(PRIVATE(this)->currentglwidget->w(), PRIVATE(this)->currentglwidget->h());
     return ( v2[0] /v2[1] );
 }
 
 SbBool
 SoFlGLWidget::isRGBMode(void){
-    const bool rgb_mode = SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes,
-                                                                WX_GL_RGBA);
+    const bool rgb_mode = false; // SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes, WX_GL_RGBA);
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlGLWidget::isRGBMode",
                            ": %d",
@@ -164,7 +161,7 @@ SoFlGLWidget::glUnlockOverlay(void){
 
 void
 SoFlGLWidget::glSwapBuffers(void){
-    PRIVATE(this)->currentglarea->SwapBuffers();
+    PRIVATE(this)->currentglarea->swap_buffers();
 }
 
 void
@@ -190,8 +187,7 @@ SoFlGLWidget::setDoubleBuffer(const SbBool enable){
 
 SbBool
 SoFlGLWidget::isDoubleBuffer(void) const{
-    const bool double_buffer = SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes,
-                                                                WX_GL_DOUBLEBUFFER);
+    const bool double_buffer = false; // SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes,WX_GL_DOUBLEBUFFER);
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlGLWidget::isDoubleBuffer",
                            ": %d",
@@ -265,18 +261,18 @@ SoFlGLWidget::getSampleBuffers(void) const{
     return (0);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlGLWidget::getGLWidget(void) const{
     return (PRIVATE(this)->currentglwidget);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlGLWidget::getNormalWidget(void) const{
     SOFL_STUB();
     return (0);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlGLWidget::getOverlayWidget(void) const{
     SOFL_STUB();
     return (0);
@@ -301,14 +297,14 @@ SoFlGLWidget::getOverlayTransparentPixel(void){
 }
 
 void
-SoFlGLWidget::processEvent(wxEvent& WXUNUSED(event)){
+SoFlGLWidget::processEvent(int event){
     // Nothing is done here for the SoFlGLWidget, as realize, resize and
     // expose events are caught by explicitly attaching signal callbacks
     // to the widget.
 }
 
-Fl_Window *
-SoFlGLWidget::buildWidget(Fl_Window* parent) {
+Fl_Widget *
+SoFlGLWidget::buildWidget(Fl_Widget* parent) {
     assert(parent !=0 && "parent can not be null");
     PRIVATE(this)->glparent = parent;
     return (PRIVATE(this)->buildGLWidget());
@@ -346,7 +342,7 @@ SoFlGLWidget::sizeChanged(const SbVec2s & size){
 }
 
 void
-SoFlGLWidget::widgetChanged(Fl_Window* w){
+SoFlGLWidget::widgetChanged(Fl_Widget* w){
     SOFL_STUB();
 }
 

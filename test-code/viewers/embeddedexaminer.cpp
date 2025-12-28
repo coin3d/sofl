@@ -61,8 +61,8 @@ protected:
 
 public:
 
-    SplitFrame( Fl_Window* parent,
-                  Fl_WindowID id = wxID_ANY,
+    SplitFrame( Fl_Widget* parent,
+                  Fl_WidgetID id = wxID_ANY,
                   const wxString& title = wxEmptyString,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxSize( 500,300 ),
@@ -112,7 +112,7 @@ public:
 
     }
 
-    void onIdle( wxIdleEvent& )
+    void onIdle( int )
     {
         splitter->SetSashPosition( 0 );
         splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SplitFrame::onIdle ), NULL, this );
@@ -126,7 +126,7 @@ int
 main(int argc, char ** argv)
 {
     // Initialize SoFl.
-    SoFl::init((Fl_Window *)NULL);
+    SoFl::init((Fl_Widget *)NULL);
 
     // Set up scrollview window.
     SplitFrame * vp = new SplitFrame(0);

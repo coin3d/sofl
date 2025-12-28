@@ -45,10 +45,6 @@
 
 #include "WheelEvents.h"
 #include "sofldefs.h"
-#include "Inventor/Fl/viewers/ViewersWxIds.h"
-
-#include <FL/fl.h>
-#include <FL/mstream.h>
 
 #include <cassert>
 #include <cstdio>
@@ -57,33 +53,37 @@
 #include <algorithm>
 #include <stdint.h>
 
-wxBEGIN_EVENT_TABLE(SoFlThumbWheel, wxPanel)
-                EVT_MOTION(SoFlThumbWheel::mouseMoveEvent)
-                EVT_LEFT_DOWN(SoFlThumbWheel::mousePressEvent)
-                EVT_LEFT_UP(SoFlThumbWheel::mouseReleaseEvent)
-                EVT_MOUSEWHEEL(SoFlThumbWheel::mouseWheel)
-                EVT_PAINT(SoFlThumbWheel::paintEvent)
-wxEND_EVENT_TABLE()
 
 static const int SHADEBORDERWIDTH = 0;
 
-SoFlThumbWheel::SoFlThumbWheel(Fl_Window * parent,
-                               const char * name)
-        : wxPanel(parent,
-                  wxID_ANY) {
+SoFlThumbWheel::SoFlThumbWheel(Fl_Widget *parent,
+                               const char *name)
+    : Fl_Widget(parent->x(),
+                parent->y(),
+                parent->w(),
+                parent->h(),
+                name)
+/*: wxPanel(parent,
+          wxID_ANY) */ {
     this->constructor(SoFlThumbWheel::Vertical);
 }
 
 SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
-                               Fl_Window * parent,
-                               const char * name)
-        : wxPanel(parent,
-                  wxID_ANY) {
-    if(!name)
-        this->SetName("SoFlThumbWheel");
+                               Fl_Widget *parent,
+                               const char *name)
+: Fl_Widget(parent->x(),
+            parent->y(),
+            parent->w(),
+            parent->h(),
+            name)
+{
+#if 0
+    if (!name)
+        this->naSetName("SoFlThumbWheel");
     else
         this->SetName(name);
     this->constructor(orientation);
+#endif
 }
 
 void
@@ -94,12 +94,12 @@ SoFlThumbWheel::constructor(Orientation orientation) {
     this->wheel = new SoAnyThumbWheel;
     this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
     this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
-    this->pixmaps = NULL;
+    // TODO: this->pixmaps = NULL;
     this->numPixmaps = 0;
     this->currentPixmap = -1;
-    wxSize s = sizeHint();
-    SetMinSize(s);
-    SetMaxSize(s);
+    // TODO: wxSize s = sizeHint();
+    // TODO: SetMinSize(s);
+    // TODO: SetMaxSize(s);
 }
 
 SoFlThumbWheel::~SoFlThumbWheel() {
@@ -118,11 +118,11 @@ SoFlThumbWheel::setOrientation(Orientation orientation) {
 }
 
 void
-SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
+SoFlThumbWheel::paintEvent(wxPaintEvent & WXUNUSED(event)) {
     wxPaintDC dc(this);
 
     int w, dval;
-    wxSize size= this->GetSize();
+    wxSize size = this->GetSize();
     if (this->orient == SoFlThumbWheel::Vertical) {
         w = size.GetX() - 12;
         dval = size.GetY() - 6;
@@ -133,8 +133,8 @@ SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
 
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::paintEvent",
-                              "dval: %d and w: %d",
-                              dval, w);
+                           "dval: %d and w: %d",
+                           dval, w);
 #endif
 
     // Handle resizing to too small dimensions gracefully.
@@ -143,15 +143,16 @@ SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
     this->initWheel(dval, w);
 
     int pixmap = this->wheel->getBitmapForValue(this->tempWheelValue,
-                                                (this->state == SoFlThumbWheel::Disabled) ?
-                                                SoAnyThumbWheel::DISABLED : SoAnyThumbWheel::ENABLED);
+                                                (this->state == SoFlThumbWheel::Disabled)
+                                                    ? SoAnyThumbWheel::DISABLED
+                                                    : SoAnyThumbWheel::ENABLED);
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::paintEvent",
-                              "pixmap value is: %d and bitmap pointer is %p",
-                              pixmap, this->pixmaps);
+                           "pixmap value is: %d and bitmap pointer is %p",
+                           pixmap, this->pixmaps);
 #endif
 
-    if(pixmap >= numPixmaps)
+    if (pixmap >= numPixmaps)
         return;
 
     wxRect widgetrect(0, 0,
@@ -160,30 +161,29 @@ SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
     wxRect wheelrect(widgetrect);
 
     if (this->orient == Vertical) {
-        wheelrect.SetTop(   wheelrect.GetTop() + 2);
+        wheelrect.SetTop(wheelrect.GetTop() + 2);
         wheelrect.SetBottom(wheelrect.GetBottom() - 4);
-        wheelrect.SetLeft(  wheelrect.GetLeft() + 5);
-        wheelrect.SetRight( wheelrect.GetRight() - 10);
+        wheelrect.SetLeft(wheelrect.GetLeft() + 5);
+        wheelrect.SetRight(wheelrect.GetRight() - 10);
     } else {
-        wheelrect.SetTop(   wheelrect.GetTop() + 5);
+        wheelrect.SetTop(wheelrect.GetTop() + 5);
         wheelrect.SetBottom(wheelrect.GetBottom() - 10);
-        wheelrect.SetLeft(  wheelrect.GetLeft() + 2);
-        wheelrect.SetRight( wheelrect.GetRight() - 4);
+        wheelrect.SetLeft(wheelrect.GetLeft() + 2);
+        wheelrect.SetRight(wheelrect.GetRight() - 4);
     }
     dc.DrawRectangle(wheelrect);
 
-    wheelrect.SetTop(   wheelrect.GetTop() + 1);
+    wheelrect.SetTop(wheelrect.GetTop() + 1);
     wheelrect.SetBottom(wheelrect.GetBottom() - 1);
-    wheelrect.SetLeft(  wheelrect.GetLeft() + 1);
-    wheelrect.SetRight( wheelrect.GetRight() - 1);
+    wheelrect.SetLeft(wheelrect.GetLeft() + 1);
+    wheelrect.SetRight(wheelrect.GetRight() - 1);
     // wheelrect is now wheel-only
 
     wxRect dRect;
     if (this->orient == Vertical) {
-        dRect = wxRect(wheelrect.GetLeft(),wheelrect.GetTop(),w,dval);
-    }
-    else {
-        dRect = wxRect(wheelrect.GetLeft(),wheelrect.GetTop(),dval,w);
+        dRect = wxRect(wheelrect.GetLeft(), wheelrect.GetTop(), w, dval);
+    } else {
+        dRect = wxRect(wheelrect.GetLeft(), wheelrect.GetTop(), dval, w);
     }
 
     assert(pixmap < numPixmaps);
@@ -198,7 +198,7 @@ SoFlThumbWheel::paintEvent(wxPaintEvent& WXUNUSED(event)) {
 */
 
 void
-SoFlThumbWheel::mousePressEvent(wxMouseEvent&  event) {
+SoFlThumbWheel::mousePressEvent(wxMouseEvent &event) {
     if (this->state != SoFlThumbWheel::Idle)
         return;
     this->state = SoFlThumbWheel::Dragging;
@@ -211,7 +211,7 @@ SoFlThumbWheel::mousePressEvent(wxMouseEvent&  event) {
     this->mouseLastPos = this->mouseDownPos;
 
 #if SOFL_DEBUG && 0
-    SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent","");
+    SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent", "");
 #endif
 
     sendEvent(SO_WX_MOUSE_WHEEL_PRESSED, "mousePressEvent");
@@ -221,8 +221,7 @@ SoFlThumbWheel::mousePressEvent(wxMouseEvent&  event) {
   \internal
 */
 void
-SoFlThumbWheel::mouseMoveEvent(wxMouseEvent& event) {
-
+SoFlThumbWheel::mouseMoveEvent(wxMouseEvent &event) {
     if (this->state != SoFlThumbWheel::Dragging)
         return;
 
@@ -252,7 +251,7 @@ SoFlThumbWheel::mouseMoveEvent(wxMouseEvent& event) {
   \internal
 */
 void
-SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent& WXUNUSED(event)) {
+SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent & WXUNUSED(event)) {
     if (this->state != SoFlThumbWheel::Dragging)
         return;
 
@@ -263,11 +262,11 @@ SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent& WXUNUSED(event)) {
 }
 
 void
-SoFlThumbWheel::mouseWheel(wxMouseEvent &WXUNUSED(event)) {
+SoFlThumbWheel::mouseWheel(wxMouseEvent & WXUNUSED(event)) {
     SOFL_STUB();
     return;
 #if 0
-    int delta = /*event.GetWheelDelta() * */(float)(event.GetWheelRotation()) / 120.0;
+    int delta = /*event.GetWheelDelta() * */(float) (event.GetWheelRotation()) / 120.0;
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::mouseWheel",
                            "delta: %d wheelValue: %d mouseDownPos: %d",
@@ -333,10 +332,10 @@ SoFlThumbWheel::value() const {
 }
 
 void
-fill(std::vector<uint8_t>& buffer,
-          unsigned long n,
-          int channel = 3) {
-    if(channel>3) {
+fill(std::vector<uint8_t> &buffer,
+     unsigned long n,
+     int channel = 3) {
+    if (channel > 3) {
         buffer.push_back((n >> 24) & 0xFF);
     }
     buffer.push_back((n >> 16) & 0xFF);
@@ -344,14 +343,14 @@ fill(std::vector<uint8_t>& buffer,
     buffer.push_back(n & 0xFF);
 }
 
-uint8_t*
-toRGBChannel(const std::vector<unsigned int>& img) {
+uint8_t *
+toRGBChannel(const std::vector<unsigned int> &img) {
     std::vector<uint8_t> vout;
-    for(size_t i=0;i<img.size();++i) {
+    for (size_t i = 0; i < img.size(); ++i) {
         fill(vout, img[i]);
     }
     assert(vout.size() == img.size()*3);
-    uint8_t* out = static_cast<uint8_t*>(malloc( vout.size() ));
+    uint8_t *out = static_cast<uint8_t *>(malloc(vout.size()));
     memcpy(out, &vout[0], vout.size());
     return (out);
 }
@@ -378,15 +377,14 @@ SoFlThumbWheel::initWheel(int diameter, int width) {
     }
 
     this->numPixmaps = this->wheel->getNumBitmaps();
-    this->pixmaps = new wxBitmap * [this->numPixmaps];
+    this->pixmaps = new wxBitmap *[this->numPixmaps];
 
     for (int i = 0; i < this->numPixmaps; i++) {
-        std::vector<unsigned int> buffer(pwidth*pheight);
+        std::vector<unsigned int> buffer(pwidth * pheight);
         this->wheel->drawBitmap(i, &buffer[0],
-                                (this->orient == Vertical) ? SoAnyThumbWheel::VERTICAL :
-                                SoAnyThumbWheel::HORIZONTAL);
-        uint8_t* rgb = toRGBChannel(buffer);
-        wxImage img(pwidth, pheight,rgb);
+                                (this->orient == Vertical) ? SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
+        uint8_t *rgb = toRGBChannel(buffer);
+        Fl_Image img(pwidth, pheight, rgb);
         assert(img.IsOk());
         this->pixmaps[i] = new wxBitmap(img);
     }
@@ -447,7 +445,7 @@ SoFlThumbWheel::getRangeBoundaryHandling() const {
 
 void
 SoFlThumbWheel::sendEvent(long id,
-                          const std::string& event_id) {
+                          const std::string &event_id) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::sendEvent",
                            "id: %d event: %s tempWheelValue: %d",

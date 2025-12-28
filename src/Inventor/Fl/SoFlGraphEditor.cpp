@@ -95,7 +95,7 @@ SOFL_OBJECT_SOURCE(SoFlGraphEditor);
 */
 
 SoFlGraphEditor::SoFlGraphEditor(
-  Fl_Window * const parent,
+  Fl_Widget * const parent,
   const char * const name,
   const SbBool embed,
   const int parts)
@@ -109,7 +109,7 @@ SoFlGraphEditor::SoFlGraphEditor(
 */
 
 SoFlGraphEditor::SoFlGraphEditor(
-  Fl_Window * const parent,
+  Fl_Widget * const parent,
   const char * const name,
   const SbBool embed,
   const int parts,
@@ -132,12 +132,12 @@ SoFlGraphEditor::constructor(
 
   this->buildflags = parts & EVERYTHING;
 
-  this->editorbase = (Fl_Window *) NULL;
-  this->menubar = (Fl_Window *) NULL;
-  this->grapheditor = (Fl_Window *) NULL;
-  this->graphroot = (Fl_Window *) NULL;
-  this->statusbar = (Fl_Window *) NULL;
-  this->statusmessage = (Fl_Window *) NULL;
+  this->editorbase = (Fl_Widget *) NULL;
+  this->menubar = (Fl_Widget *) NULL;
+  this->grapheditor = (Fl_Widget *) NULL;
+  this->graphroot = (Fl_Widget *) NULL;
+  this->statusbar = (Fl_Widget *) NULL;
+  this->statusmessage = (Fl_Widget *) NULL;
 
   this->horizontal = (WxAdjustment *) NULL;
   this->vertical = (WxAdjustment *) NULL;
@@ -146,8 +146,8 @@ SoFlGraphEditor::constructor(
 
   if (! build) return;
   this->setSize(SbVec2s(350, 450));
-  Fl_Window * parent = this->getParentWidget();
-  Fl_Window * editor = this->buildWidget(parent);
+  Fl_Widget * parent = this->getParentWidget();
+  Fl_Widget * editor = this->buildWidget(parent);
   this->setBaseWidget(editor);
 } // constructor()
 
@@ -196,15 +196,15 @@ SoFlGraphEditor::getSceneGraph(
   FIXME: write doc
 */
 
-Fl_Window *
+Fl_Widget *
 SoFlGraphEditor::buildSubGraph(
-  Fl_Window * parent,
+  Fl_Widget * parent,
   SoNode * node)
 {
   assert(node != NULL);
   const char * classname = node->getTypeId().getName().getString();
   SbName nodename = node->getName();
-  Fl_Window * root;
+  Fl_Widget * root;
   if (! nodename) {
     root = WX_WIDGET(ww_tree_item_new_with_label((gchar*)classname));
   } else {
@@ -219,22 +219,22 @@ SoFlGraphEditor::buildSubGraph(
   ww_signal_connect(WX_OBJECT(root), "select",
     WX_SIGNAL_FUNC(SoFlGraphEditor::selectionCB), (gpointer) this);
 
-  Fl_Window * substuff = WX_WIDGET(ww_tree_new());
+  Fl_Widget * substuff = WX_WIDGET(ww_tree_new());
   ww_tree_item_set_subtree(WX_TREE_ITEM(root), substuff);
 
   SoFieldList fields;
   if (node->getFields(fields) > 0) {
-    Fl_Window * fieldsitem = WX_WIDGET(ww_tree_item_new_with_label("[fields]"));
+    Fl_Widget * fieldsitem = WX_WIDGET(ww_tree_item_new_with_label("[fields]"));
     ww_widget_show(fieldsitem);
     ww_tree_append(WX_TREE(substuff), fieldsitem);
-    Fl_Window * fieldstree = WX_WIDGET(ww_tree_new());
+    Fl_Widget * fieldstree = WX_WIDGET(ww_tree_new());
     ww_tree_item_set_subtree(WX_TREE_ITEM(fieldsitem), fieldstree);
     for (int i = 0; i < fields.getLength(); i++) {
       SoField * field = fields[i];
       SbName fieldname;
       node->getFieldName(field, fieldname);
       const char * fieldnamestr = fieldname.getString();
-      Fl_Window * fieldwidget = WX_WIDGET(ww_tree_item_new_with_label((gchar*)fieldnamestr));
+      Fl_Widget * fieldwidget = WX_WIDGET(ww_tree_item_new_with_label((gchar*)fieldnamestr));
       ww_object_set_data(WX_OBJECT(fieldwidget), "SoNode", (gpointer) node);
       ww_object_set_data(WX_OBJECT(fieldwidget), "SoField", (gpointer) field);
       ww_widget_show(fieldwidget);
@@ -247,7 +247,7 @@ SoFlGraphEditor::buildSubGraph(
   SoChildList * children = node->getChildren();
   if (children != NULL && children->getLength() > 0) {
     for (int i = 0; i < children->getLength(); i++)
-      Fl_Window * kid = SoFlGraphEditor::buildSubGraph(substuff, (SoNode *) children->get(i));
+      Fl_Widget * kid = SoFlGraphEditor::buildSubGraph(substuff, (SoNode *) children->get(i));
   }
   return root;
 }
@@ -260,7 +260,7 @@ void
 SoFlGraphEditor::buildSceneGraphTree(// virtual, protected
   void)
 {
-  Fl_Window * graph = this->buildSubGraph(this->graphroot, this->scenegraph);
+  Fl_Widget * graph = this->buildSubGraph(this->graphroot, this->scenegraph);
   ww_tree_item_expand(WX_TREE_ITEM(graph));
 } // buildSceneGraphTree()
 
@@ -306,9 +306,9 @@ SoFlGraphEditor::saveSceneGraph(// virtual, protected
   This method returns builds and returns the basic graph editor component.
 */
 
-Fl_Window *
+Fl_Widget *
 SoFlGraphEditor::buildWidget(// virtual, protected
-  Fl_Window * parent)
+  Fl_Widget * parent)
 {
   this->editorbase = WX_WIDGET(ww_vbox_new(FALSE, 0));
   if (this->buildflags & MENUBAR) {
@@ -335,22 +335,22 @@ SoFlGraphEditor::buildWidget(// virtual, protected
   This function builds and returns the graph editor menu bar.
 */
 
-Fl_Window *
+Fl_Widget *
 SoFlGraphEditor::buildMenuBarWidget(// virtual, protected
-  Fl_Window * parent)
+  Fl_Widget * parent)
 {
-  Fl_Window * menubar = WX_WIDGET(ww_menu_bar_new());
-  Fl_Window * filemenuitem = ww_menu_item_new_with_label(_("File"));
+  Fl_Widget * menubar = WX_WIDGET(ww_menu_bar_new());
+  Fl_Widget * filemenuitem = ww_menu_item_new_with_label(_("File"));
   ww_widget_show(filemenuitem);
   ww_menu_bar_append(WX_MENU_BAR(menubar), WX_WIDGET(filemenuitem));
-  Fl_Window * filemenu = WX_WIDGET(ww_menu_new());
+  Fl_Widget * filemenu = WX_WIDGET(ww_menu_new());
   ww_widget_show(filemenu);
-  Fl_Window * saveitem = ww_menu_item_new_with_label(_("Save"));
+  Fl_Widget * saveitem = ww_menu_item_new_with_label(_("Save"));
   ww_widget_show(saveitem);
   ww_menu_append(WX_MENU(filemenu), WX_WIDGET(saveitem));
   ww_signal_connect(WX_OBJECT(saveitem), "activate",
     WX_SIGNAL_FUNC(SoFlGraphEditor::saveCB), (gpointer) this);
-  Fl_Window * closeitem = ww_menu_item_new_with_label(_("Close"));
+  Fl_Widget * closeitem = ww_menu_item_new_with_label(_("Close"));
   ww_widget_show(closeitem);
   ww_menu_append(WX_MENU(filemenu), WX_WIDGET(closeitem));
   ww_signal_connect(WX_OBJECT(closeitem), "activate",
@@ -363,15 +363,15 @@ SoFlGraphEditor::buildMenuBarWidget(// virtual, protected
   This function builds and returns the actual graph editor widget.
 */
 
-Fl_Window *
+Fl_Widget *
 SoFlGraphEditor::buildGraphEditorWidget(// virtual, protected
-  Fl_Window * parent)
+  Fl_Widget * parent)
 {
   /* value, lower, upper, step_increment, page_increment, page_size */
   this->vertical = WX_ADJUSTMENT(ww_adjustment_new(0, 0, 1000, 10, 100, 100));
   this->horizontal = WX_ADJUSTMENT(ww_adjustment_new(0, 0, 1000, 10, 100, 1000));
 
-  Fl_Window * editor = WX_WIDGET(ww_scrolled_window_new(horizontal, vertical));
+  Fl_Widget * editor = WX_WIDGET(ww_scrolled_window_new(horizontal, vertical));
   ww_scrolled_window_set_policy(
     WX_SCROLLED_WINDOW(editor), WX_POLICY_NEVER, WX_POLICY_ALWAYS);
 
@@ -386,16 +386,16 @@ SoFlGraphEditor::buildGraphEditorWidget(// virtual, protected
   This function builds and returns the graph editor status bar.
 */
 
-Fl_Window *
+Fl_Widget *
 SoFlGraphEditor::buildStatusBarWidget(// virtual, protected
-  Fl_Window * parent)
+  Fl_Widget * parent)
 {
-  Fl_Window * statusframe = WX_WIDGET(ww_frame_new((gchar *) NULL));
+  Fl_Widget * statusframe = WX_WIDGET(ww_frame_new((gchar *) NULL));
   ww_widget_set_usize(statusframe, 0, 30);
   ww_frame_set_shadow_type(WX_FRAME(statusframe), WX_SHADOW_ETCHED_IN);
   ww_container_set_border_width(WX_CONTAINER(statusframe), 3);
   
-  Fl_Window * statuswidgets = ww_hbox_new(FALSE, 0);
+  Fl_Widget * statuswidgets = ww_hbox_new(FALSE, 0);
   ww_widget_set_usize(statusframe, 0, 30);
   ww_container_add(WX_CONTAINER(statusframe), statuswidgets);
   ww_widget_show(statuswidgets);
@@ -416,7 +416,7 @@ SoFlGraphEditor::buildStatusBarWidget(// virtual, protected
 
 void
 SoFlGraphEditor::nodeSelection(// virtual, protected
-  Fl_Window * treeitem,
+  Fl_Widget * treeitem,
   SoNode * node)
 {
   this->setStatusMessage(node->getTypeId().getName().getString());
@@ -428,7 +428,7 @@ SoFlGraphEditor::nodeSelection(// virtual, protected
 
 void
 SoFlGraphEditor::fieldSelection(// virtual, protected
-  Fl_Window * treeitem,
+  Fl_Widget * treeitem,
   SoNode * node,
   SoField * field)
 {

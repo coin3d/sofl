@@ -52,7 +52,7 @@ public:
     EVERYTHING =    0x07
   };
 
-  SoFlGraphEditor(Fl_Window * const parent = (Fl_Window *) NULL,
+  SoFlGraphEditor(Fl_Widget * const parent = (Fl_Widget *) NULL,
                    const char * const name = (char *) NULL,
                    const SbBool embed = TRUE,
                    const int parts = EVERYTHING);
@@ -62,13 +62,13 @@ public:
   SoNode * getSceneGraph(void) const;
 
 protected:
-  SoFlGraphEditor(Fl_Window * const parent, const char * const name,
+  SoFlGraphEditor(Fl_Widget * const parent, const char * const name,
                    const SbBool embed, const int parts, const SbBool build);
 
-  Fl_Window * buildWidget(Fl_Window * parent);
-  virtual Fl_Window * buildMenuBarWidget(Fl_Window * parent);
-  virtual Fl_Window * buildGraphEditorWidget(Fl_Window * parent);
-  virtual Fl_Window * buildStatusBarWidget(Fl_Window * parent);
+  Fl_Widget * buildWidget(Fl_Widget * parent);
+  virtual Fl_Widget * buildMenuBarWidget(Fl_Widget * parent);
+  virtual Fl_Widget * buildGraphEditorWidget(Fl_Widget * parent);
+  virtual Fl_Widget * buildStatusBarWidget(Fl_Widget * parent);
 
   virtual void sizeChanged(const SbVec2s & size);
 
@@ -79,8 +79,8 @@ protected:
 
   virtual void setStatusMessage(const char * message);
 
-  virtual void nodeSelection(Fl_Window * item, SoNode * node);
-  virtual void fieldSelection(Fl_Window * item, SoNode * node, SoField * field);
+  virtual void nodeSelection(Fl_Widget * item, SoNode * node);
+  virtual void fieldSelection(Fl_Widget * item, SoNode * node, SoField * field);
 
   virtual const char * getDefaultWidgetName(void) const;
   virtual const char * getDefaultTitle(void) const;
@@ -89,21 +89,21 @@ protected:
 private:
   void constructor(const SbBool build, const int parts);
 
-  static void saveCB(Fl_Window * obj, void* closure);
-  static void closeCB(Fl_Window * obj, void* closure);
-  static void selectionCB(Fl_Window * obj, void* closure);
+  static void saveCB(Fl_Widget * obj, void* closure);
+  static void closeCB(Fl_Widget * obj, void* closure);
+  static void selectionCB(Fl_Widget * obj, void* closure);
 
-  Fl_Window * buildSubGraph(Fl_Window * parent, SoNode * node);
+  Fl_Widget * buildSubGraph(Fl_Widget * parent, SoNode * node);
 
   SoNode * scenegraph;
 
   int buildflags;
-  Fl_Window * editorbase;
-  Fl_Window * menubar;
-  Fl_Window * grapheditor;
-  Fl_Window * graphroot;
-  Fl_Window * statusbar;
-  Fl_Window * statusmessage;
+  Fl_Widget * editorbase;
+  Fl_Widget * menubar;
+  Fl_Widget * grapheditor;
+  Fl_Widget * graphroot;
+  Fl_Widget * statusbar;
+  Fl_Widget * statusmessage;
 
   WxAdjustment * vertical;
   WxAdjustment * horizontal;

@@ -61,7 +61,7 @@ public:
                                               wxDefaultPosition,
                                               wxSize(400,400));
 
-        Fl_Window* window = SoFl::init("renderarea");
+        Fl_Widget* window = SoFl::init("renderarea");
 
         SoFlFullViewer * renderarea =
                 new SoFlFullViewer(window,
@@ -75,9 +75,9 @@ public:
 #if 1
         wxFlexGridSizer* horizontal_sizer = new wxFlexGridSizer(1,3,0,0);
 
-        Fl_Window* left_panel;
-        Fl_Window* center_panel;
-        Fl_Window* right_panel;
+        Fl_Widget* left_panel;
+        Fl_Widget* center_panel;
+        Fl_Widget* right_panel;
 
         horizontal_sizer->AddGrowableCol(1);
         horizontal_sizer->AddGrowableRow(0);
@@ -97,7 +97,7 @@ public:
         horizontal_sizer->Add( right_panel, 0, wxEXPAND|wxALL,0);
 #endif
 #if 1
-        Fl_Window* bottom_panel;
+        Fl_Widget* bottom_panel;
 
         bottom_panel = renderarea->buildBottomTrim(aFrame);
         bottom_panel->SetBackgroundColour( wxColour( 255, 255, 255 ) );

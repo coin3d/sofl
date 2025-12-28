@@ -7,11 +7,11 @@
 
 class MyCanvas : public wxGLCanvas {
 public:
-    MyCanvas (Fl_Window* parent,
+    MyCanvas (Fl_Widget* parent,
               int * attributes): wxGLCanvas(parent,
         wxID_ANY,
         NULL) {
-        wxGLContext ctx(this);
+        GLContext ctx(this);
         bool res = wxGLCanvas::IsDisplaySupported(attributes);
         if(res) {
             std::cout<<"EGL is supported!"<<std::endl;

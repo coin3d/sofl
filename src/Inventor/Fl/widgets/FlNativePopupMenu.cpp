@@ -369,7 +369,7 @@ WxNativePopupMenu::removeMenuItem(int itemid) {
 
 // Doc in superclass.
 void
-WxNativePopupMenu::popUp(Fl_Window * inside, int x, int y) {
+WxNativePopupMenu::popUp(Fl_Widget * inside, int x, int y) {
     MenuRecord * rec = this->getMenuRecord(0);
     inside->PopupMenu(rec->menu);
 }
@@ -445,7 +445,7 @@ WxNativePopupMenu::getItemRecordFromId(int itemid) {
 }
 
 void
-WxNativePopupMenu::itemActivation(wxCommandEvent& action) {
+WxNativePopupMenu::itemActivation(int action) {
     int id = action.GetId();
     ItemRecord *rec = getItemRecordFromId(id);
     assert(rec);

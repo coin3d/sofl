@@ -1,3 +1,4 @@
+executable(02.1.Cone SOURCES 02.1.Cone.cpp LIBS SoFl)
 
 executable(02.3.Trackball SOURCES 02.3.Trackball.cpp LIBS SoFl)
 

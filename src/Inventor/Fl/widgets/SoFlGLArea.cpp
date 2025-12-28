@@ -36,18 +36,17 @@
 
 #include <map>
 
-SoFlGLArea::SoFlGLArea(Fl_Window *parent,
+SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
                        const std::vector<int>& attributes)
-        : Fl_Gl_Window(X, Y, W, H, L) {
+        : Fl_Gl_Window(parent->x(),
+            parent->y(),
+            parent->w(),
+            parent->h()
+            /*TODO*/) {
 
-wxGLCanvas(parent,
-                     wxID_ANY,
-                     &attributes[0],
-                     wxDefaultPosition,
-                     parent->GetClientSize()) {
-    this->SetName("SoFlGLArea");
+    // this->SetName("SoFlGLArea");
 
-    gl_real_context = new wxGLContext(this);
+    gl_real_context = this->context();
     is_gl_initialized = false;
     gl_format = attributes;
 }
@@ -57,27 +56,22 @@ SoFlGLArea::~SoFlGLArea() {
     delete gl_real_context;
 }
 
-void SoFlGLArea::OnPaint(wxPaintEvent& event ) {
+void SoFlGLArea::draw() {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLArea::OnPaint",
                            "size:%d %d",
-                           GetSize().x,
-                           GetSize().y);
+                           w(),
+                           h());
 #endif
+    if (!valid()) {
 
-    // must always be here
-    wxPaintDC dc(this);
-
+    }
     InitGL();
-
-    wxCommandEvent a_wx_event(SO_WX_GL_DRAW, GetId());
-    a_wx_event.SetEventObject(this);
-    a_wx_event.SetString("SO_WX_GL_INIT");
-    ProcessWindowEvent(a_wx_event);
-
-    event.Skip();
 }
 
+int SoFlGLArea::handle(int event) {
+    return Fl_Gl_Window::handle(event);
+}
 
 
 void SoFlGLArea::InitGL() {
@@ -93,11 +87,6 @@ void SoFlGLArea::InitGL() {
 void SoFlGLArea::makeCurrent() {
   //  if(gl_real_context)
   //      SetCurrent(*gl_real_context);
-}
-
-const GLContext *
-SoFlGLArea::context() {
-    return gl_real_context;
 }
 
 #if 0
@@ -123,7 +112,7 @@ SoFlGLArea::areEqual(const SoFlGLArea::GLFormat &format1,
     SOFL_STUB();
     return (false);
 }
-
+#if 0
 bool ConvertWXAttrsWxGLFormat(const int *wxattrs,
                               SoFlGLArea::GLFormat  &format)
 {
@@ -249,3 +238,4 @@ bool ConvertWXAttrsWxGLFormat(const int *wxattrs,
 
     return true;
 }
+#endif

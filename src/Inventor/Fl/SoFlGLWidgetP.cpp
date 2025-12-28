@@ -52,7 +52,7 @@ SoFlGLWidgetP::~SoFlGLWidgetP() {
 }
 
 void
-SoFlGLWidgetP::gl_init(wxCommandEvent& )
+SoFlGLWidgetP::gl_init(int )
 {
 #if SOFL_DEBUG
     SoDebugError::postInfo("gl_init", "invoked");
@@ -62,7 +62,7 @@ SoFlGLWidgetP::gl_init(wxCommandEvent& )
 }
 
 void
-SoFlGLWidgetP::gl_reshape(wxSizeEvent& event) {
+SoFlGLWidgetP::gl_reshape(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::gl_reshape",
                            "<%d, %d>",
@@ -76,7 +76,7 @@ SoFlGLWidgetP::gl_reshape(wxSizeEvent& event) {
 }
 
 void
-SoFlGLWidgetP::gl_exposed(wxCommandEvent&) {
+SoFlGLWidgetP::gl_exposed(int) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::gl_exposed", "%f", SbTime::getTimeOfDay().getValue());
 #endif
@@ -179,8 +179,8 @@ SoFlGLWidgetP::buildGLWidget(void) {
                                this->hasOverlay() ? "overlay" : "no overlay");
 #endif
 
-        Fl_Window *wascurrent = this->currentglwidget;
-        Fl_Window *wasprevious = this->previousglwidget;
+        Fl_Widget *wascurrent = this->currentglwidget;
+        Fl_Widget *wasprevious = this->previousglwidget;
         SoFlGLArea *wascurrentarea = this->currentglarea;
         SoFlGLArea *waspreviousarea = this->previousglarea;
 
@@ -308,7 +308,7 @@ SoFlGLWidgetP::buildGLWidget(void) {
 }
 
 // Returns the normal GL context.
-const wxGLContext *
+const GLContext *
 SoFlGLWidgetP::getNormalContext(void) {
     SoFlGLArea * w = this->currentglarea;
     if (w) return w->context();
@@ -316,7 +316,7 @@ SoFlGLWidgetP::getNormalContext(void) {
 }
 
 // Returns the overlay GL context.
-const wxGLContext *
+const GLContext *
 SoFlGLWidgetP::getOverlayContext(void) {
     SoFlGLArea * w = this->currentglarea;
     // TODO: if (w) { return QGLWidget_overlayContext(w); }
@@ -359,7 +359,7 @@ void SoFlGLWidgetP::initGLModes(int glmodes) {
 }
 
 void
-SoFlGLWidgetP::eventHandler(Fl_Window * /*widget*/ , void *closure, wxEvent &event, bool *) {
+SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, intevent, bool *) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
                            "");
@@ -388,7 +388,7 @@ SoFlGLWidgetP::onKey(wxKeyEvent &event) {
 }
 
 bool
-SoFlGLWidgetP::isAPanel(Fl_Window* window) {
+SoFlGLWidgetP::isAPanel(Fl_Widget* window) {
     return (window->IsKindOf(wxCLASSINFO(wxPanel)));
 }
 

@@ -115,7 +115,7 @@ main(int, char **argv)
     SoMouseButtonEvent  myMouseEvent;
 
     // Initialize Inventor and Xt
-    Fl_Window* myWindow = SoFl::init(argv[0]);
+    Fl_Widget* myWindow = SoFl::init(argv[0]);
     if (myWindow == NULL) exit(1);
 
     SoSeparator *root = new SoSeparator;

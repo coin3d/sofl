@@ -39,9 +39,9 @@ class MyFrame : public  AFrame{
 public:
     MyFrame();
     wxPanel* getPanel();
-    virtual void on_size( wxSizeEvent& event );
-    virtual void on_about( wxCommandEvent& event );
-    virtual void on_quit( wxCommandEvent& event );
+    virtual void on_size( int event );
+    virtual void on_about( int event );
+    virtual void on_quit( int event );
 
 };
 

@@ -51,7 +51,7 @@ public:
         if ( !wxApp::OnInit() )
             return false;
 
-        Fl_Window* window = SoFl::init("renderarea");
+        Fl_Widget* window = SoFl::init("renderarea");
 
                 new SoFlFullViewer(window,
                                    "Renderarea demonstration",

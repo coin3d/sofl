@@ -40,7 +40,7 @@ struct ItemRecord;
 
 class WxNativePopupMenu
         : public SoFlPopupMenu
-        , public  wxEvtHandler{
+        /*, public  wxEvtHandler*/{
     typedef SoFlPopupMenu inherited;
 public:
     WxNativePopupMenu(void);
@@ -65,7 +65,7 @@ public:
     virtual void removeMenu(int menuid) ;
     virtual void removeMenuItem(int itemid) ;
 
-    virtual void popUp(Fl_Window* inside, int x, int y) ;
+    virtual void popUp(Fl_Widget* inside, int x, int y) ;
 
 protected:
 
@@ -77,7 +77,7 @@ protected:
     MenuRecord * createMenuRecord(const char * name);
     ItemRecord * createItemRecord(const char * name);
 
-    void itemActivation(wxCommandEvent&);
+    void itemActivation(int);
 
 private:
     SbPList * menus;

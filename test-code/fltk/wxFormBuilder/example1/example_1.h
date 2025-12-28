@@ -40,14 +40,14 @@ class AFrame : public wxFrame
 		wxPanel* panel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void on_about( wxCommandEvent& event ) { event.Skip(); }
-		virtual void on_quit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void on_size( wxSizeEvent& event ) { event.Skip(); }
+		virtual void on_about( int event ) { event.Skip(); }
+		virtual void on_quit( int event ) { event.Skip(); }
+		virtual void on_size( int event ) { event.Skip(); }
 
 
 	public:
 
-		AFrame( Fl_Window* parent, Fl_WindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		AFrame( Fl_Widget* parent, Fl_WidgetID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~AFrame();
 

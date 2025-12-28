@@ -53,17 +53,17 @@ SoFlInputFocus::~SoFlInputFocus() {
 }
 
 void 
-SoFlInputFocus::enable(Fl_Window* widget, SoFlEventHandler * handler, void * closure) {
+SoFlInputFocus::enable(Fl_Widget* widget, SoFlEventHandler * handler, void * closure) {
     SOFL_STUB();
 }
 
 void 
-SoFlInputFocus::disable(Fl_Window* widget, SoFlEventHandler * handler, void * closure){
+SoFlInputFocus::disable(Fl_Widget* widget, SoFlEventHandler * handler, void * closure){
     SOFL_STUB();
 }
 
 const SoEvent * 
-SoFlInputFocus::translateEvent(wxEvent& event) {
+SoFlInputFocus::translateEvent(int event) {
     SOFL_STUB();
     return (0);
 }

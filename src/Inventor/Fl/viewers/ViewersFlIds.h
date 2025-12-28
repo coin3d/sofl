@@ -39,6 +39,6 @@
 
 #include "FL/windowid.h"
 
-extern const Fl_WindowID FULL_VIEWER_P;
+extern const Fl_WidgetID FULL_VIEWER_P;
 
 #endif //SOFL_VIEWERSWXIDS_H

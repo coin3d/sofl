@@ -44,12 +44,10 @@ public:
 
     typedef std::vector<int> GLFormat;
 
-    SoFlGLArea(Fl_Window *parent,
+    SoFlGLArea(Fl_Widget *parent,
                const GLFormat& );
 
     virtual ~SoFlGLArea();
-
-    const GLContext *context();
 
     void makeCurrent();
 
@@ -60,10 +58,12 @@ public:
                          const GLFormat& format2);
 
 protected:
+    int handle(int event) override;
     void draw() override ;
 
 private:
     void InitGL();
+    GLContext gl_real_context;
     bool is_gl_initialized;
     GLFormat gl_format;
 };

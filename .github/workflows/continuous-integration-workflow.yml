@@ -19,35 +19,19 @@ jobs:
       - name: Create build directory and run CMake
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install g++ \
-            net-tools \
-            openssh-server \
-            git \
-            meld \
-            coin3d \
-            coin \
-            fltk \
-            bzip2 \
-            cmake \
-            zlib1g-dev \
-            pkgconf \
-            doxygen \
-            libpng-dev \
-            libjpeg-dev \
-            libglew-dev \
-            libwayland-dev \
-            libwayland-cursor-dev \
-            libwayland-egl-dev \
-            libwayland-server-dev \
-            libxkbcommon-dev \
-            waylandpp-dev \
-            wayland-protocols \
-            xkbcommon \
-            libxfixes-dev \
-            libxcursor-dev \
-            libxinerama-dev \
-            libxft-dev
-          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
+          sudo apt-get -y install g++ freeglut3-dev git libboost-all-dev
+      - name: Download and install Coin3D
+        run: |
+          git clone --depth 1 --branch v4.0.6 https://github.com/coin3d/coin.git /tmp/coin_source_dir
+          mkdir /tmp/coin_source_dir/coin_build_dir
+          cmake -S /tmp/coin_source_dir -B /tmp/coin_source_dir/coin_build_dir -DCOIN_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11
+          sudo cmake --build /tmp/coin_source_dir/coin_build_dir --target install --config Release -- -j8
+      - name: Download and install fltk
+        run: |
+          git clone --depth 1 --branch release-1.4.4 https://github.com/fltk/fltk /tmp/fltk_source_dir
+          mkdir /tmp/fltk_source_dir/fltk_build_dir
+          cmake -S /tmp/fltk_source_dir -B /tmp/fltk_source_dir/fltk_build_dir -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DFLTK_BUILD_SHARED_LIBS=ON
+          sudo cmake --build /tmp/fltk_source_dir/fltk_build_dir --target install --config Release -- -j8
       - name: Build project
         run: cmake --build cmake_build_dir --target install --config Release -- -j4
       - name: Run tests

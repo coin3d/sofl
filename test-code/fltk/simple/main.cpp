@@ -36,7 +36,7 @@
 class SoFlGLArea : public wxGLCanvas
 {
 public:
-    SoFlGLArea(Fl_Window *parent,
+    SoFlGLArea(Fl_Widget *parent,
                wxGLAttributes& attributes)
 #if 0
             : wxGLCanvas(parent,
@@ -52,7 +52,7 @@ public:
                          parent->GetClientSize())
 #endif
                          {
-        gl_real_context = new wxGLContext(this);
+        gl_real_context = new GLContext(this);
         is_gl_initialized = false;
     }
 
@@ -80,7 +80,7 @@ protected:
         std::cout<<"OnEraseBackground"<<std::endl;
     }
 
-    void OnSize(wxSizeEvent& event) {
+    void OnSize(int event) {
         event.Skip();
         std::cout<<"OnSize"<<std::endl;
     }
@@ -96,7 +96,7 @@ private:
     }
 
     bool is_gl_initialized;
-    wxGLContext* gl_real_context;
+    GLContext* gl_real_context;
 
 wxDECLARE_NO_COPY_CLASS(SoFlGLArea);
 wxDECLARE_EVENT_TABLE();

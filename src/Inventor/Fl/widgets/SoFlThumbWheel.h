@@ -68,16 +68,18 @@
 #include "Inventor/Fl/SoFlBasic.h"
 #include "Inventor/Fl/widgets/SoAnyThumbWheel.h"
 
-#include <FL/panel.h>
+#include <FL/Fl_Widget.H>
 
-class SOFL_DLL_API SoFlThumbWheel : public wxPanel
+#include <string>
+
+class SOFL_DLL_API SoFlThumbWheel : public Fl_Widget
 {
 
 public:
     enum Orientation { Horizontal, Vertical };
 
-    explicit SoFlThumbWheel(Fl_Window * parent = 0, const char * name = 0);
-    explicit SoFlThumbWheel(Orientation, Fl_Window * parent = 0, const char * name = 0);
+    explicit SoFlThumbWheel(Fl_Widget * parent = 0, const char * name = 0);
+    explicit SoFlThumbWheel(Orientation, Fl_Widget * parent = 0, const char * name = 0);
     ~SoFlThumbWheel();
 
     void setOrientation(Orientation);
@@ -97,14 +99,15 @@ public:
     void setRangeBoundaryHandling(boundaryHandling handling);
     boundaryHandling getRangeBoundaryHandling() const;
 
+    /*
     wxSize sizeHint() const;
 
     void paintEvent(wxPaintEvent& );
-    void mousePressEvent(wxMouseEvent& );
-    void mouseReleaseEvent(wxMouseEvent& );
-    void mouseMoveEvent(wxMouseEvent& );
-    void mouseWheel(wxMouseEvent& );
-
+    void mousePressEvent(int );
+    void mouseReleaseEvent(int );
+    void mouseMoveEvent(int );
+    void mouseWheel(int );
+*/
 private:
     void constructor(Orientation);
     void sendEvent(long id,
@@ -122,11 +125,11 @@ private:
     void initWheel(int diameter, int width);
 
     SoAnyThumbWheel * wheel;
-    wxBitmap**   pixmaps;
+    // wxBitmap**   pixmaps;
     int numPixmaps;
     int currentPixmap;
 
-wxDECLARE_EVENT_TABLE();
+
 
 }; // class SoFlThumbWheel
 

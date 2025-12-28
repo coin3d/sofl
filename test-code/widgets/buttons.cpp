@@ -43,11 +43,11 @@
 #include <Inventor/Fl/common/pixmaps/view_all.xpm>
 #include <Inventor/Fl/common/pixmaps/seek.xpm>
 
-wxButton* addButton(Fl_Window* parent,
+Fl_Button* addButton(Fl_Widget* parent,
                     const char** xpm) {
-    wxButton* p = new wxButton(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    wxImage img(xpm);
-    p->SetBitmap(wxImage(img));
+    Fl_Button* p = new Fl_Button(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    Fl_Image img(xpm);
+    p->SetBitmap(Fl_Image(img));
     //p->SetMaxSize(bmp.GetSize());
     return (p);
 }

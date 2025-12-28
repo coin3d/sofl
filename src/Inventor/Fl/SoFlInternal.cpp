@@ -35,83 +35,8 @@
 #include <sstream>
 
 
-std::string
-nameToString(const Fl_Window* w) {
-    std::ostringstream  oss;
-    oss<<"name:\""<<w->GetName()<<"\"";
-    oss<<" ptr:"<<std::hex<<w;
-    return (oss.str());
-}
 
 std::string
-sizeToString(const wxSize& s) {
-    std::ostringstream  oss;
-    oss<<"size:("<<s.GetX()<<","<<s.GetY()<<")";
-    return (oss.str());
-}
-
-std::string
-dumpSizer(wxSizer* sizer,
-          const std::string& prefix) {
-    std::string out;
-    out += prefix;
-    out += " -> sizer:";
-    out += sizeToString(sizer->GetSize());
-    return (out);
-}
-
-std::string
-dumpData(const Fl_Window* w,
-         const std::string& prefix="") {
-    std::string out;
-    out += prefix;
-    out += nameToString(w);
-    out += " ";
-    out += sizeToString(w->GetSize());
-    out += " minClientSize:";
-    out += sizeToString(w->GetMinClientSize());
-    if(w->GetSizer()) {
-        out += dumpSizer(w->GetSizer(), prefix);
-#if 0
-        wxSizerItemList list = w->GetSizer()->GetChildren();
-        wxSizerItemList::compatibility_iterator node = list.GetFirst();
-        while(node) {
-            if(node->GetData() && node->GetData()->GetSizer())
-                dumpSizer(node->GetData()->GetSizer(), prefix);
-           // if(node->GetData() && node->GetData()->GetWindow())
-            //    dumpData(node->GetData()->GetWindow(), prefix);
-            node = node->GetNext();
-        }
-#endif
-    }
-    return (out);
-}
-
-std::string
-dumpWindowDataImpl(const Fl_Window* window, int level) {
-    if(window == 0) {
-        return ("windows is null\n");
-    }
-
-    std::string out;
-    std::string tabs;
-    for(int i=0;i<level;++i)
-        tabs+='-';
-
-    out += "\n";
-    out += dumpData(window, tabs);
-
-    const Fl_WindowList& windows_list =  window->GetWindowChildren();
-    Fl_WindowList::compatibility_iterator node = windows_list.GetFirst();
-    while (node) {
-        Fl_Window *win = node->GetData();
-        out += dumpWindowDataImpl(win, level+1);
-        node = node->GetNext();
-    }
-    return (out);
-}
-
-std::string
-dumpWindowData(const Fl_Window* window) {
-    return (dumpWindowDataImpl(window, 0));
+dumpWindowData(const Fl_Widget* window) {
+    return ("TODO!!!");
 }

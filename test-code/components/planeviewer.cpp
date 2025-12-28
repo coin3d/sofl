@@ -42,7 +42,7 @@ main(
   int argc,
   char ** argv )
 {
-  Fl_Window * window = SoFl::init( argv[0] );
+  Fl_Widget * window = SoFl::init( argv[0] );
 
   SoNode * root = get_scene_graph( argc, argv );
   if ( ! root ) return -1;
