@@ -139,7 +139,7 @@ SoFlFullViewer::buildWidget(Fl_Widget* parent) {
 #endif
 
     PRIVATE(this)->viewerwidget = parent;
-    PRIVATE(this)->viewerwidget->SetName("viewer_widget");
+    PRIVATE(this)->viewerwidget->label("viewer_widget");
 
     this->registerWidget(PRIVATE(this)->viewerwidget);
 
@@ -148,7 +148,7 @@ SoFlFullViewer::buildWidget(Fl_Widget* parent) {
 #endif
 
     PRIVATE(this)->canvas = inherited::buildWidget(PRIVATE(this)->viewerwidget);
-    PRIVATE(this)->canvas->SetMinSize(wxSize(100,100));
+    PRIVATE(this)->canvas->size(100,100);
 
 #if SOFL_DEBUG && 0
     PRIVATE(this)->canvas->SetBackgroundColour(wxColour(250, 0, 255));
@@ -261,7 +261,7 @@ SoFlFullViewer::setViewing(SbBool enable) {
     }
 
     inherited::setViewing(enable);
-
+/*
     // Must check that buttons have been built, in case this viewer
     // component was made without decorations.
     if (PRIVATE(this)->viewerbuttons->getLength() > 0) {
@@ -269,6 +269,7 @@ SoFlFullViewer::setViewing(SbBool enable) {
         ((wxToggleButton*)(PRIVATE(this))->getViewerbutton(INTERACT_BUTTON))->SetValue(enable ? FALSE : TRUE);
         ((Fl_Button*)PRIVATE(this)->getViewerbutton(SEEK_BUTTON))->Enable(enable);
     }
+    */
 }
 
 
@@ -298,6 +299,8 @@ SoFlFullViewer::buildDecoration(Fl_Widget* parent) {
 
 Fl_Widget*
 SoFlFullViewer::buildLeftTrim(Fl_Widget* parent){
+    Fl_Widget* p = nullptr;
+    /*
     wxPanel* p = new wxPanel(parent);
     p->SetName("leftTrim");
     p->SetMinSize(wxSize(24,100));
@@ -319,11 +322,14 @@ SoFlFullViewer::buildLeftTrim(Fl_Widget* parent){
 #if SOFL_DEBUG && 0
     dumpWindowData(p);
 #endif
+*/
     return p;
 }
 
 Fl_Widget*
 SoFlFullViewer::buildBottomTrim(Fl_Widget* parent) {
+    Fl_Widget* w = nullptr;
+#if 0
     Fl_Widget * w = new wxPanel(parent);
     w->SetName("bottomTrim");
     w->SetMinSize(wxSize(100,24));
@@ -372,11 +378,15 @@ SoFlFullViewer::buildBottomTrim(Fl_Widget* parent) {
 
     w->SetSizer( layout );
     w->Fit();
+#endif
+
     return w;
 }
 
 Fl_Widget*
 SoFlFullViewer::buildRightTrim(Fl_Widget* parent) {
+    Fl_Widget* p = nullptr;
+#if 0
     wxPanel* p = new wxPanel(parent);
     p->SetName("rightTrim");
 #if SOFL_DEBUG && 0
@@ -399,6 +409,8 @@ SoFlFullViewer::buildRightTrim(Fl_Widget* parent) {
     sizer->Add(t, 1, wxALL| wxCENTER, border_size);
     p->SetSizer(sizer);
     p->Layout();
+#endif
+
     return p;
 }
 
@@ -410,6 +422,8 @@ SoFlFullViewer::buildAppButtons(Fl_Widget* parent) {
 
 Fl_Widget*
 SoFlFullViewer::buildViewerButtons(Fl_Widget* parent) {
+    Fl_Widget* w = nullptr;
+#if 0
     wxPanel * w = new wxPanel(parent);
     w->SetName("viewerButtons");
 #if SOFL_DEBUG && 0
@@ -425,12 +439,15 @@ SoFlFullViewer::buildViewerButtons(Fl_Widget* parent) {
         sizer->Add( b, 0, wxALL | wxCENTER, 0);
     }
     w->SetSizer(sizer);
+#endif
+
     return (w);
 }
 
 void
 SoFlFullViewer::createViewerButtons(Fl_Widget* parent,
                                     SbPList * button_list) {
+#if 0
     for (int i=0; i <= SEEK_BUTTON; i++) {
         wxAnyButton *p = new Fl_Button(parent, i);
 
@@ -485,6 +502,8 @@ SoFlFullViewer::createViewerButtons(Fl_Widget* parent,
         p->SetSize(XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
         button_list->append(p);
     }
+#endif
+
 }
 
 void
@@ -520,7 +539,7 @@ SoFlFullViewer::setLeftWheelString(const char * const name) {
     initString(this->leftWheelStr, name);
 
     if (this->leftWheelLabel)
-        this->leftWheelLabel->SetLabel(name ? name : "");
+        this->leftWheelLabel->label(name ? name : "");
 }
 
 void
@@ -528,7 +547,7 @@ SoFlFullViewer::setBottomWheelString(const char * const name) {
     initString(this->bottomWheelStr, name);
 
     if (this->bottomWheelLabel)
-        this->leftWheelLabel->SetLabel(name ? name : "");
+        this->leftWheelLabel->label(name ? name : "");
 
 }
 
@@ -537,7 +556,7 @@ SoFlFullViewer::setRightWheelString(const char * const name) {
     initString(this->rightWheelStr, name);
 
     if (this->rightWheelLabel) {
-        this->rightWheelLabel->SetLabel(name ? name : "");
+        this->rightWheelLabel->label(name ? name : "");
     }
 }
 

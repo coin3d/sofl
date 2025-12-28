@@ -239,4 +239,5 @@ SoFl::getWidgetSize(const Fl_Widget* widget) {
                                   "null widget");
     }
 #endif // SOFL_DEBUG
+    return size;
 }

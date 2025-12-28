@@ -38,13 +38,13 @@
 struct MenuRecord;
 struct ItemRecord;
 
-class WxNativePopupMenu
+class FlNativePopupMenu
         : public SoFlPopupMenu
         /*, public  wxEvtHandler*/{
     typedef SoFlPopupMenu inherited;
 public:
-    WxNativePopupMenu(void);
-    virtual ~WxNativePopupMenu();
+    FlNativePopupMenu(void);
+    virtual ~FlNativePopupMenu();
     virtual int newMenu(const char * name, int menuid = -1) ;
     virtual int getMenu(const char * name) ;
     virtual void setMenuTitle(int id, const char * title) ;

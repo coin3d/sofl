@@ -38,6 +38,7 @@
 
 #include "Inventor/Fl/viewers/SoGuiFullViewerP.h"
 #include "Inventor/Fl/viewers/SoFlFullViewer.h"
+#include <FL/Fl_Toggle_Button.H>
 #include <string>
 #include <map>
 
@@ -50,13 +51,13 @@ public:
     std::string popupmenutitle;
     Fl_Widget * viewerwidget;
     Fl_Widget * canvas;
-    // wxToggleButton * interactbutton;
-    // wxToggleButton * viewbutton;
+    Fl_Toggle_Button * interactbutton;
+    Fl_Toggle_Button * viewbutton;
     SbBool decorations;
     SbString menutitle;
     SbBool menuenabled;
-    // wxSizer* mainlayout;
-    // wxBoxSizer * appbuttonlayout;
+    Fl_Window* mainlayout;
+    Fl_Window * appbuttonlayout;
     Fl_Widget* appbuttonform;
     SbPList * appbuttonlist;
     SbPList * viewerbuttons;
@@ -91,7 +92,6 @@ public:
     void wheelReleased(int);
     void wheelMoved(int);
 
-    /*
 
     // Button row.
     void interactbuttonClicked(int );
@@ -101,7 +101,7 @@ public:
     void viewallbuttonClicked(int );
     void seekbuttonClicked(int );
     void seekbuttonClicked();
-*/
+
     // Menu items.
     void selectedViewing();
     void selectedDecoration();

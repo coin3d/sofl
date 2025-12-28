@@ -31,28 +31,33 @@
 \**************************************************************************/
 
 /*!
-  \class WxNativePopupMenu Inventor/Fl/widgets/WxNativePopupMenu.h
-  \brief The WxNativePopupMenu class implements a common interface for pop-up
+  \class FlNativePopupMenu Inventor/Fl/widgets/FlNativePopupMenu.h
+  \brief The SoFlNativePopupMenu class implements a common interface for pop-up
   menu management for all the Coin GUI toolkit libraries.
 */
 
-#include "WxNativePopupMenu.h"
+#include "FlNativePopupMenu.h"
+#include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
 #include "sofldefs.h"
+#include <FL/Fl_Menu_Window.H>
+#include <FL/Fl_Menu_Item.H>
+#include <string>
+
 
 struct MenuRecord {
     int menuid;
     std::string name;
     std::string title;
-    wxMenu* menu;
-    wxMenu* parent;
+    Fl_Menu_Window* menu;
+    Fl_Menu_Window* parent;
 };
 struct ItemRecord {
     int itemid;
     int flags;
     std::string name;
     std::string title;
-    wxMenu* parent;
-    wxMenuItem * action;
+    Fl_Menu_Window* parent;
+    Fl_Menu_Item * action;
 };
 
 #define ITEM_MARKED       0x0001
@@ -62,7 +67,7 @@ struct ItemRecord {
 /*!
   The constructor.
 */
-WxNativePopupMenu::WxNativePopupMenu(void) {
+FlNativePopupMenu::FlNativePopupMenu(void) {
     this->menus = new SbPList;
     this->items = new SbPList;
 }
@@ -70,7 +75,7 @@ WxNativePopupMenu::WxNativePopupMenu(void) {
 /*!
   Destructor.
 */
-WxNativePopupMenu::~WxNativePopupMenu() {
+FlNativePopupMenu::~FlNativePopupMenu() {
     const int numMenus = this->menus->getLength();
 
     int i;
@@ -94,7 +99,7 @@ WxNativePopupMenu::~WxNativePopupMenu() {
 /*!
 */
 int
-WxNativePopupMenu::newMenu(const char * name,
+FlNativePopupMenu::newMenu(const char * name,
                            int menuid) {
     // FIXME: this function is the same in the other So-libraries --
 
@@ -117,7 +122,7 @@ WxNativePopupMenu::newMenu(const char * name,
 /*!
 */
 int
-WxNativePopupMenu::getMenu(const char * name) {
+FlNativePopupMenu::getMenu(const char * name) {
     const int numMenus = this->menus->getLength();
     int i;
     for (i = 0; i < numMenus; i++) {
@@ -131,22 +136,22 @@ WxNativePopupMenu::getMenu(const char * name) {
 /*!
 */
 void
-WxNativePopupMenu::setMenuTitle(int menuid,
+FlNativePopupMenu::setMenuTitle(int menuid,
                                 const char * title) {
     MenuRecord * rec = this->getMenuRecord(menuid);
     assert(rec && "no such menu");
     rec->title = title;
 
     if (rec->parent)  {
-        rec->menu->SetTitle(rec->title);
-        getMenuRecord(rec->menuid)->menu->SetTitle(rec->title);
+        rec->menu->label(rec->title.c_str());
+        getMenuRecord(rec->menuid)->menu->label(rec->title.c_str());
     }
 }
 
 /*!
 */
 const char *
-WxNativePopupMenu::getMenuTitle(int menuid) {
+FlNativePopupMenu::getMenuTitle(int menuid) {
     MenuRecord * rec = this->getMenuRecord(menuid);
     assert(rec && "no such menu");
     return rec->title.c_str();
@@ -155,7 +160,7 @@ WxNativePopupMenu::getMenuTitle(int menuid) {
 /*!
 */
 int
-WxNativePopupMenu::newMenuItem(const char * name,
+FlNativePopupMenu::newMenuItem(const char * name,
                                int itemid) {
     int id = itemid;
     if (id == -1) {
@@ -174,7 +179,7 @@ WxNativePopupMenu::newMenuItem(const char * name,
 /*!
 */
 int
-WxNativePopupMenu::getMenuItem(const char * name) {
+FlNativePopupMenu::getMenuItem(const char * name) {
     const int numItems = this->items->getLength();
     int i;
     for (i = 0; i < numItems; i++) {
@@ -188,20 +193,20 @@ WxNativePopupMenu::getMenuItem(const char * name) {
 /*!
 */
 void
-WxNativePopupMenu::setMenuItemTitle(int itemid,
+FlNativePopupMenu::setMenuItemTitle(int itemid,
                                     const char * title) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such menu");
     rec->title = title;
     if (rec->parent) {
-        rec->action->SetItemLabel(rec->title);
+        rec->action->label(rec->title.c_str());
     }
 }
 
 /*!
 */
 const char *
-WxNativePopupMenu::getMenuItemTitle(int itemid) {
+FlNativePopupMenu::getMenuItemTitle(int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such menu");
     return rec->title.c_str();
@@ -210,11 +215,11 @@ WxNativePopupMenu::getMenuItemTitle(int itemid) {
 /*!
 */
 void
-WxNativePopupMenu::setMenuItemEnabled(int itemid,
+FlNativePopupMenu::setMenuItemEnabled(int itemid,
                                       SbBool enabled) {
     ItemRecord * rec = this->getItemRecord(itemid);
     if (rec) {
-        rec->action->Check(enabled ? true : false);
+        rec->action->value(enabled ? true : false);
         return;
     }
 }
@@ -222,11 +227,11 @@ WxNativePopupMenu::setMenuItemEnabled(int itemid,
 /*!
 */
 SbBool
-WxNativePopupMenu::getMenuItemEnabled(int itemid) {
+FlNativePopupMenu::getMenuItemEnabled(int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
 
     if (rec) {
-        return  (rec->action->IsChecked());
+        return  (rec->action->value());
     }
     return (FALSE);
 }
@@ -234,7 +239,7 @@ WxNativePopupMenu::getMenuItemEnabled(int itemid) {
 /*!
 */
 void
-WxNativePopupMenu::_setMenuItemMarked(int itemid, SbBool marked) {
+FlNativePopupMenu::_setMenuItemMarked(int itemid, SbBool marked) {
     ItemRecord * rec = this->getItemRecord(itemid);
     if (rec == NULL)
         return;
@@ -244,32 +249,33 @@ WxNativePopupMenu::_setMenuItemMarked(int itemid, SbBool marked) {
         rec->flags &= ~ITEM_MARKED;
 
     if (rec->parent  && rec->action) {
-        rec->action->Check(marked != 0);
+        rec->action->value(marked != 0);
     }
 }
 
 /*!
 */
 SbBool
-WxNativePopupMenu::getMenuItemMarked( int itemid) {
+FlNativePopupMenu::getMenuItemMarked( int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such menu");
     if (rec->parent == NULL)
         return (rec->flags & ITEM_MARKED) ? TRUE : FALSE;
 
-    return (rec->action->IsChecked());
+    return (rec->action->value());
 }
 
 /*!
 */
 void
-WxNativePopupMenu::addMenu(int menuid,
+FlNativePopupMenu::addMenu(int menuid,
                            int submenuid,
                            int pos) {
     MenuRecord * super = this->getMenuRecord(menuid);
     MenuRecord * sub = this->getMenuRecord(submenuid);
     assert(super && sub && "no such menu");
 
+    /*
     wxMenuItem* action = 0;
     if (pos == -1) {
         action = super->menu->AppendSubMenu(sub->menu, sub->title);
@@ -278,20 +284,21 @@ WxNativePopupMenu::addMenu(int menuid,
         super->menu->Insert(pos, sub->menuid,  sub->title, sub->menu);
     }
     action->SetItemLabel(sub->title);
+    */
     sub->parent = super->menu;
 }
 
 /*!
 */
 void
-WxNativePopupMenu::addMenuItem(int menuid,
+FlNativePopupMenu::addMenuItem(int menuid,
                                int itemid,
                                int pos) {
     MenuRecord * menu = this->getMenuRecord(menuid);
     assert(menu && "invalid parent menu id");
     ItemRecord * item = this->getItemRecord(itemid);
     assert(item && "invalid child menu id");
-
+/*
     if (pos == -1) {
         item->action = menu->menu->AppendCheckItem(itemid, item->title);
     }
@@ -305,16 +312,19 @@ WxNativePopupMenu::addMenuItem(int menuid,
     if (item->flags & ITEM_MARKED) {
         item->action->Check(true);
     }
+    */
 }
 
 void
-WxNativePopupMenu::addSeparator(int menuid,
+FlNativePopupMenu::addSeparator(int menuid,
                                 int pos) {
     MenuRecord * menu = this->getMenuRecord(menuid);
     assert(menu && "no such menu");
 
     ItemRecord * rec = createItemRecord("separator");
+    /*
     menu->menu->InsertSeparator(pos);
+    */
     rec->flags |= ITEM_SEPARATOR;
     this->items->append(rec);
 }
@@ -326,23 +336,23 @@ WxNativePopupMenu::addSeparator(int menuid,
   allocated.
 */
 void
-WxNativePopupMenu::removeMenu(int menuid) {
+FlNativePopupMenu::removeMenu(int menuid) {
     MenuRecord * rec = this->getMenuRecord(menuid);
     assert(rec && "no such menu");
 
     if (rec->menuid == 0) {
 #if SOFL_DEBUG && 0
-        SoDebugError::postInfo("WxNativePopupMenu::RemoveMenu", "can't remove root");
+        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "can't remove root");
 #endif
         return;
     }
     if (rec->parent == NULL) {
 #if SOFL_DEBUG && 0
-        SoDebugError::postInfo("WxNativePopupMenu::RemoveMenu", "menu not attached");
+        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "menu not attached");
 #endif
         return;
     }
-    rec->parent->Delete(rec->menuid);
+ //   rec->parent->Delete(rec->menuid);
     rec->parent = NULL;
 }
 
@@ -353,31 +363,31 @@ WxNativePopupMenu::removeMenu(int menuid) {
   be allocated.
 */
 void
-WxNativePopupMenu::removeMenuItem(int itemid) {
+FlNativePopupMenu::removeMenuItem(int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such item");
 
     if (rec->parent == NULL) {
 #if SOFL_DEBUG && 0
-        SoDebugError::postInfo("WxNativePopupMenu::RemoveMenu", "item not attached");
+        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "item not attached");
 #endif
         return;
     }
-    rec->parent->Remove(rec->itemid);
+    //rec->parent->Remove(rec->itemid);
     rec->parent = NULL;
 }
 
 // Doc in superclass.
 void
-WxNativePopupMenu::popUp(Fl_Widget * inside, int x, int y) {
+FlNativePopupMenu::popUp(Fl_Widget * inside, int x, int y) {
     MenuRecord * rec = this->getMenuRecord(0);
-    inside->PopupMenu(rec->menu);
+    //inside->PopupMenu(rec->menu);
 }
 
 /*!
 */
 MenuRecord *
-WxNativePopupMenu::getMenuRecord(int menuid) {
+FlNativePopupMenu::getMenuRecord(int menuid) {
     const int numMenus = this->menus->getLength();
     int i;
     for (i = 0; i < numMenus; i++)
@@ -389,7 +399,7 @@ WxNativePopupMenu::getMenuRecord(int menuid) {
 /*!
 */
 ItemRecord *
-WxNativePopupMenu::getItemRecord(int itemid) {
+FlNativePopupMenu::getItemRecord(int itemid) {
     const int numItems = this->items->getLength();
     for (int i = 0; i < numItems; i++) {
         const int recid = ((ItemRecord *) (*this->items)[i])->itemid;
@@ -403,18 +413,19 @@ WxNativePopupMenu::getItemRecord(int itemid) {
 /*!
 */
 MenuRecord *
-WxNativePopupMenu::createMenuRecord(const char * name) {
+FlNativePopupMenu::createMenuRecord(const char * name) {
     MenuRecord * rec = new MenuRecord;
     rec->menuid = -1;
     rec->name =  name;
     rec->title = name;
 
+    /*
     rec->menu = new  wxMenu("");
     rec->menu->Connect(wxEVT_COMMAND_MENU_SELECTED,
-                       wxCommandEventHandler(WxNativePopupMenu::itemActivation),
+                       wxCommandEventHandler(FlNativePopupMenu::itemActivation),
                        0,
                        this);
-
+*/
     rec->parent = NULL;
     return rec;
 }
@@ -422,7 +433,7 @@ WxNativePopupMenu::createMenuRecord(const char * name) {
 /*!
 */
 ItemRecord *
-WxNativePopupMenu::createItemRecord(const char * name) {
+FlNativePopupMenu::createItemRecord(const char * name) {
     ItemRecord * rec = new ItemRecord;
     rec->itemid = -1;
     rec->flags = 0;
@@ -434,7 +445,7 @@ WxNativePopupMenu::createItemRecord(const char * name) {
 }
 
 ItemRecord *
-WxNativePopupMenu::getItemRecordFromId(int itemid) {
+FlNativePopupMenu::getItemRecordFromId(int itemid) {
     const int numItems = this->items->getLength();
     for (int i = 0; i < numItems; i++) {
         const ItemRecord * rec = static_cast<ItemRecord *>((*this->items)[i]);
@@ -445,10 +456,12 @@ WxNativePopupMenu::getItemRecordFromId(int itemid) {
 }
 
 void
-WxNativePopupMenu::itemActivation(int action) {
+FlNativePopupMenu::itemActivation(int action) {
+    /*
     int id = action.GetId();
     ItemRecord *rec = getItemRecordFromId(id);
     assert(rec);
     inherited::invokeMenuSelection(rec->itemid);
+    */
 }
 

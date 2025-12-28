@@ -27,7 +27,7 @@ set(HDRS
   Inventor/${Gui}/viewers/So${Gui}FullViewerP.h
   Inventor/${Gui}/viewers/So${Gui}PlaneViewerP.h
   Inventor/${Gui}/widgets/So${Gui}GLArea.h
-#  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
+  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
   Inventor/${Gui}/widgets/So${Gui}Slider.h          # added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.h
   Inventor/${Gui}/widgets/WheelEvents.h     # added
@@ -66,7 +66,7 @@ set(SRCS
   Inventor/${Gui}/widgets/So${Gui}GLArea.cpp
   Inventor/${Gui}/widgets/So${Gui}Slider.cpp #added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.cpp
-#  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
+  Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
   Inventor/${Gui}/widgets/WheelEvents.cpp     # added
 )
 
@@ -148,7 +148,7 @@ if(NOT SO${GUI}_BUILD_MAC_FRAMEWORK)
 endif()
 
 #target_link_libraries(${PROJECT_NAME} Coin::Coin ${SOFL_OPENGL_LIBRARIES} ${fltk_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} Coin::Coin ${fltk_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Coin::Coin fltk::fltk-shared fltk::gl-shared ) # fltk::fltk_gl)
 
 # Add a target to generate API documentation with Doxygen
 if(SO${GUI}_BUILD_DOCUMENTATION)

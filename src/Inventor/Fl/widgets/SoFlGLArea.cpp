@@ -53,7 +53,7 @@ SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
 
 
 SoFlGLArea::~SoFlGLArea() {
-    delete gl_real_context;
+    // delete gl_real_context;
 }
 
 void SoFlGLArea::draw() {

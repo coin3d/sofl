@@ -83,17 +83,15 @@ public:
     bool hasZBuffer() const;
     bool hasOverlay() const;
 
-    /*
+
     // Required by the common code
     static void eventHandler(Fl_Widget*, void*, int, bool*);
-*/
+
 protected:
     virtual SbBool isDirectRendering(void);
 
-    /*
-    const GLContext *getOverlayContext(void);
-    const GLContext *getNormalContext(void);
-    */
+    const GLContext getOverlayContext(void);
+    const GLContext getNormalContext(void);
 };
 
 

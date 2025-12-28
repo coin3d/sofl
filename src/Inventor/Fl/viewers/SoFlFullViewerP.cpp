@@ -128,18 +128,20 @@ SoFlFullViewerP::wheelPressed(int event) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlFullViewerP::wheelPressed", "event arrived!");
 #endif
+    /*
     MapEvent::iterator it = objectMap.find( static_cast<Fl_Widget*>(event.GetEventObject()));
     if( it != objectMap.end() ) {
         VoidFuncNoPar function = it->second.onPress;
         (PUBLIC(this)->*function)();
     }
+    */
 #if SOFL_DEBUG && 0
     else {
         SoDebugError::postWarning("SoFlFullViewerP::wheelPressed", "not valid event found!");
     }
 #endif
 
-    event.Skip();
+
 }
 
 void
@@ -147,18 +149,18 @@ SoFlFullViewerP::wheelReleased(int event) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlFullViewerP::wheelReleased", "event arrived!");
 #endif
-    MapEvent::iterator it = objectMap.find( static_cast<Fl_Widget*>(event.GetEventObject()));
+    /*MapEvent::iterator it = objectMap.find( static_cast<Fl_Widget*>(event.GetEventObject()));
     if( it != objectMap.end() ) {
         VoidFuncNoPar function = it->second.onRelease;
         (PUBLIC(this)->*function)();
     }
+    */
 #if SOFL_DEBUG && 0
     else {
         SoDebugError::postWarning("SoFlFullViewerP::wheelReleased", "not valid event found!");
     }
 #endif
 
-    event.Skip();
 }
 
 void
@@ -166,6 +168,7 @@ SoFlFullViewerP::wheelMoved(int event) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlFullViewerP::wheelMoved", "event arrived!");
 #endif
+    /*
     Fl_Widget* emitting_thumb_wheel = static_cast<Fl_Widget*>(event.GetEventObject());
     MapEvent::iterator it = objectMap.find( emitting_thumb_wheel);
     if( it != objectMap.end() ) {
@@ -174,13 +177,14 @@ SoFlFullViewerP::wheelMoved(int event) {
         if(v)
             (PUBLIC(this)->*function)(*v);
     }
+    */
 #if SOFL_DEBUG && 0
     else {
         SoDebugError::postWarning("SoFlFullViewerP::wheelMoved", "not valid event found!");
     }
 #endif
 
-    event.Skip();
+
 }
 
 #define ADD_DATA_IN_MAP(objectName) \
@@ -219,10 +223,10 @@ void
 SoFlFullViewerP::interactbuttonClicked(int) {
 
     if (this->interactbutton)
-        this->interactbutton->SetValue(TRUE);
+        this->interactbutton->value(TRUE);
 
     if (this->viewbutton)
-        this->viewbutton->SetValue(FALSE);
+        this->viewbutton->value(FALSE);
 
     if (PUBLIC(this)->isViewing())
         PUBLIC(this)->setViewing(FALSE);
@@ -246,9 +250,9 @@ SoFlFullViewerP::decreaseInteractiveCount() {
 void
 SoFlFullViewerP::viewbuttonClicked(int) {
     if (this->interactbutton)
-        this->interactbutton->SetValue(FALSE);
+        this->interactbutton->value(FALSE);
     if (this->viewbutton)
-        this->viewbutton->SetValue(TRUE);
+        this->viewbutton->value(TRUE);
 
     if (!PUBLIC(this)->isViewing())
         PUBLIC(this)->setViewing(TRUE);
@@ -257,6 +261,7 @@ SoFlFullViewerP::viewbuttonClicked(int) {
 
 void SoFlFullViewerP::bindEvents(Fl_Widget *w) {
     assert(w && "window can not be null!");
+    /*
     w->Bind(SO_WX_MOUSE_WHEEL_PRESSED, &SoFlFullViewerP::wheelPressed, this, FULL_VIEWER_P);
     w->Bind(SO_WX_MOUSE_WHEEL_RELEASED, &SoFlFullViewerP::wheelReleased, this, FULL_VIEWER_P);
     w->Bind(SO_WX_MOUSE_WHEEL_MOVED, &SoFlFullViewerP::wheelMoved, this, FULL_VIEWER_P);
@@ -268,6 +273,7 @@ void SoFlFullViewerP::bindEvents(Fl_Widget *w) {
     w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::sethomebuttonClicked, this, SET_HOME_BUTTON);
     w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::seekbuttonClicked, this, SEEK_BUTTON);
     w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::viewallbuttonClicked, this, VIEW_ALL_BUTTON);
+    */
 }
 
 #undef ADD_DATA_IN_MAP

@@ -43,8 +43,11 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/errors/SoDebugError.h>
 
+
 #include "WheelEvents.h"
 #include "sofldefs.h"
+
+#include <FL/Fl_Pixmap.H>
 
 #include <cassert>
 #include <cstdio>
@@ -94,7 +97,7 @@ SoFlThumbWheel::constructor(Orientation orientation) {
     this->wheel = new SoAnyThumbWheel;
     this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
     this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
-    // TODO: this->pixmaps = NULL;
+    this->pixmaps = nullptr;
     this->numPixmaps = 0;
     this->currentPixmap = -1;
     // TODO: wxSize s = sizeHint();
@@ -114,11 +117,13 @@ SoFlThumbWheel::~SoFlThumbWheel() {
 void
 SoFlThumbWheel::setOrientation(Orientation orientation) {
     this->orient = orientation;
-    Refresh();
+    // Refresh();
+
 }
 
 void
-SoFlThumbWheel::paintEvent(wxPaintEvent & WXUNUSED(event)) {
+SoFlThumbWheel::paintEvent(int event) {
+#if 0
     wxPaintDC dc(this);
 
     int w, dval;
@@ -191,6 +196,8 @@ SoFlThumbWheel::paintEvent(wxPaintEvent & WXUNUSED(event)) {
     dc.DrawBitmap(bitmap, dRect.GetX(), dRect.GetY(), false);
 
     this->currentPixmap = pixmap;
+#endif
+
 }
 
 /*!
@@ -198,7 +205,8 @@ SoFlThumbWheel::paintEvent(wxPaintEvent & WXUNUSED(event)) {
 */
 
 void
-SoFlThumbWheel::mousePressEvent(wxMouseEvent &event) {
+SoFlThumbWheel::mousePressEvent(int event) {
+#if 0
     if (this->state != SoFlThumbWheel::Idle)
         return;
     this->state = SoFlThumbWheel::Dragging;
@@ -215,13 +223,16 @@ SoFlThumbWheel::mousePressEvent(wxMouseEvent &event) {
 #endif
 
     sendEvent(SO_WX_MOUSE_WHEEL_PRESSED, "mousePressEvent");
+#endif
+
 }
 
 /*!
   \internal
 */
 void
-SoFlThumbWheel::mouseMoveEvent(wxMouseEvent &event) {
+SoFlThumbWheel::mouseMoveEvent(int event) {
+#if 0
     if (this->state != SoFlThumbWheel::Dragging)
         return;
 
@@ -245,13 +256,16 @@ SoFlThumbWheel::mouseMoveEvent(wxMouseEvent &event) {
 
     sendEvent(SO_WX_MOUSE_WHEEL_MOVED, "mouseWheel");
     Refresh();
+#endif
+
 }
 
 /*!
   \internal
 */
 void
-SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent & WXUNUSED(event)) {
+SoFlThumbWheel::mouseReleaseEvent(int  event) {
+#if 0
     if (this->state != SoFlThumbWheel::Dragging)
         return;
 
@@ -262,7 +276,7 @@ SoFlThumbWheel::mouseReleaseEvent(wxMouseEvent & WXUNUSED(event)) {
 }
 
 void
-SoFlThumbWheel::mouseWheel(wxMouseEvent & WXUNUSED(event)) {
+SoFlThumbWheel::mouseWheel(int  WXUNUSED(event)) {
     SOFL_STUB();
     return;
 #if 0
@@ -281,6 +295,7 @@ SoFlThumbWheel::mouseWheel(wxMouseEvent & WXUNUSED(event)) {
     Refresh();
     sendEvent(SO_WX_MOUSE_WHEEL_MOVED,
               "mouseWheel");
+#endif
 #endif
 }
 
@@ -310,15 +325,15 @@ SoFlThumbWheel::orientedCoord(const QPoint &p) const
 }
 */
 
-wxSize
+SbVec2s
 SoFlThumbWheel::sizeHint() const {
     const int length = 122;
     int thick = 24;
 
     if (this->orient == SoFlThumbWheel::Horizontal)
-        return wxSize(length, thick);
+        return SbVec2s(length, thick);
     else
-        return wxSize(thick, length);
+        return SbVec2s(thick, length);
 }
 
 SoFlThumbWheel::Orientation
@@ -377,16 +392,18 @@ SoFlThumbWheel::initWheel(int diameter, int width) {
     }
 
     this->numPixmaps = this->wheel->getNumBitmaps();
-    this->pixmaps = new wxBitmap *[this->numPixmaps];
+    this->pixmaps = new Fl_Pixmap *[this->numPixmaps];
 
     for (int i = 0; i < this->numPixmaps; i++) {
         std::vector<unsigned int> buffer(pwidth * pheight);
         this->wheel->drawBitmap(i, &buffer[0],
                                 (this->orient == Vertical) ? SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
         uint8_t *rgb = toRGBChannel(buffer);
+        /*
         Fl_Image img(pwidth, pheight, rgb);
         assert(img.IsOk());
-        this->pixmaps[i] = new wxBitmap(img);
+        this->pixmaps[i] = new Fl_Pixmap(img);
+        */
     }
 }
 
@@ -396,7 +413,7 @@ SoFlThumbWheel::setEnabled(bool enable) {
         this->state = SoFlThumbWheel::Idle;
     else
         this->state = SoFlThumbWheel::Disabled;
-    Refresh();
+    // Refresh();
 }
 
 bool
@@ -408,7 +425,7 @@ void
 SoFlThumbWheel::setValue(float value) {
     this->wheelValue = this->tempWheelValue = value;
     this->mouseDownPos = this->mouseLastPos;
-    Refresh();
+    // Refresh();
 }
 
 void
@@ -454,9 +471,11 @@ SoFlThumbWheel::sendEvent(long id,
                            this->tempWheelValue);
 #endif
 
+    /*
     wxCommandEvent a_wx_event(id, GetId());
     a_wx_event.SetEventObject(this);
     a_wx_event.SetString(event_id);
     a_wx_event.SetClientData(&this->tempWheelValue);
     ProcessWindowEvent(a_wx_event);
+    */
 }

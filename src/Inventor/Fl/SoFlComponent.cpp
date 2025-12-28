@@ -67,11 +67,11 @@ SoFlComponent::SoFlComponent(Fl_Widget* const parent,
 
     PRIVATE(this)->realized = false;
     PRIVATE(this)->shelled = false;
-    PRIVATE(this)->widget = NULL;
+    PRIVATE(this)->widget = nullptr;
     PRIVATE(this)->parent = parent;
-    PRIVATE(this)->closeCB = NULL;
-    PRIVATE(this)->closeCBdata = NULL;
-    PRIVATE(this)->visibilitychangeCBs = NULL;
+    PRIVATE(this)->closeCB = nullptr;
+    PRIVATE(this)->closeCBdata = nullptr;
+    PRIVATE(this)->visibilitychangeCBs = nullptr;
     PRIVATE(this)->fullscreen = false;
 
     this->setClassName("SoFlComponent");
@@ -85,7 +85,7 @@ SoFlComponent::SoFlComponent(Fl_Widget* const parent,
                                  this->getDefaultWidgetName());
 
     if (!parent || !embed) {
-        PRIVATE(this)->parent = new wxFrame(NULL, wxID_ANY, name);
+        // TODO: PRIVATE(this)->parent = new wxFrame(nullptr, wxID_ANY, name);
         PRIVATE(this)->embedded = false;
         PRIVATE(this)->shelled = true;
     }
@@ -97,7 +97,7 @@ SoFlComponent::SoFlComponent(Fl_Widget* const parent,
     // TODO: PRIVATE(this)->parent->installEventFilter(PRIVATE(this));
 }
 
-void  SoFlComponent::initClasses(void) {
+void  SoFlComponent::initClasses() {
     SoFlComponent::initClass();
     SoFlGLWidget::initClass();
     SoFlRenderArea::initClass();
@@ -110,7 +110,7 @@ void  SoFlComponent::initClasses(void) {
 }
 
 void
-SoFlComponent::afterRealizeHook(void) {
+SoFlComponent::afterRealizeHook() {
     SOFL_STUB();
 }
 
@@ -137,10 +137,10 @@ SoFlComponent::setBaseWidget(Fl_Widget* w) {
         /* TODO: iconText = (PRIVATE(this)->widget-windowIconText().isEmpty() ?
 		iconText :
 		PRIVATE(this)->widget->windowIconText());
-         */
         widgetName = (PRIVATE(this)->widget->GetName().IsEmpty() ?
                       widgetName :
                       PRIVATE(this)->widget->GetName());
+        */
 
         this->unregisterWidget(PRIVATE(this)->widget);
     }
@@ -154,19 +154,19 @@ SoFlComponent::setBaseWidget(Fl_Widget* w) {
                            "widget: %p, parent: %p", w, PRIVATE(this)->parent);
 #endif
 
-    if (!PRIVATE(this)->parent || PRIVATE(this)->parent->IsTopLevel()) {
+    if (!PRIVATE(this)->parent /*|| PRIVATE(this)->parent->IsTopLevel()*/) {
 
-        if (PRIVATE(this)->widget->GetName() == "") {
+        if (std::string(PRIVATE(this)->widget->label()).empty()) {
             this->setTitle(this->getDefaultTitle());
         }
 
-        SoFl::getShellWidget(this->getWidget())->SetName(iconText);
+        SoFl::getShellWidget(this->getWidget())->label(iconText.c_str());
     }
-    PRIVATE(this)->widget->SetName(widgetName);
+    PRIVATE(this)->widget->label(widgetName.c_str());
 }
 
 void
-SoFlComponent::show(void) {
+SoFlComponent::show() {
     if(SOFL_DEBUG && !PRIVATE(this)->widget) { // debug
         SoDebugError::postWarning("SoFlComponent::show",
                                   "Called while no Fl_Widget has been set.");
@@ -182,33 +182,33 @@ SoFlComponent::show(void) {
     }
 
     // only parent has power for setting the correct size
-    PRIVATE(this)->parent->SetClientSize(PRIVATE(this)->storesize[0],
+    PRIVATE(this)->parent->size(PRIVATE(this)->storesize[0],
                                          PRIVATE(this)->storesize[1]);
 
     if (SOFLCOMP_RESIZE_DEBUG) {  // debug
         SoDebugError::postInfo("SoFlComponent::show-2",
                                "resized %p: (%d, %d)",
                                PRIVATE(this)->widget,
-                               PRIVATE(this)->widget->GetSize().GetX(),
-                               PRIVATE(this)->widget->GetSize().GetY());
+                               PRIVATE(this)->widget->w(),
+                               PRIVATE(this)->widget->h());
     }
 
     if(! PRIVATE(this)->embedded && PRIVATE(this)->shelled) {
 #if SOFL_DEBUG
         SoDebugError::postInfo("SoFlComponent::show",
                                "perform show if is not embedded and is shelled");
-        PRIVATE(this)->parent->Show();
+        PRIVATE(this)->parent->show();
 #endif
     }
-    PRIVATE(this)->widget->Show();
+    PRIVATE(this)->widget->show();
 
     this->sizeChanged(PRIVATE(this)->storesize);
 }
 
 void
-SoFlComponent::hide(void) {
+SoFlComponent::hide() {
     SOFL_STUB();
-    PRIVATE(this)->widget->Hide();
+    PRIVATE(this)->widget->hide();
 }
 
 void
@@ -227,7 +227,7 @@ SoFlComponent::setWidgetCursor(Fl_Widget* w, const SoFlCursor & cursor) {
     // grabbed by the window under X11, we should really compare with
     // the previous cursor before doing anything, to avoid spending
     // unnecessary clockcycles during animation. 20011203 mortene.
-
+/*
     if (cursor.getShape() == SoFlCursor::CUSTOM_BITMAP) {
         const SoFlCursor::CustomCursor * cc = &cursor.getCustomCursor();
         w->SetCursor(*SoFlComponentP::getNativeCursor(cc));
@@ -255,19 +255,21 @@ SoFlComponent::setWidgetCursor(Fl_Widget* w, const SoFlCursor & cursor) {
                 break;
         }
     }
+    */
 }
 
 SbBool
-SoFlComponent::isFullScreen(void) const {
+SoFlComponent::isFullScreen() const {
     return (PRIVATE(this)->fullscreen);
 }
 
 SbBool
 SoFlComponent::setFullScreen(const SbBool onoff) {
     Fl_Widget * w = this->getShellWidget();
-    if (w == NULL) w = this->getParentWidget();
-    if (w == NULL) w = this->getWidget();
+    if (w == nullptr) w = this->getParentWidget();
+    if (w == nullptr) w = this->getWidget();
     if (!w) { return false; }
+    /*
     wxFrame* frame =  dynamic_cast<wxFrame*>(w);
     if(frame) {
         frame->ShowFullScreen(onoff);
@@ -275,22 +277,23 @@ SoFlComponent::setFullScreen(const SbBool onoff) {
     else {
         return (false);
     }
+    */
 
     PRIVATE(this)->fullscreen = onoff;
     return (PRIVATE(this)->fullscreen);
 }
 
 SbBool
-SoFlComponent::isVisible(void) {
+SoFlComponent::isVisible() {
     bool ret = false;
     if( PRIVATE(this)->widget ) {
-        ret = PRIVATE(this)->widget->IsShownOnScreen();
+        ret = PRIVATE(this)->widget->visible();
     }
     return (ret);
 }
 
 SbBool
-SoFlComponent::isTopLevelShell(void) const {
+SoFlComponent::isTopLevelShell() const {
 #if SOFL_DEBUG
     if (! PRIVATE(this)->widget) {
         SoDebugError::postWarning("SoFlComponent::isTopLevelShell",
@@ -302,17 +305,17 @@ SoFlComponent::isTopLevelShell(void) const {
 }
 
 Fl_Widget*
-SoFlComponent::getWidget(void) const {
+SoFlComponent::getWidget() const {
     return this->getBaseWidget();
 }
 
 Fl_Widget*
-SoFlComponent::getBaseWidget(void) const {
+SoFlComponent::getBaseWidget() const {
     return PRIVATE(this)->widget;
 }
 
 Fl_Widget*
-SoFlComponent::getParentWidget(void) const {
+SoFlComponent::getParentWidget() const {
     return PRIVATE(this)->parent;
 }
 
@@ -352,12 +355,11 @@ SoFlComponent::setSize(const SbVec2s size) {
                            PRIVATE(this)->widget,
                            size[0], size[1]);
 #endif // debug
-    const SbBool yetbuilt = (this->getWidget() != NULL);
+    const SbBool yetbuilt = (this->getWidget() != nullptr);
     if (yetbuilt) {
         Fl_Widget * shell = this->getShellWidget();
         if (shell) {
-            // shell->SetSize(size[0], size[1]);
-            shell->SetClientSize(wxSize(size[0], size[1]));
+            shell->size(size[0], size[1]);
         }
     }
 #endif
@@ -366,18 +368,18 @@ SoFlComponent::setSize(const SbVec2s size) {
 }
 
 SbVec2s
-SoFlComponent::getSize(void) const {
+SoFlComponent::getSize() const {
     return (PRIVATE(this)->storesize);
 }
 
 void
 SoFlComponent::setTitle(const char * const title) {
-    SoFl::getShellWidget(this->getWidget())->SetName(title);
+    SoFl::getShellWidget(this->getWidget())->label(title);
 }
 
 const char *
-SoFlComponent::getTitle(void) const {
-    return (SoFl::getShellWidget(this->getWidget())->GetName());
+SoFlComponent::getTitle() const {
+    return (SoFl::getShellWidget(this->getWidget())->label());
 }
 
 void
@@ -386,19 +388,19 @@ SoFlComponent::setIconTitle(const char * const title) {
 }
 
 const char *
-SoFlComponent::getIconTitle(void) const {
+SoFlComponent::getIconTitle() const {
     SOFL_STUB();
     return ("");
 }
 
 const char *
-SoFlComponent::getWidgetName(void) const{
+SoFlComponent::getWidgetName() const{
     SOFL_STUB();
     return ("");
 }
 
 const char *
-SoFlComponent::getClassName(void) const {
+SoFlComponent::getClassName() const {
     SOFL_STUB();
     return ("");
 }

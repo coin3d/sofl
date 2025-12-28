@@ -66,11 +66,11 @@ SoFlGLWidgetP::gl_reshape(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::gl_reshape",
                            "<%d, %d>",
-                           event.GetSize().GetWidth(),
-                           event.GetSize().GetHeight());
+                           currentglwidget->w(),
+                           currentglwidget->h());
 #endif
 
-    this->glSize = SbVec2s((short) event.GetSize().GetWidth(), (short) event.GetSize().GetHeight());
+    this->glSize = SbVec2s( currentglarea->w(), currentglarea->h());
     this->wasresized = true;
     pub->setSize(this->glSize);
 }
@@ -275,7 +275,7 @@ SoFlGLWidgetP::buildGLWidget(void) {
 
         int frame = PUBLIC(this)->isBorder() ? this->borderthickness : 0;
         // TODO: this->currentglwidget->setGeometry(frame, frame,this->glSize[0] - 2*frame,this->glSize[1] - 2*frame);
-
+/*
         this->currentglarea->Bind(wxEVT_SIZE, &SoFlGLWidgetP::gl_reshape, this);
         this->currentglarea->Bind(SO_WX_GL_INIT, &SoFlGLWidgetP::gl_init, this);
         this->currentglarea->Bind(SO_WX_GL_DRAW, &SoFlGLWidgetP::gl_exposed, this);
@@ -287,7 +287,7 @@ SoFlGLWidgetP::buildGLWidget(void) {
         this->currentglarea->Bind(wxEVT_MOUSEWHEEL, &SoFlGLWidgetP::onMouse, this);
         this->currentglarea->Bind(wxEVT_KEY_DOWN, &SoFlGLWidgetP::onKey, this);
         this->currentglarea->Bind(wxEVT_KEY_UP, &SoFlGLWidgetP::onKey, this);
-
+*/
         // Reset to avoid unnecessary scenegraph redraws.
         PUBLIC(this)->waitForExpose = true;
 
@@ -308,7 +308,7 @@ SoFlGLWidgetP::buildGLWidget(void) {
 }
 
 // Returns the normal GL context.
-const GLContext *
+const GLContext
 SoFlGLWidgetP::getNormalContext(void) {
     SoFlGLArea * w = this->currentglarea;
     if (w) return w->context();
@@ -316,7 +316,7 @@ SoFlGLWidgetP::getNormalContext(void) {
 }
 
 // Returns the overlay GL context.
-const GLContext *
+const GLContext
 SoFlGLWidgetP::getOverlayContext(void) {
     SoFlGLArea * w = this->currentglarea;
     // TODO: if (w) { return QGLWidget_overlayContext(w); }
@@ -335,18 +335,18 @@ void SoFlGLWidgetP::initGLModes(int glmodes) {
 
     gl_attributes.clear();
     if(glmodes & SO_GL_DOUBLE) {
-        gl_attributes.push_back(WX_GL_DOUBLEBUFFER);
+        //gl_attributes.push_back(WX_GL_DOUBLEBUFFER);
     }
     if(glmodes & SO_GL_ZBUFFER) {
         // 24 bit seems to be ok also on Windows
-        gl_attributes.push_back(WX_GL_DEPTH_SIZE);
+        //gl_attributes.push_back(WX_GL_DEPTH_SIZE);
         gl_attributes.push_back(24);
     }
     if(glmodes & SO_GL_RGB) {
-        gl_attributes.push_back(WX_GL_RGBA);
+        //gl_attributes.push_back(WX_GL_RGBA);
     }
     if(glmodes & SO_GL_STEREO) {
-        gl_attributes.push_back(WX_GL_STEREO);
+        //gl_attributes.push_back(WX_GL_STEREO);
     }
     gl_attributes.push_back(0);
 
@@ -359,7 +359,7 @@ void SoFlGLWidgetP::initGLModes(int glmodes) {
 }
 
 void
-SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, intevent, bool *) {
+SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, int event, bool *) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
                            "");
@@ -370,7 +370,7 @@ SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, intevent, bo
 }
 
 void
-SoFlGLWidgetP::onMouse(wxMouseEvent &event) {
+SoFlGLWidgetP::onMouse(int event) {
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlGLWidgetP::onMouse",
                            "mouse event");
@@ -379,7 +379,7 @@ SoFlGLWidgetP::onMouse(wxMouseEvent &event) {
 }
 
 void
-SoFlGLWidgetP::onKey(wxKeyEvent &event) {
+SoFlGLWidgetP::onKey(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::onKey",
                            "key event");
@@ -389,12 +389,12 @@ SoFlGLWidgetP::onKey(wxKeyEvent &event) {
 
 bool
 SoFlGLWidgetP::isAPanel(Fl_Widget* window) {
-    return (window->IsKindOf(wxCLASSINFO(wxPanel)));
+    return (false); //window->IsKindOf(wxCLASSINFO(wxPanel)));
 }
 
 void
 SoFlGLWidgetP::addSizer() {
-
+/*
     if(glparent->GetSizer()) {
         SoDebugError::postWarning("SoFlGLWidgetP::addSizer",
                                   "panel holds a sizer, the old one will be removed");
@@ -406,12 +406,12 @@ SoFlGLWidgetP::addSizer() {
     glparent->SetSizer(sizer);
     sizer->Add(this->currentglarea, 0, wxEXPAND | wxALL, 0);
     sizer->Layout();
+    */
 }
 
 bool
 SoFlGLWidgetP::hasZBuffer() const {
-    const bool z_buffer = SoFlGLArea::isGLFeatureAvailable(gl_attributes,
-                                                           WX_GL_DEPTH_SIZE);
+    const bool z_buffer = false; // SoFlGLArea::isGLFeatureAvailable(gl_attributes, WX_GL_DEPTH_SIZE);
     return (z_buffer);
 }
 

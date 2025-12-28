@@ -71,10 +71,11 @@
 #include <FL/Fl_Widget.H>
 
 #include <string>
+#include <Inventor/SbVec2s.h>
 
-class SOFL_DLL_API SoFlThumbWheel : public Fl_Widget
-{
+#include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
 
+class SOFL_DLL_API SoFlThumbWheel : public Fl_Widget {
 public:
     enum Orientation { Horizontal, Vertical };
 
@@ -99,15 +100,14 @@ public:
     void setRangeBoundaryHandling(boundaryHandling handling);
     boundaryHandling getRangeBoundaryHandling() const;
 
-    /*
-    wxSize sizeHint() const;
+    SbVec2s sizeHint() const;
 
-    void paintEvent(wxPaintEvent& );
+    void paintEvent(int );
     void mousePressEvent(int );
     void mouseReleaseEvent(int );
     void mouseMoveEvent(int );
     void mouseWheel(int );
-*/
+
 private:
     void constructor(Orientation);
     void sendEvent(long id,
@@ -125,7 +125,7 @@ private:
     void initWheel(int diameter, int width);
 
     SoAnyThumbWheel * wheel;
-    // wxBitmap**   pixmaps;
+    Fl_Pixmap**   pixmaps;
     int numPixmaps;
     int currentPixmap;
 
