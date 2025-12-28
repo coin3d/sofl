@@ -3,9 +3,9 @@ name: Continuous Integration Build
 on:
   workflow_dispatch:  # Allow manual triggers
   pull_request:
-    branches: [ master ]
-  #push:
-  #  branches: [ master ]
+    branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   ubuntu-build:
@@ -20,33 +20,33 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install g++ \
-		  net-tools \
-		  openssh-server \
-		  git \
-		  meld \
-		  coin3d \
-		  coin \
-		  fltk \
-		  bzip2 \
-		  cmake \
-		  zlib1g-dev \
-		  pkgconf \
-		  doxygen \
-		  libpng-dev \
-		  libjpeg-dev \
-		  libglew-dev \
-		  libwayland-dev \
-		  libwayland-cursor-dev \
-		  libwayland-egl-dev \
-		  libwayland-server-dev \
-		  libxkbcommon-dev \
-		  waylandpp-dev \
-		  wayland-protocols \
-		  xkbcommon \
-		  libxfixes-dev \
-		  libxcursor-dev \
-		  libxinerama-dev \
-		  libxft-dev
+            net-tools \
+            openssh-server \
+            git \
+            meld \
+            coin3d \
+            coin \
+            fltk \
+            bzip2 \
+            cmake \
+            zlib1g-dev \
+            pkgconf \
+            doxygen \
+            libpng-dev \
+            libjpeg-dev \
+            libglew-dev \
+            libwayland-dev \
+            libwayland-cursor-dev \
+            libwayland-egl-dev \
+            libwayland-server-dev \
+            libxkbcommon-dev \
+            waylandpp-dev \
+            wayland-protocols \
+            xkbcommon \
+            libxfixes-dev \
+            libxcursor-dev \
+            libxinerama-dev \
+            libxft-dev
           cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
       - name: Build project
         run: cmake --build cmake_build_dir --target install --config Release -- -j4
@@ -60,59 +60,59 @@ jobs:
           path: cmake_install_dir/
         if: always()
 
-  windows-build:
-    name: Windows Build
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Create build directory and run CMake
-        shell: cmd
-        run: |
-          mkdir cmake_download_dir
-          set DOWNLOAD_FILE_BOOST=boost_1_78_0-bin-msvc-14.3-64.7z
-          for /f %%i in ('curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/coin3d/coin/releases ^| jq -r --arg COIN_REPO_TAG_NAME "CI-builds" ".[] | select(.tag_name==$COIN_REPO_TAG_NAME) | .id"') do set RELEASE_ID=%%i
-          for /f %%i in ('curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/coin3d/coin/releases/%RELEASE_ID% ^| jq -r --arg DOWNLOAD_FILE_BOOST "%DOWNLOAD_FILE_BOOST%" ".assets[] | select(.name==$DOWNLOAD_FILE_BOOST) | .id"') do set ASSET_ID=%%i
-          set DOWNLOAD_ADDRESS_BOOST=https://api.github.com/repos/coin3d/coin/releases/assets/%ASSET_ID%
-          echo download file %DOWNLOAD_FILE_BOOST% from address %DOWNLOAD_ADDRESS_BOOST%
-          curl -s -S -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/octet-stream" -o %DOWNLOAD_FILE_BOOST% %DOWNLOAD_ADDRESS_BOOST%
-          7z x %DOWNLOAD_FILE_BOOST% -ocmake_download_dir
-          cmake -S . -B cmake_build_dir -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DCMAKE_PREFIX_PATH=cmake_download_dir/boost_1_78_0 -DBoost_DIR=cmake_download_dir/boost_1_78_0/lib64-msvc-14.3/cmake/Boost-1.78.0
-      - name: Build project
-        run: cmake --build cmake_build_dir --target INSTALL --config Release -- /nologo /verbosity:minimal /maxcpucount:2 /property:MultiProcessorCompilation=true
-      - name: Run tests
-        run:  ctest -C Release -VV
-        working-directory: cmake_build_dir
-      - name: Create Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows-Artifacts
-          path: cmake_install_dir/
-        if: always()
-
-  macos-build:
-    name: MacOS Build
-    runs-on: macos-14
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Create build directory and run CMake
-        run: |
-          brew install boost
-          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DCMAKE_CXX_STANDARD=11
-      - name: Build project
-        run: cmake --build cmake_build_dir --target install --config Release -- -j4
-      - name: Run tests
-        run:  ctest -C Release -VV
-        working-directory: cmake_build_dir
-      - name: Create Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: MacOS-Artifacts
-          path: cmake_install_dir/
-        if: always()
+#  windows-build:
+#    name: Windows Build
+#    runs-on: windows-latest
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#        with:
+#          submodules: recursive
+#      - name: Create build directory and run CMake
+#        shell: cmd
+#        run: |
+#          mkdir cmake_download_dir
+#          set DOWNLOAD_FILE_BOOST=boost_1_78_0-bin-msvc-14.3-64.7z
+#          for /f %%i in ('curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/coin3d/coin/releases ^| jq -r --arg COIN_REPO_TAG_NAME "CI-builds" ".[] | select(.tag_name==$COIN_REPO_TAG_NAME) | .id"') do set RELEASE_ID=%%i
+#          for /f %%i in ('curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/coin3d/coin/releases/%RELEASE_ID% ^| jq -r --arg DOWNLOAD_FILE_BOOST "%DOWNLOAD_FILE_BOOST%" ".assets[] | select(.name==$DOWNLOAD_FILE_BOOST) | .id"') do set ASSET_ID=%%i
+#          set DOWNLOAD_ADDRESS_BOOST=https://api.github.com/repos/coin3d/coin/releases/assets/%ASSET_ID%
+#          echo download file %DOWNLOAD_FILE_BOOST% from address %DOWNLOAD_ADDRESS_BOOST%
+#          curl -s -S -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/octet-stream" -o %DOWNLOAD_FILE_BOOST% %DOWNLOAD_ADDRESS_BOOST%
+#          7z x %DOWNLOAD_FILE_BOOST% -ocmake_download_dir
+#          cmake -S . -B cmake_build_dir -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DCMAKE_PREFIX_PATH=cmake_download_dir/boost_1_78_0 -DBoost_DIR=cmake_download_dir/boost_1_78_0/lib64-msvc-14.3/cmake/Boost-1.78.0
+#      - name: Build project
+#        run: cmake --build cmake_build_dir --target INSTALL --config Release -- /nologo /verbosity:minimal /maxcpucount:2 /property:MultiProcessorCompilation=true
+#      - name: Run tests
+#        run:  ctest -C Release -VV
+#        working-directory: cmake_build_dir
+#      - name: Create Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Windows-Artifacts
+#          path: cmake_install_dir/
+#        if: always()
+#
+#  macos-build:
+#    name: MacOS Build
+#    runs-on: macos-14
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#        with:
+#          submodules: recursive
+#      - name: Create build directory and run CMake
+#        run: |
+#          brew install boost
+#          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir -DCMAKE_CXX_STANDARD=11
+#      - name: Build project
+#        run: cmake --build cmake_build_dir --target install --config Release -- -j4
+#      - name: Run tests
+#        run:  ctest -C Release -VV
+#        working-directory: cmake_build_dir
+#      - name: Create Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: MacOS-Artifacts
+#          path: cmake_install_dir/
+#        if: always()
         

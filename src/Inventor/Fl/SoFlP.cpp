@@ -38,7 +38,6 @@
 #include <Inventor/sensors/SoSensorManager.h>
 
 #include <iostream>
-#include <FL/sizer.h>
 #include <sstream>
 
 class SoFlApp : public  wxApp {

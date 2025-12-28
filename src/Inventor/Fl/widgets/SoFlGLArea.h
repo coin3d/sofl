@@ -33,14 +33,12 @@
 #ifndef SOFL_SOFLGLAREA_H
 #define SOFL_SOFLGLAREA_H
 
-#include <FL/fl.h>
-#include <FL/glcanvas.h>
-#include <FL/timer.h>
+#include <FL/Fl_Gl_Window.H>
 #include <vector>
 
 class SoFlGLWidgetP;
 
-class SoFlGLArea : public wxGLCanvas
+class SoFlGLArea : public Fl_Gl_Window
 {
 public:
 
@@ -51,7 +49,7 @@ public:
 
     virtual ~SoFlGLArea();
 
-    const wxGLContext *context();
+    const GLContext *context();
 
     void makeCurrent();
 
@@ -62,22 +60,13 @@ public:
                          const GLFormat& format2);
 
 protected:
-    void OnPaint(wxPaintEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
+    void draw() override ;
 
 private:
     void InitGL();
-
     bool is_gl_initialized;
-    wxGLContext* gl_real_context;
     GLFormat gl_format;
-    //wxGLAttributes  gl_attributes;
-
-wxDECLARE_NO_COPY_CLASS(SoFlGLArea);
-wxDECLARE_EVENT_TABLE();
 };
 
-wxDECLARE_EVENT(SO_WX_GL_INIT, wxCommandEvent);
-wxDECLARE_EVENT(SO_WX_GL_DRAW, wxCommandEvent);
 
 #endif //SOFL_SOFLGLAREA_H

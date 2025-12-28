@@ -34,25 +34,13 @@
 #include "Inventor/Fl/SoFlGLWidgetP.h"
 #include "sofldefs.h"
 
-#include "FL/fl.h"
-#include "FL/file.h"
-#include "FL/dcclient.h"
-
-#include <GL/gl.h>
 #include <map>
-
-wxBEGIN_EVENT_TABLE(SoFlGLArea, wxGLCanvas)
-                EVT_PAINT(SoFlGLArea::OnPaint)
-                EVT_ERASE_BACKGROUND(SoFlGLArea::OnEraseBackground)
-wxEND_EVENT_TABLE()
-
-wxDEFINE_EVENT(SO_WX_GL_INIT, wxCommandEvent);
-wxDEFINE_EVENT(SO_WX_GL_DRAW, wxCommandEvent);
-
 
 SoFlGLArea::SoFlGLArea(Fl_Window *parent,
                        const std::vector<int>& attributes)
-        : wxGLCanvas(parent,
+        : Fl_Gl_Window(X, Y, W, H, L) {
+
+wxGLCanvas(parent,
                      wxID_ANY,
                      &attributes[0],
                      wxDefaultPosition,
@@ -90,35 +78,29 @@ void SoFlGLArea::OnPaint(wxPaintEvent& event ) {
     event.Skip();
 }
 
-void SoFlGLArea::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
-    SOFL_STUB();
-    // Do nothing, to avoid flashing on MSW
-}
+
 
 void SoFlGLArea::InitGL() {
     if(!is_gl_initialized) {
-        SetCurrent(*gl_real_context);
+        //SetCurrent(*gl_real_context);
         is_gl_initialized = true;
 
-        wxCommandEvent a_wx_event(SO_WX_GL_INIT, GetId());
-        a_wx_event.SetEventObject(this);
-        a_wx_event.SetString("SO_WX_GL_INIT");
-        ProcessWindowEvent(a_wx_event);
     } else {
-        SetCurrent(*gl_real_context);
+//        SetCurrent(*gl_real_context);
     }
 }
 
 void SoFlGLArea::makeCurrent() {
-    if(gl_real_context)
-        SetCurrent(*gl_real_context);
+  //  if(gl_real_context)
+  //      SetCurrent(*gl_real_context);
 }
 
-const wxGLContext *
+const GLContext *
 SoFlGLArea::context() {
     return gl_real_context;
 }
 
+#if 0
 bool
 isBoolean(int value) {
     bool res = false;
@@ -133,38 +115,7 @@ isBoolean(int value) {
     }
     return (res);
 }
-
-bool
-SoFlGLArea::isGLFeatureAvailable(const SoFlGLArea::GLFormat& format,
-                                 int feature) {
-    bool res = false;
-
-    if(format.empty())
-        return (res);
-    if(format[0] == 0)
-        return (res);
-
-    assert(format.size()>1);
-
-    for ( int arg = 0; format[arg] != 0; arg++ ) {
-
-        // get the value for parameters that have a value or 0 for the last one
-        int v = format[arg + 1];
-
-        if (format[arg] == feature) {
-            res = true;
-            break;
-        } else if (!isBoolean(format[arg])) {
-            ++arg;
-        } else {
-            if (!v) {
-                res = false;
-                break;
-            }
-        }
-    }
-    return (res);
-}
+#endif
 
 bool
 SoFlGLArea::areEqual(const SoFlGLArea::GLFormat &format1,
