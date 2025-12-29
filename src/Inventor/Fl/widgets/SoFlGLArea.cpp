@@ -42,6 +42,7 @@ SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
                    parent->y(),
                    parent->w(),
                    parent->h()) {
+    SOFL_STUB();
     mode(&attributes[0]);
     this->label("SoFlGLArea");
     is_gl_initialized = false;
@@ -49,9 +50,11 @@ SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
 }
 
 SoFlGLArea::~SoFlGLArea() {
+    SOFL_STUB();
 }
 
 void SoFlGLArea::draw() {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLArea::draw",
                            "size:%d %d",
@@ -61,14 +64,17 @@ void SoFlGLArea::draw() {
     if (!valid()) {
     }
     InitGL();
+    this->redraw();
 }
 
 int SoFlGLArea::handle(int event) {
+    SOFL_STUB();
+    this->redraw();
     return Fl_Gl_Window::handle(event);
 }
 
-
 void SoFlGLArea::InitGL() {
+    SOFL_STUB();
     if (!is_gl_initialized) {
         is_gl_initialized = true;
         this->make_current();
@@ -78,153 +84,6 @@ void SoFlGLArea::InitGL() {
 }
 
 void SoFlGLArea::makeCurrent() {
+    SOFL_STUB();
     this->make_current();
 }
-
-#if 0
-bool
-isBoolean(int value) {
-    bool res = false;
-    switch (value) {
-        case WX_GL_RGBA:
-        case WX_GL_DOUBLEBUFFER:
-        case WX_GL_STEREO:
-            res = true;
-            break;
-        default:
-            break;
-    }
-    return (res);
-}
-#endif
-
-bool
-SoFlGLArea::areEqual(const SoFlGLArea::GLFormat &format1,
-                     const SoFlGLArea::GLFormat &format2) {
-    SOFL_STUB();
-    return (false);
-}
-#if 0
-bool ConvertWXAttrsWxGLFormat(const int *wxattrs,
-                              SoFlGLArea::GLFormat &format) {
-    if (!wxattrs)
-        return true;
-
-    for (int arg = 0; wxattrs[arg] != 0; arg++) {
-        // indicates whether we have a boolean attribute
-        bool isBoolAttr = false;
-
-        int v = wxattrs[arg + 1];
-        switch (wxattrs[arg]) {
-            case WX_GL_BUFFER_SIZE:
-                //format.setRgba(false);
-                format.push_back(WX_GL_BUFFER_SIZE);
-                // I do not know how to set the buffer size, so fail
-                return false;
-
-            case WX_GL_LEVEL:
-                // format.setPlane(v);
-                format.push_back(WX_GL_LEVEL);
-                format.push_back(v);
-                break;
-
-            case WX_GL_RGBA:
-                format[WX_GL_RGBA] = 1;
-                // format.setRgba(true);
-                isBoolAttr = true;
-                break;
-
-            case WX_GL_DOUBLEBUFFER:
-                format[WX_GL_DOUBLEBUFFER] = 1;
-                // format.setDoubleBuffer(true);
-                isBoolAttr = true;
-                break;
-
-            case WX_GL_STEREO:
-                format[WX_GL_STEREO] = 1;
-                // format.setStereo(true);
-                isBoolAttr = true;
-                break;
-
-            case WX_GL_AUX_BUFFERS:
-                format[WX_GL_AUX_BUFFERS] = 1;
-                // don't know how to implement
-                return false;
-
-            case WX_GL_MIN_RED:
-                format[WX_GL_MIN_RED] = v * 8;
-                // format.setRedBufferSize(v*8);
-                break;
-
-            case WX_GL_MIN_GREEN:
-                format[WX_GL_MIN_GREEN] = v;
-                // format.setGreenBufferSize(v);
-                break;
-
-            case WX_GL_MIN_BLUE:
-                format[WX_GL_MIN_BLUE] = v;
-                // format.setBlueBufferSize(v);
-                break;
-
-            case WX_GL_MIN_ALPHA:
-                format[WX_GL_MIN_ALPHA] = v;
-                // format.setAlpha(true);
-                // format.setAlphaBufferSize(v);
-                break;
-
-            case WX_GL_DEPTH_SIZE:
-                format[WX_GL_DEPTH_SIZE] = v;
-                // format.setDepth(true);
-                // format.setDepthBufferSize(v);
-                break;
-
-            case WX_GL_STENCIL_SIZE:
-                format[WX_GL_STENCIL_SIZE] = v;
-                // format.setStencil(true);
-                // format.setStencilBufferSize(v);
-                break;
-
-            case WX_GL_MIN_ACCUM_RED:
-            case WX_GL_MIN_ACCUM_GREEN:
-            case WX_GL_MIN_ACCUM_BLUE:
-            case WX_GL_MIN_ACCUM_ALPHA:
-                format[WX_GL_MIN_ACCUM_RED] = v;
-                format[WX_GL_MIN_ACCUM_GREEN] = v;
-                format[WX_GL_MIN_ACCUM_BLUE] = v;
-                format[WX_GL_MIN_ACCUM_ALPHA] = v;
-                // format.setAccumBufferSize(v);
-                break;
-
-            case WX_GL_SAMPLE_BUFFERS:
-                format[WX_GL_SAMPLE_BUFFERS] = v;
-                // format.setSampleBuffers(v);
-                // can we somehow indicate if it's not supported?
-                break;
-
-            case WX_GL_SAMPLES:
-                format[WX_GL_SAMPLES] = v;
-                // format.setSamples(v);
-                // can we somehow indicate if it's not supported?
-                break;
-
-            case WX_GL_MAJOR_VERSION:
-                format[WX_GL_MAJOR_VERSION] = v;
-                // format.setVersion ( v,0 );
-                break;
-
-            default:
-                wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
-                           wxattrs[arg]);
-                continue;
-        }
-
-        if (!isBoolAttr) {
-            if (!v)
-                return false; // zero parameter
-            arg++;
-        }
-    }
-
-    return true;
-}
-#endif

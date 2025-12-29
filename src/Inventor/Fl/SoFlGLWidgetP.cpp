@@ -37,6 +37,7 @@
 
 #include <Inventor/SbTime.h>
 
+#include <GL/glx.h>
 #include "sofldefs.h"
 
 #define PRIVATE(obj) ((obj)->pimpl)
@@ -54,6 +55,7 @@ SoFlGLWidgetP::~SoFlGLWidgetP() {
 void
 SoFlGLWidgetP::gl_init(int )
 {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("gl_init", "invoked");
 #endif
@@ -63,6 +65,7 @@ SoFlGLWidgetP::gl_init(int )
 
 void
 SoFlGLWidgetP::gl_reshape(int event) {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::gl_reshape",
                            "<%d, %d>",
@@ -77,6 +80,7 @@ SoFlGLWidgetP::gl_reshape(int event) {
 
 void
 SoFlGLWidgetP::gl_exposed(int) {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::gl_exposed", "%f", SbTime::getTimeOfDay().getValue());
 #endif
@@ -299,6 +303,7 @@ SoFlGLWidgetP::buildGLWidget() {
 // Returns the normal GL context.
 const GLContext
 SoFlGLWidgetP::getNormalContext() {
+    SOFL_STUB();
     SoFlGLArea * w = this->currentglarea;
     if (w) return w->context();
     return nullptr;
@@ -307,6 +312,7 @@ SoFlGLWidgetP::getNormalContext() {
 // Returns the overlay GL context.
 const GLContext
 SoFlGLWidgetP::getOverlayContext() {
+    SOFL_STUB();
     SoFlGLArea * w = this->currentglarea;
     // TODO: if (w) { return QGLWidget_overlayContext(w); }
     return nullptr;
@@ -314,6 +320,7 @@ SoFlGLWidgetP::getOverlayContext() {
 
 SbBool
 SoFlGLWidgetP::isDirectRendering() {
+    SOFL_STUB();
     SbBool res = FALSE;
     //TODO: if(this->currentglarea && this->currentglarea->GetGLCTXAttrs().x11Direct)
         res = TRUE;
@@ -321,21 +328,22 @@ SoFlGLWidgetP::isDirectRendering() {
 }
 
 void SoFlGLWidgetP::initGLModes(int glmodes) {
+    SOFL_STUB();
 
     gl_attributes.clear();
     if(glmodes & SO_GL_DOUBLE) {
-        //gl_attributes.push_back(WX_GL_DOUBLEBUFFER);
+        gl_attributes.push_back(GLX_DOUBLEBUFFER);
     }
     if(glmodes & SO_GL_ZBUFFER) {
         // 24 bit seems to be ok also on Windows
-        //gl_attributes.push_back(WX_GL_DEPTH_SIZE);
+        gl_attributes.push_back(GLX_DEPTH_SIZE);
         gl_attributes.push_back(24);
     }
     if(glmodes & SO_GL_RGB) {
-        //gl_attributes.push_back(WX_GL_RGBA);
+        gl_attributes.push_back(GLX_RGBA);
     }
     if(glmodes & SO_GL_STEREO) {
-        //gl_attributes.push_back(WX_GL_STEREO);
+        gl_attributes.push_back(GLX_STEREO);
     }
     gl_attributes.push_back(0);
 
@@ -344,11 +352,12 @@ void SoFlGLWidgetP::initGLModes(int glmodes) {
         SoDebugError::postInfo("SoFlGLWidget::SoFlGLWidget",
                                "required GL modes are not supported!");
     }
-     */
+    */
 }
 
 void
 SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, int event, bool *) {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
                            "");
@@ -360,6 +369,7 @@ SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/ , void *closure, int event, b
 
 void
 SoFlGLWidgetP::onMouse(int event) {
+    SOFL_STUB();
 #if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlGLWidgetP::onMouse",
                            "mouse event");
@@ -369,6 +379,7 @@ SoFlGLWidgetP::onMouse(int event) {
 
 void
 SoFlGLWidgetP::onKey(int event) {
+    SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::onKey",
                            "key event");
@@ -378,11 +389,13 @@ SoFlGLWidgetP::onKey(int event) {
 
 bool
 SoFlGLWidgetP::isAPanel(Fl_Widget* window) {
+    SOFL_STUB();
     return (false); //window->IsKindOf(wxCLASSINFO(wxPanel)));
 }
 
 void
 SoFlGLWidgetP::addSizer() {
+    SOFL_STUB();
 /*
     if(glparent->GetSizer()) {
         SoDebugError::postWarning("SoFlGLWidgetP::addSizer",
@@ -400,6 +413,7 @@ SoFlGLWidgetP::addSizer() {
 
 bool
 SoFlGLWidgetP::hasZBuffer() const {
+    SOFL_STUB();
     const bool z_buffer = false; // SoFlGLArea::isGLFeatureAvailable(gl_attributes, WX_GL_DEPTH_SIZE);
     return (z_buffer);
 }

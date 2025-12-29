@@ -44,15 +44,14 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlGLWidget);
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SoFlGLWidget::SoFlGLWidget(Fl_Widget* const parent ,
-                           const char * const name ,
-                           const SbBool embed ,
-                           const int glmodes ,
-                           const SbBool build):
-        inherited(parent, name, embed),
-        waitForExpose(true),
-        drawToFrontBuffer(false) {
-
+SoFlGLWidget::SoFlGLWidget(Fl_Widget *const parent,
+                           const char *const name,
+                           const SbBool embed,
+                           const int glmodes,
+                           const SbBool build)
+    : inherited(parent, name, embed),
+      waitForExpose(true),
+      drawToFrontBuffer(false) {
     PRIVATE(this) = new SoFlGLWidgetP(this);
     PRIVATE(this)->initGLModes(glmodes);
 
@@ -66,20 +65,19 @@ SoFlGLWidget::SoFlGLWidget(Fl_Widget* const parent ,
     PRIVATE(this)->currentglarea = nullptr;
     PRIVATE(this)->previousglarea = nullptr;
 
-    if (! build) {
+    if (!build) {
         return;
     }
 
     this->setClassName("SoFlGLWidget");
-    Fl_Widget* parent_widget = this->getParentWidget();
-    Fl_Widget* widget = this->buildWidget(parent_widget);
+    Fl_Widget *parent_widget = this->getParentWidget();
+    Fl_Widget *widget = this->buildWidget(parent_widget);
     this->setBaseWidget(widget);
 }
 
 SoFlGLWidget::~SoFlGLWidget() {
-
     if (PRIVATE(this)->currentglwidget) {
-        SoAny::si()->unregisterGLContext((void *)this);
+        SoAny::si()->unregisterGLContext((void *) this);
     }
 
     delete PRIVATE(this);
@@ -97,11 +95,13 @@ SoFlGLWidget::setQuadBufferStereo(const SbBool enable) {
 
 SbBool
 SoFlGLWidget::isQuadBufferStereo() const {
+    SOFL_STUB();
     return (FALSE);
 }
 
 void
-SoFlGLWidget::setGLSize(const SbVec2s size){
+SoFlGLWidget::setGLSize(const SbVec2s size) {
+    SOFL_STUB();
     if (size == PRIVATE(this)->glSize) return;
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidget::setGLSize",
@@ -111,24 +111,27 @@ SoFlGLWidget::setGLSize(const SbVec2s size){
     PRIVATE(this)->glSizeUnscaled = size;
     if (PRIVATE(this)->currentglwidget) {
         int frame = this->isBorder() ? PRIVATE(this)->borderthickness : 0;
-        PRIVATE(this)->currentglwidget->size( size[0], size[1] );
+        PRIVATE(this)->currentglwidget->size(size[0], size[1]);
     }
 }
 
 
 SbVec2s
-SoFlGLWidget::getGLSize() const{
+SoFlGLWidget::getGLSize() const {
+    SOFL_STUB();
     return (PRIVATE(this)->glSize);
 }
 
 float
-SoFlGLWidget::getGLAspectRatio() const{
+SoFlGLWidget::getGLAspectRatio() const {
+    SOFL_STUB();
     SbVec2f v2(PRIVATE(this)->currentglwidget->w(), PRIVATE(this)->currentglwidget->h());
-    return ( v2[0] /v2[1] );
+    return (v2[0] / v2[1]);
 }
 
 SbBool
-SoFlGLWidget::isRGBMode(){
+SoFlGLWidget::isRGBMode() {
+    SOFL_STUB();
     constexpr bool rgb_mode = false; // SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes, WX_GL_RGBA);
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidget::isRGBMode",
@@ -139,55 +142,62 @@ SoFlGLWidget::isRGBMode(){
 }
 
 void
-SoFlGLWidget::glLockNormal(){
+SoFlGLWidget::glLockNormal() {
+    SOFL_STUB();
     assert(PRIVATE(this)->currentglarea != nullptr);
     PRIVATE(this)->currentglarea->makeCurrent();
 }
 
 void
-SoFlGLWidget::glUnlockNormal(){
+SoFlGLWidget::glUnlockNormal() {
+    SOFL_STUB();
     // do nothing
 }
 
 void
-SoFlGLWidget::glLockOverlay(){
+SoFlGLWidget::glLockOverlay() {
     SOFL_STUB();
 }
 
 void
-SoFlGLWidget::glUnlockOverlay(){
+SoFlGLWidget::glUnlockOverlay() {
     SOFL_STUB();
 }
 
 void
-SoFlGLWidget::glSwapBuffers(){
+SoFlGLWidget::glSwapBuffers() {
+    SOFL_STUB();
     PRIVATE(this)->currentglarea->swap_buffers();
 }
 
 void
-SoFlGLWidget::glFlushBuffer(){
+SoFlGLWidget::glFlushBuffer() {
+    SOFL_STUB();
     glFlush();
 }
 
 SbBool
-SoFlGLWidget::glScheduleRedraw(){
+SoFlGLWidget::glScheduleRedraw() {
     SOFL_STUB();
     return (TRUE);
 }
 
 SbBool
-SoFlGLWidget::isBorder() const{
+SoFlGLWidget::isBorder() const {
+    SOFL_STUB();
     return (PRIVATE(this)->borderthickness ? true : false);
 }
 
 void
-SoFlGLWidget::setDoubleBuffer(const SbBool enable){
+SoFlGLWidget::setDoubleBuffer(const SbBool enable) {
     SOFL_STUB();
 }
 
 SbBool
-SoFlGLWidget::isDoubleBuffer() const{
-    const bool double_buffer = false; // SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes,WX_GL_DOUBLEBUFFER);
+SoFlGLWidget::isDoubleBuffer() const {
+    SOFL_STUB();
+    const bool double_buffer = false;
+    // SoFlGLArea::isGLFeatureAvailable(PRIVATE(this)->gl_attributes,WX_GL_DOUBLEBUFFER);
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidget::isDoubleBuffer",
                            ": %d",
@@ -197,127 +207,134 @@ SoFlGLWidget::isDoubleBuffer() const{
 }
 
 void
-SoFlGLWidget::setDrawToFrontBufferEnable(const SbBool enable){
+SoFlGLWidget::setDrawToFrontBufferEnable(const SbBool enable) {
+    SOFL_STUB();
     drawToFrontBuffer = enable;
 }
 
 SbBool
-SoFlGLWidget::isDrawToFrontBufferEnable() const{
+SoFlGLWidget::isDrawToFrontBufferEnable() const {
+    SOFL_STUB();
     return (drawToFrontBuffer);
 }
 
 void
-SoFlGLWidget::setAccumulationBuffer(const SbBool enable){
+SoFlGLWidget::setAccumulationBuffer(const SbBool enable) {
     SOFL_STUB();
 }
 
 SbBool
-SoFlGLWidget::getAccumulationBuffer() const{
+SoFlGLWidget::getAccumulationBuffer() const {
     SOFL_STUB();
     return (FALSE);
 }
 
 void
-SoFlGLWidget::setStencilBuffer(const SbBool enable){
+SoFlGLWidget::setStencilBuffer(const SbBool enable) {
     SOFL_STUB();
 }
 
 SbBool
-SoFlGLWidget::getStencilBuffer() const{
+SoFlGLWidget::getStencilBuffer() const {
     SOFL_STUB();
     return (FALSE);
 }
 
 void
-SoFlGLWidget::setAlphaChannel(const SbBool enable){
+SoFlGLWidget::setAlphaChannel(const SbBool enable) {
     SOFL_STUB();
 }
 
 SbBool
-SoFlGLWidget::getAlphaChannel() const{
+SoFlGLWidget::getAlphaChannel() const {
     SOFL_STUB();
     return (FALSE);
 }
 
 void
-SoFlGLWidget::setOverlayRender(const SbBool onoff){
+SoFlGLWidget::setOverlayRender(const SbBool onoff) {
     SOFL_STUB();
 }
 
 SbBool
-SoFlGLWidget::isOverlayRender() const{
+SoFlGLWidget::isOverlayRender() const {
     SOFL_STUB();
     return (FALSE);
 }
 
 void
-SoFlGLWidget::setSampleBuffers(const int numsamples){
+SoFlGLWidget::setSampleBuffers(const int numsamples) {
     SOFL_STUB();
 }
 
 int
-SoFlGLWidget::getSampleBuffers() const{
+SoFlGLWidget::getSampleBuffers() const {
     SOFL_STUB();
     return (0);
 }
 
-Fl_Widget*
-SoFlGLWidget::getGLWidget() const{
+Fl_Widget *
+SoFlGLWidget::getGLWidget() const {
+    SOFL_STUB();
     return (PRIVATE(this)->currentglwidget);
 }
 
-Fl_Widget*
-SoFlGLWidget::getNormalWidget() const{
+Fl_Widget *
+SoFlGLWidget::getNormalWidget() const {
     SOFL_STUB();
     return (nullptr);
 }
 
-Fl_Widget*
-SoFlGLWidget::getOverlayWidget() const{
+Fl_Widget *
+SoFlGLWidget::getOverlayWidget() const {
     SOFL_STUB();
     return (nullptr);
 }
 
 SbBool
-SoFlGLWidget::hasOverlayGLArea() const{
+SoFlGLWidget::hasOverlayGLArea() const {
     SOFL_STUB();
     return (false);
 }
 
 SbBool
-SoFlGLWidget::hasNormalGLArea() const{
+SoFlGLWidget::hasNormalGLArea() const {
+    SOFL_STUB();
     const auto context = PRIVATE(this)->currentglarea->context();
-    const bool res = ( context != nullptr);
+    const bool res = (context != nullptr);
     return (res);
 }
 
 unsigned long
-SoFlGLWidget::getOverlayTransparentPixel(){
+SoFlGLWidget::getOverlayTransparentPixel() {
     SOFL_STUB();
     return (0);
 }
 
 void
-SoFlGLWidget::processEvent(int event){
+SoFlGLWidget::processEvent(int event) {
+    SOFL_STUB();
     // Nothing is done here for the SoFlGLWidget, as realize, resize and
     // expose events are caught by explicitly attaching signal callbacks
     // to the widget.
 }
 
 Fl_Widget *
-SoFlGLWidget::buildWidget(Fl_Widget* parent) {
+SoFlGLWidget::buildWidget(Fl_Widget *parent) {
+    SOFL_STUB();
     assert(parent != nullptr && "parent can not be null");
     PRIVATE(this)->glparent = parent;
     return (PRIVATE(this)->buildGLWidget());
 }
 
 void
-SoFlGLWidget::redrawOverlay(){
+SoFlGLWidget::redrawOverlay() {
     SOFL_STUB();
 }
 
 void
-SoFlGLWidget::initGraphic(){
+SoFlGLWidget::initGraphic() {
+    SOFL_STUB();
     this->glLockNormal();
     // Need to set this explicitly when running on top of Open Inventor,
     // as it seems to have been forgotten there.
@@ -325,13 +342,14 @@ SoFlGLWidget::initGraphic(){
     glEnable(GL_DEPTH_TEST);
     this->glUnlockNormal();
 }
+
 void
-SoFlGLWidget::initOverlayGraphic(){
+SoFlGLWidget::initOverlayGraphic() {
     SOFL_STUB();
 }
 
 void
-SoFlGLWidget::sizeChanged(const SbVec2s & size){
+SoFlGLWidget::sizeChanged(const SbVec2s &size) {
     SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidget::sizeChanged",
@@ -343,7 +361,7 @@ SoFlGLWidget::sizeChanged(const SbVec2s & size){
 }
 
 void
-SoFlGLWidget::widgetChanged(Fl_Widget* w){
+SoFlGLWidget::widgetChanged(Fl_Widget *w) {
     SOFL_STUB();
     w->redraw();
 }

@@ -58,8 +58,8 @@ public:
 
     static void sensorQueueChanged();
 
-    void onIdle(int event);
-    void onClose(int event);
+    static void onIdle(int event);
+    static void onClose(int event);
 
     void build_fl_window();
     //void setWxApp(wxAppConsole*);
@@ -67,7 +67,7 @@ public:
     void setMainFrame(Fl_Widget*);
     Fl_Widget* getMainFrame() const;
 
-    void finish();
+    static void finish();
 };
 
 #endif //SOFL_SOFLP_H
