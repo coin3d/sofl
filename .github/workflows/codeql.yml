@@ -64,6 +64,10 @@ jobs:
     # or others). This is typically only required for manual builds.
     # - name: Setup runtime (example)
     #   uses: actions/setup-example@v1
+    - name: Update and install dependencies
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install g++ freeglut3-dev git libboost-all-dev
     - name: Download and install Coin3D
       run: |
         git clone --depth 1 --branch v4.0.6 https://github.com/coin3d/coin.git /tmp/coin_source_dir
