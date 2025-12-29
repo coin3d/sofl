@@ -23,17 +23,17 @@ jobs:
       - name: Download and install Coin3D
         run: |
           git clone --depth 1 --branch v4.0.6 https://github.com/coin3d/coin.git /tmp/coin_source_dir
-          mkdir /tmp/coin_source_dir/coin_build_dir
           cmake -S /tmp/coin_source_dir -B /tmp/coin_source_dir/coin_build_dir -DCOIN_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11
           sudo cmake --build /tmp/coin_source_dir/coin_build_dir --target install --config Release -- -j8
       - name: Download and install fltk
         run: |
           git clone --depth 1 --branch release-1.4.4 https://github.com/fltk/fltk /tmp/fltk_source_dir
-          mkdir /tmp/fltk_source_dir/fltk_build_dir
           cmake -S /tmp/fltk_source_dir -B /tmp/fltk_source_dir/fltk_build_dir -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DFLTK_BUILD_SHARED_LIBS=ON
           sudo cmake --build /tmp/fltk_source_dir/fltk_build_dir --target install --config Release -- -j8
-      - name: Build project
-        run: cmake --build cmake_build_dir --target install --config Release -- -j4
+      - name: Configure and build project
+        run: |
+          cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
+          cmake --build cmake_build_dir --target install --config Release -- -j4
       - name: Run tests
         run:  ctest -C Release -VV
         working-directory: cmake_build_dir
