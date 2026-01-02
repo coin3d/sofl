@@ -35,8 +35,8 @@ function(report_prepare)
 endfunction(report_prepare)
 
 set(SO${GUI}_MAJOR_VERSION 0)
-set(SO${GUI}_MINOR_VERSION 1)
-set(SO${GUI}_MICRO_VERSION 1)
+set(SO${GUI}_MINOR_VERSION 0)
+set(SO${GUI}_MICRO_VERSION 2)
 set(SO${GUI}_BETA_VERSION)
 set(SO${GUI}_VERSION ${SO${GUI}_MAJOR_VERSION}.${SO${GUI}_MINOR_VERSION}.${SO${GUI}_MICRO_VERSION}${SO${GUI}_BETA_VERSION})
 
