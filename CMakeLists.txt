@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(gui fl)
 set(Gui Fl)
 set(GUI FL)
-set(WIDGET Fl_Widget*)
+set(WIDGET Fl_Window*)
 set(EVENT int)
 
 set (CMAKE_CXX_STANDARD 11)
@@ -36,7 +36,7 @@ endfunction(report_prepare)
 
 set(SO${GUI}_MAJOR_VERSION 0)
 set(SO${GUI}_MINOR_VERSION 0)
-set(SO${GUI}_MICRO_VERSION 2)
+set(SO${GUI}_MICRO_VERSION 3)
 set(SO${GUI}_BETA_VERSION)
 set(SO${GUI}_VERSION ${SO${GUI}_MAJOR_VERSION}.${SO${GUI}_MINOR_VERSION}.${SO${GUI}_MICRO_VERSION}${SO${GUI}_BETA_VERSION})
 

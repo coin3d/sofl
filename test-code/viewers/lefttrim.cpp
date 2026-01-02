@@ -52,7 +52,7 @@ public:
         if ( !wxApp::OnInit() )
             return false;
 
-        Fl_Widget* window = SoFl::init("renderarea");
+        Fl_Window* window = SoFl::init("renderarea");
 
         SoFlFullViewer * renderarea =
                 new SoFlFullViewer(window,
@@ -67,7 +67,7 @@ public:
                                                     wxDefaultPosition,
                                                     wxSize(50,200));
         std::clog<<dumpWindowData(asimpleframe)<<std::endl;
-        Fl_Widget* w = renderarea->buildLeftTrim(asimpleframe);
+        Fl_Window* w = renderarea->buildLeftTrim(asimpleframe);
         //asimpleframe->SetSize(w->GetSize());
         std::clog<<dumpWindowData(asimpleframe)<<std::endl;
         asimpleframe->Layout();

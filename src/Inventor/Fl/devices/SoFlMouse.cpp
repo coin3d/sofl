@@ -61,11 +61,11 @@ SoFlMouse::~SoFlMouse(void) {
     delete PRIVATE(this);
 }
 
-void SoFlMouse::enable(Fl_Widget *widget, SoFlEventHandler *handler, void *closure) {
+void SoFlMouse::enable(Fl_Window *widget, SoFlEventHandler *handler, void *closure) {
     // Nothing to do, already managed by callback in GLArea
 }
 
-void SoFlMouse::disable(Fl_Widget *widget, SoFlEventHandler *handler, void *closure) {
+void SoFlMouse::disable(Fl_Window *widget, SoFlEventHandler *handler, void *closure) {
     // Nothing to do, already managed by callback in GLArea
 }
 

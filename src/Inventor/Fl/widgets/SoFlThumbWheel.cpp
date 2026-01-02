@@ -59,9 +59,9 @@
 
 static const int SHADEBORDERWIDTH = 0;
 
-SoFlThumbWheel::SoFlThumbWheel(Fl_Widget *parent,
+SoFlThumbWheel::SoFlThumbWheel(Fl_Window *parent,
                                const char *name)
-    : Fl_Widget(parent->x(),
+    : Fl_Window(parent->x(),
                 parent->y(),
                 parent->w(),
                 parent->h(),
@@ -72,9 +72,9 @@ SoFlThumbWheel::SoFlThumbWheel(Fl_Widget *parent,
 }
 
 SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
-                               Fl_Widget *parent,
+                               Fl_Window *parent,
                                const char *name)
-: Fl_Widget(parent->x(),
+: Fl_Window(parent->x(),
             parent->y(),
             parent->w(),
             parent->h(),

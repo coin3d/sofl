@@ -68,19 +68,19 @@
 #include "Inventor/Fl/SoFlBasic.h"
 #include "Inventor/Fl/widgets/SoAnyThumbWheel.h"
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 
 #include <string>
 #include <Inventor/SbVec2s.h>
 
 #include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
 
-class SOFL_DLL_API SoFlThumbWheel : public Fl_Widget {
+class SOFL_DLL_API SoFlThumbWheel : public Fl_Window {
 public:
     enum Orientation { Horizontal, Vertical };
 
-    explicit SoFlThumbWheel(Fl_Widget * parent = 0, const char * name = 0);
-    explicit SoFlThumbWheel(Orientation, Fl_Widget * parent = 0, const char * name = 0);
+    explicit SoFlThumbWheel(Fl_Window * parent = 0, const char * name = 0);
+    explicit SoFlThumbWheel(Orientation, Fl_Window * parent = 0, const char * name = 0);
     ~SoFlThumbWheel();
 
     void setOrientation(Orientation);

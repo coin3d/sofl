@@ -46,7 +46,7 @@ main(
   int argc,
   char ** argv )
 {
-  Fl_Widget* window = SoFl::init( argv[0] );
+  Fl_Window* window = SoFl::init( argv[0] );
 
   SoNode * root = new SoCone;
 

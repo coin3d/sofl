@@ -1,3 +1,10 @@
-add_executable(simple  main.cpp )
-#message(FATAL_ERROR ${Coin_LIBRARIES})
-target_link_libraries(simple ${fltk_LIBRARIES} GL)
+
+find_package(GLEW)
+
+if(GLEW_FOUND)
+    add_executable(OpenGL3test OpenGL3test.cxx)
+    target_link_libraries(OpenGL3test fltk::fltk fltk::gl GLEW::glew)
+endif (GLEW_FOUND)
+
+add_executable(fltkWithOpenInventorWindow fltkWithOpenInventorWindow.cpp)
+target_link_libraries(fltkWithOpenInventorWindow fltk::fltk fltk::gl SoFl)

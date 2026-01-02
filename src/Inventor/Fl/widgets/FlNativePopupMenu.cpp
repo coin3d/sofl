@@ -379,7 +379,7 @@ FlNativePopupMenu::removeMenuItem(int itemid) {
 
 // Doc in superclass.
 void
-FlNativePopupMenu::popUp(Fl_Widget * inside, int x, int y) {
+FlNativePopupMenu::popUp(Fl_Window * inside, int x, int y) {
     MenuRecord * rec = this->getMenuRecord(0);
     //inside->PopupMenu(rec->menu);
 }

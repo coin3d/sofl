@@ -33,14 +33,14 @@
 #include "Inventor/Fl/SoFl.h"
 
 #include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Window.H>
 
 #include "Inventor/Fl/SoFlP.h"
 #include "Inventor/Fl/SoFlInternal.h"
 #include "sofldefs.h"
 
-Fl_Widget*
+Fl_Window*
 SoFl::init(int & argc,
            char ** argv,
            const char * appname,
@@ -91,7 +91,7 @@ SoFl::init(int & argc,
 }
 
 void
-SoFl::init(Fl_Widget* toplevelwidget) {
+SoFl::init(Fl_Window* toplevelwidget) {
 #ifdef COIN_IV_EXTENSIONS
 #define COIN_IV_EXTENSION(ext) ext::initClass();
     COIN_IV_EXTENSIONS
@@ -171,25 +171,25 @@ SoFl::done() {
 }
 
 void
-SoFl::show(Fl_Widget* const widget) {
+SoFl::show(Fl_Window* const widget) {
     assert(widget != nullptr && "widget can not be null");
     widget->show();
 }
 
 void
-SoFl::hide(Fl_Widget* const widget) {
+SoFl::hide(Fl_Window* const widget) {
     widget->hide();
 }
 
 void
-SoFl::createSimpleErrorDialog(Fl_Widget* widget,
+SoFl::createSimpleErrorDialog(Fl_Window* widget,
                               const char * title,
                               const char * string1,
                               const char * string2 ) {
     SOFL_STUB();
 }
 
-Fl_Widget*
+Fl_Window*
 getTopLevelWidget() {
 #if SOFL_DEBUG // debug
     SoDebugError::postInfo("SoFl::getTopLevelWidget","%s",__FUNCTION__);
@@ -197,8 +197,8 @@ getTopLevelWidget() {
     return (Fl::first_window());
 }
 
-Fl_Widget*
-SoFl::getShellWidget(const Fl_Widget* /*widget*/) {
+Fl_Window*
+SoFl::getShellWidget(const Fl_Window* /*widget*/) {
 #if SOFL_DEBUG // debug
     SoDebugError::postInfo("SoFl::getShellWidget","%s",__FUNCTION__);
 #endif // debug
@@ -206,7 +206,7 @@ SoFl::getShellWidget(const Fl_Widget* /*widget*/) {
 }
 
 void
-SoFl::setWidgetSize(Fl_Widget* const widget, const SbVec2s size) {
+SoFl::setWidgetSize(Fl_Window* const widget, const SbVec2s size) {
 #if SOFL_DEBUG // debug
     SoDebugError::postInfo("SoFl::setWidgetSize","%s",__FUNCTION__);
 #endif // debug
@@ -224,7 +224,7 @@ SoFl::setWidgetSize(Fl_Widget* const widget, const SbVec2s size) {
 
 
 SbVec2s
-SoFl::getWidgetSize(const Fl_Widget* widget) {
+SoFl::getWidgetSize(const Fl_Window* widget) {
     SbVec2s size(-1,-1);
     if ( widget ) {
         size[0] = widget->w();

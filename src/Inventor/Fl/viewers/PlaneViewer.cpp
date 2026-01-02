@@ -46,13 +46,13 @@
 #define PUBLIC(o) (o->pub)
 #define PRIVATE(o) (o->pimpl)
 
-Fl_Widget*
-SoFlPlaneViewer::buildWidget(Fl_Widget* parent) {
+Fl_Window*
+SoFlPlaneViewer::buildWidget(Fl_Window* parent) {
     return inherited::buildWidget(parent);
 }
 
 void
-SoFlPlaneViewer::createViewerButtons(Fl_Widget* parent,
+SoFlPlaneViewer::createViewerButtons(Fl_Window* parent,
                                      SbPList * buttons) {
     inherited::createViewerButtons(parent, buttons);
 #if 0
@@ -135,7 +135,7 @@ void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     if (!buildnow) return;
 
     PUBLIC(this)->setSize(SbVec2s(550, 490)); // extra buttons -> more height
-    Fl_Widget * viewer = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
+    Fl_Window * viewer = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
     PUBLIC(this)->setBaseWidget(viewer);
 
     viewer->Bind(wxEVT_BUTTON,

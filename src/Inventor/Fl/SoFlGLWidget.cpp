@@ -44,7 +44,7 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlGLWidget);
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
-SoFlGLWidget::SoFlGLWidget(Fl_Widget *const parent,
+SoFlGLWidget::SoFlGLWidget(Fl_Window *const parent,
                            const char *const name,
                            const SbBool embed,
                            const int glmodes,
@@ -70,8 +70,8 @@ SoFlGLWidget::SoFlGLWidget(Fl_Widget *const parent,
     }
 
     this->setClassName("SoFlGLWidget");
-    Fl_Widget *parent_widget = this->getParentWidget();
-    Fl_Widget *widget = this->buildWidget(parent_widget);
+    Fl_Window *parent_widget = this->getParentWidget();
+    Fl_Window *widget = this->buildWidget(parent_widget);
     this->setBaseWidget(widget);
 }
 
@@ -271,18 +271,18 @@ SoFlGLWidget::getSampleBuffers() const {
     return (0);
 }
 
-Fl_Widget *
+Fl_Window *
 SoFlGLWidget::getGLWidget() const {
     return (PRIVATE(this)->currentglwidget);
 }
 
-Fl_Widget *
+Fl_Window *
 SoFlGLWidget::getNormalWidget() const {
     SOFL_STUB();
     return (nullptr);
 }
 
-Fl_Widget *
+Fl_Window *
 SoFlGLWidget::getOverlayWidget() const {
     SOFL_STUB();
     return (nullptr);
@@ -314,8 +314,8 @@ SoFlGLWidget::processEvent(int event) {
     // to the widget.
 }
 
-Fl_Widget *
-SoFlGLWidget::buildWidget(Fl_Widget *parent) {
+Fl_Window *
+SoFlGLWidget::buildWidget(Fl_Window *parent) {
     assert(parent != nullptr && "parent can not be null");
     PRIVATE(this)->glparent = parent;
     return (PRIVATE(this)->buildGLWidget());
@@ -355,7 +355,7 @@ SoFlGLWidget::sizeChanged(const SbVec2s &size) {
 }
 
 void
-SoFlGLWidget::widgetChanged(Fl_Widget *w) {
+SoFlGLWidget::widgetChanged(Fl_Window *w) {
     SOFL_STUB();
     w->redraw();
 }

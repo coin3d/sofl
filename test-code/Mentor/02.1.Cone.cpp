@@ -53,7 +53,7 @@ main(int , char **argv)
 {
     // Initialize Inventor. This returns a main window to use.
     // If unsuccessful, exit.
-    Fl_Widget*  myWindow = SoFl::init(argv[0]); // pass the app name
+    Fl_Window*  myWindow = SoFl::init(argv[0]); // pass the app name
     if (myWindow == NULL) exit(1);
 
     // Make a scene containing a red cone

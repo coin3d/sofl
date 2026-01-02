@@ -49,8 +49,8 @@ public:
     ~SoFlFullViewerP();
 
     std::string popupmenutitle;
-    Fl_Widget * viewerwidget;
-    Fl_Widget * canvas;
+    Fl_Window * viewerwidget;
+    Fl_Window * canvas;
     Fl_Toggle_Button * interactbutton;
     Fl_Toggle_Button * viewbutton;
     SbBool decorations;
@@ -58,7 +58,7 @@ public:
     SbBool menuenabled;
     Fl_Window* mainlayout;
     Fl_Window * appbuttonlayout;
-    Fl_Widget* appbuttonform;
+    Fl_Window* appbuttonform;
     SbPList * appbuttonlist;
     SbPList * viewerbuttons;
 
@@ -80,12 +80,12 @@ public:
         VoidFuncOnePar onMove;
     };
 
-    typedef std::map<Fl_Widget*, WheelFunctions> MapEvent;
+    typedef std::map<Fl_Window*, WheelFunctions> MapEvent;
     MapEvent objectMap;
     void initThumbWheelEventMap();
 
     void setLeftWheelValue(const float value);
-    static void setThumbWheelValue(Fl_Widget*, float value);
+    static void setThumbWheelValue(Fl_Window*, float value);
     void showDecorationWidgets(SbBool onOff);
     // Thumbwheels.
     void wheelPressed(int);
@@ -111,7 +111,7 @@ public:
     void increaseInteractiveCount();
     void decreaseInteractiveCount();
 
-    void bindEvents(Fl_Widget*);
+    void bindEvents(Fl_Window*);
 
     /*
     // Return pointer to pushbutton in right-side decoration bar.

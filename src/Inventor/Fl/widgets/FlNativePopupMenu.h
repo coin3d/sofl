@@ -65,7 +65,7 @@ public:
     virtual void removeMenu(int menuid) ;
     virtual void removeMenuItem(int itemid) ;
 
-    virtual void popUp(Fl_Widget* inside, int x, int y) ;
+    virtual void popUp(Fl_Window* inside, int x, int y) ;
 
 protected:
 

@@ -42,7 +42,7 @@ class SoFlGLArea : public Fl_Gl_Window {
 public:
     typedef std::vector<int> GLFormat;
 
-    SoFlGLArea(Fl_Widget *parent,
+    SoFlGLArea(Fl_Window *parent,
                SoFlGLWidgetP *parentWidget,
                const GLFormat &);
 

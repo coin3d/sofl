@@ -54,12 +54,12 @@ SoFlKeyboard::~SoFlKeyboard(void) {
 }
 
 void
-SoFlKeyboard::enable(Fl_Widget *widget, SoFlEventHandler *handler, void *closure) {
+SoFlKeyboard::enable(Fl_Window *widget, SoFlEventHandler *handler, void *closure) {
     SOFL_STUB();
 }
 
 void
-SoFlKeyboard::disable(Fl_Widget *widget, SoFlEventHandler *handler, void *closure) {
+SoFlKeyboard::disable(Fl_Window *widget, SoFlEventHandler *handler, void *closure) {
     SOFL_STUB();
 }
 

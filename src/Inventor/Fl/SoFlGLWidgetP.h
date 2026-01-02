@@ -37,7 +37,7 @@
 
 #include <Inventor/SbVec2s.h>
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 
 #include <set>
 #include <vector>
@@ -61,11 +61,11 @@ public:
     SbVec2s glSizeUnscaled;
     SbBool wasresized;
 
-    Fl_Widget * currentglwidget;
-    Fl_Widget * previousglwidget;
+    Fl_Window * currentglwidget;
+    Fl_Window * previousglwidget;
     SoFlGLArea * currentglarea;
     SoFlGLArea * previousglarea;
-    Fl_Widget * glparent;
+    Fl_Window * glparent;
 
     int borderthickness;
 
@@ -77,14 +77,14 @@ public:
     void onMouse(int);
     void onKey(int);
 
-    static bool isAPanel(Fl_Widget*);
+    static bool isAPanel(Fl_Window*);
     void addSizer();
 
     bool hasZBuffer() const;
     bool hasOverlay() const;
 
     // Required by the common code
-    static void eventHandler(Fl_Widget*, void*, int, bool*);
+    static void eventHandler(Fl_Window*, void*, int, bool*);
 
 protected:
     virtual SbBool isDirectRendering(void);

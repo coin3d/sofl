@@ -41,7 +41,7 @@ int
 main(int argc,
      char ** argv )
 {
-    Fl_Widget* window = SoFl::init( argv[0] );
+    Fl_Window* window = SoFl::init( argv[0] );
 
     SoFlExaminerViewer * viewer = new SoFlExaminerViewer( window );
     viewer->setSize(SbVec2s(800,800));

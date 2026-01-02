@@ -85,7 +85,7 @@ main(int , char **argv)
     printf("Up and Down arrows       - scale selected objects\n");
 
     // Initialize Inventor and Xt
-    Fl_Widget* myWindow = SoFl::init(argv[0]);
+    Fl_Window* myWindow = SoFl::init(argv[0]);
     if (myWindow == NULL) exit(1);
 
     // Create and set up the selection node

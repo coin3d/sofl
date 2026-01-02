@@ -45,7 +45,7 @@ class SoFlP : public SoGuiP {
 public:
 
     bool init;
-    Fl_Widget* main_frame;
+    Fl_Window* main_frame;
     Fl_Window* main_app;
     SoFlP();
     bool is_a_soflp_app;
@@ -64,8 +64,8 @@ public:
     void build_fl_window();
     //void setWxApp(wxAppConsole*);
 
-    void setMainFrame(Fl_Widget*);
-    Fl_Widget* getMainFrame() const;
+    void setMainFrame(Fl_Window*);
+    Fl_Window* getMainFrame() const;
 
     static void finish();
 };

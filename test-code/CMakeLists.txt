@@ -31,4 +31,4 @@ include_directories(
 add_subdirectory(Mentor)
 #add_subdirectory(viewers)
 #add_subdirectory(widgets)
-#add_subdirectory(fltk)
+add_subdirectory(fltk)

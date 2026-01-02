@@ -33,11 +33,11 @@
 #include "Inventor/Fl/SoFlInternal.h"
 
 #include <sstream>
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 
 
 std::string
-dumpWindowData(const Fl_Widget* window) {
+dumpWindowData(const Fl_Window* window) {
     if(window == nullptr) return "null widget!!!";
     std::ostringstream oss;
     oss<<"title:"<<window->label()<<","

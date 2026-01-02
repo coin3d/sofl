@@ -182,8 +182,8 @@ SoFlGLWidgetP::buildGLWidget() {
                                this->hasOverlay() ? "overlay" : "no overlay");
 #endif
 
-        Fl_Widget *wascurrent = this->currentglwidget;
-        Fl_Widget *wasprevious = this->previousglwidget;
+        Fl_Window *wascurrent = this->currentglwidget;
+        Fl_Window *wasprevious = this->previousglwidget;
         SoFlGLArea *wascurrentarea = this->currentglarea;
         SoFlGLArea *waspreviousarea = this->previousglarea;
 
@@ -346,7 +346,7 @@ void SoFlGLWidgetP::initGLModes(int glmodes) {
 }
 
 void
-SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/, void *closure, int event, bool *) {
+SoFlGLWidgetP::eventHandler(Fl_Window * /*widget*/, void *closure, int event, bool *) {
     SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",
@@ -377,7 +377,7 @@ SoFlGLWidgetP::onKey(int event) {
 }
 
 bool
-SoFlGLWidgetP::isAPanel(Fl_Widget *window) {
+SoFlGLWidgetP::isAPanel(Fl_Window *window) {
     SOFL_STUB();
     return (false); //window->IsKindOf(wxCLASSINFO(wxPanel)));
 }

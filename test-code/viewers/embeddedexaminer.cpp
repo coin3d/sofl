@@ -61,7 +61,7 @@ protected:
 
 public:
 
-    SplitFrame( Fl_Widget* parent,
+    SplitFrame( Fl_Window* parent,
                   Fl_WidgetID id = wxID_ANY,
                   const wxString& title = wxEmptyString,
                   const wxPoint& pos = wxDefaultPosition,
@@ -126,7 +126,7 @@ int
 main(int argc, char ** argv)
 {
     // Initialize SoFl.
-    SoFl::init((Fl_Widget *)NULL);
+    SoFl::init((Fl_Window *)NULL);
 
     // Set up scrollview window.
     SplitFrame * vp = new SplitFrame(0);

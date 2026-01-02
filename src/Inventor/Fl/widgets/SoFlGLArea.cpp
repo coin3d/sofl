@@ -37,7 +37,7 @@
 #include "sofldefs.h"
 
 
-SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
+SoFlGLArea::SoFlGLArea(Fl_Window *parent,
                        SoFlGLWidgetP *parentW,
                        const std::vector<int> &attributes)
     : Fl_Gl_Window(parent->x(),
@@ -90,6 +90,8 @@ void SoFlGLArea::draw() {
 #endif
 
     widget_p->concreteRedraw();
+
+    Fl_Gl_Window::draw(); // Draw FLTK child widgets.
 }
 
 int SoFlGLArea::handle(int event) {

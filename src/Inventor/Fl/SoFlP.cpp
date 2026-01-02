@@ -190,13 +190,13 @@ SoFlP::setInitialize(bool i) {
     init = i;
 }
 
-Fl_Widget *
+Fl_Window *
 SoFlP::getMainFrame() const {
     return (main_frame);
 }
 
 void
-SoFlP::setMainFrame(Fl_Widget *frame) {
+SoFlP::setMainFrame(Fl_Window *frame) {
     main_frame = frame;
 }
 

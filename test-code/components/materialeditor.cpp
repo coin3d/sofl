@@ -25,7 +25,7 @@ makescene(void)
 int
 main(int argc, char ** argv)
 {
-  Fl_Widget* w = SoFl::init(argc, argv, "SoFlMaterialEditor");
+  Fl_Window* w = SoFl::init(argc, argv, "SoFlMaterialEditor");
   SoFlExaminerViewer * viewer = new SoFlExaminerViewer(w);
   SoSeparator * root;
   viewer->setSceneGraph(root = makescene());
