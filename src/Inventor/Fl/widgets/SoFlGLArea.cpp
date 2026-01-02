@@ -44,6 +44,7 @@ SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
                    parent->y(),
                    parent->w(),
                    parent->h()), widget_p(parentW) {
+    // TODO: force modes, to be fixed
     mode(FL_RGB | FL_DEPTH | FL_DOUBLE);
     this->label("SoFlGLArea");
     gl_real_context = nullptr;
