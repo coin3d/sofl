@@ -46,7 +46,7 @@ jobs:
         - language: actions
           build-mode: none
         - language: c-cpp
-          build-mode: autobuild
+          build-mode: manual
         # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'rust', 'swift'
         # Use `c-cpp` to analyze code written in C, C++ or both
         # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
@@ -78,11 +78,10 @@ jobs:
         git clone --depth 1 --branch release-1.4.4 https://github.com/fltk/fltk /tmp/fltk_source_dir
         cmake -S /tmp/fltk_source_dir -B /tmp/fltk_source_dir/fltk_build_dir -DFLTK_BUILD_TEST=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DFLTK_BUILD_SHARED_LIBS=ON
         sudo cmake --build /tmp/fltk_source_dir/fltk_build_dir --target install --config Release -- -j8
-    - name: Configure and build project
-      run: |
-        cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
-        cmake --build cmake_build_dir --target install --config Release -- -j4
-      
+    - name : Download dependencies
+      run: | 
+        git submodule update --init --recursive
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
@@ -106,6 +105,7 @@ jobs:
       if: matrix.build-mode == 'manual'
       shell: bash
       run: |
+        cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
         echo 'If you are using a "manual" build mode for one or more of the' \
           'languages you are analyzing, replace this with the commands to build' \
           'your code, for example:'

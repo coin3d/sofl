@@ -35,7 +35,6 @@
 #define BOOST_TEST_NO_MAIN
 #define BOOST_TEST_ALTERNATIVE_INIT_API
 #include <boost/test/included/unit_test.hpp>
-#include <iostream>
 namespace utf = boost::unit_test;
 
 #include <Inventor/SoDB.h>
