@@ -51,9 +51,9 @@ public:
     virtual ~SoFlExaminerViewerP();
     void constructor(const SbBool build);
 
-    Fl_Image *orthopixmap;
-    Fl_Image *perspectivepixmap;
-    Fl_Button * cameratogglebutton;
+    Fl_Image *orthopixmap{};
+    Fl_Image *perspectivepixmap{};
+    Fl_Button * cameratogglebutton{};
 
     void cameratoggleClicked(int );
 

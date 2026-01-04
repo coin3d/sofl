@@ -195,7 +195,7 @@ SoFlGLWidget::setDoubleBuffer(const SbBool enable) {
 SbBool
 SoFlGLWidget::isDoubleBuffer() const {
     const auto double_buffer = static_cast<bool>(PRIVATE(this)->gl_attributes & FL_DOUBLE);
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlGLWidget::isDoubleBuffer",
                            ": %d",
                            double_buffer);
@@ -205,13 +205,11 @@ SoFlGLWidget::isDoubleBuffer() const {
 
 void
 SoFlGLWidget::setDrawToFrontBufferEnable(const SbBool enable) {
-    SOFL_STUB();
     drawToFrontBuffer = enable;
 }
 
 SbBool
 SoFlGLWidget::isDrawToFrontBufferEnable() const {
-    SOFL_STUB();
     return (drawToFrontBuffer);
 }
 

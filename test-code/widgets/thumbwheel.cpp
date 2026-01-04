@@ -40,44 +40,34 @@
 
 
 #include <Inventor/Fl/widgets/SoFlThumbWheel.h>
+#include <Inventor/Fl/SoFl.h>
 #include <FL/Fl.H>
 
+// *************************************************************************
 
-
-// Define a new application type
-class MyApp : public wxApp
+int
+main(
+    int /*argc*/,
+    char** argv)
 {
-public:
-    virtual bool OnInit() wxOVERRIDE {
-        if ( !wxApp::OnInit() )
-            return false;
+    Fl_Window* window = SoFl::init(argv[0]);
+    window->size(800,800);
+    auto wheel_h = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, window);
 
-        SimpleFrame *aFrame = new SimpleFrame(NULL,
-                                              "thumb wheel",
-                                              wxDefaultPosition,
-                                              wxSize(300,300));
+    wheel_h->position(10,10);
+    wheel_h->size(wheel_h->sizeHint()[0], wheel_h->sizeHint()[1]);
+    wheel_h->color(FL_GREEN);
 
-        wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-        SoFlThumbWheel *wheel_h = new SoFlThumbWheel(SoFlThumbWheel::Horizontal,
-                                                     aFrame);
+    auto wheel_v = new SoFlThumbWheel(SoFlThumbWheel::Vertical, window);
+    wheel_v->position(200,0);
+    wheel_v->size(wheel_v->sizeHint()[0], wheel_v->sizeHint()[1]);
 
-        wheel_h->SetSize(wheel_h->sizeHint());
-        //wheel_h->SetMinSize( wheel_h->sizeHint());
+    wheel_v->color(FL_RED);
 
-        sizer->Add(wheel_h, 1, wxALL| wxEXPAND, 5 );
-        SoFlThumbWheel *wheel_v = new SoFlThumbWheel(SoFlThumbWheel::Vertical,
-                                                     aFrame);
-        // wheel_v->SetSize(30, 200);
-        wheel_v->SetSize(wheel_v->sizeHint());
-        //wheel_h->SetPosition(wxPoint(40, 100));
-        wheel_v->SetBackgroundColour(wxColour(255,0,0));
-        wheel_h->SetBackgroundColour(wxColour(0,255,0));
-        sizer->Add(wheel_v, 1, wxALL| wxEXPAND, 5 );
-        aFrame->SetSizer(sizer);
-        wheel_h->Show();
-        wheel_v->Show();
-        return true;
-    }
-};
-
-wxIMPLEMENT_APP(MyApp);
+    wheel_h->show();
+    wheel_v->show();
+    window->end();
+    window->show();
+    Fl::run();
+    return true;
+}

@@ -36,6 +36,8 @@
 #include "Inventor/Fl/common/pixmaps/perspective.xpm"
 #include "ButtonIndexValues.h"
 
+#include <FL/Fl_XPM_Image.H>
+
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
@@ -52,14 +54,13 @@ void
 SoFlExaminerViewerP::constructor(const SbBool build) {
     this->genericConstructor();
 
-    this->cameratogglebutton = NULL;
-
-    // TODO:
-#if 0
-    this->orthopixmap = Fl_Image((const char **) ortho_xpm);
-    this->perspectivepixmap = Fl_Image((const char **) perspective_xpm);
-    assert(this->orthopixmap.GetSize() == this->perspectivepixmap.GetSize());
-#endif
+    this->cameratogglebutton = nullptr;
+    delete this->orthopixmap;
+    this->orthopixmap = new Fl_Pixmap(const_cast<char**>(ortho_xpm));
+    delete this->perspectivepixmap;
+    this->perspectivepixmap = new Fl_Pixmap(const_cast<char**>( perspective_xpm));
+    assert(this->orthopixmap->w() == this->perspectivepixmap->h());
+    assert(this->orthopixmap->w() == this->perspectivepixmap->h());
 
     PUBLIC(this)->setClassName("SoFlExaminerViewer");
     PUBLIC(this)->setPopupMenuString("Examiner Viewer");
@@ -68,6 +69,7 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
 
     if (build) {
         Fl_Window *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
+        //abort();
 #if 0
         widget->Bind( wxEVT_BUTTON,
                       &SoFlExaminerViewerP::cameratoggleClicked,
@@ -75,7 +77,7 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
                       CAMERA_BUTTON);
         PUBLIC(this)->setBaseWidget(widget);
         widget->SetMinSize(wxSize(500,300));
-#endif
+#   endif
         PUBLIC(this)->setSize(SbVec2s(500, 300));
     }
 }
