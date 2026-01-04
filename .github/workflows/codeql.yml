@@ -106,13 +106,7 @@ jobs:
       shell: bash
       run: |
         cmake -S . -B cmake_build_dir -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=cmake_install_dir
-        echo 'If you are using a "manual" build mode for one or more of the' \
-          'languages you are analyzing, replace this with the commands to build' \
-          'your code, for example:'
-        echo '  make bootstrap'
-        echo '  make release'
-        exit 1
-
+        cmake --build cmake_build_dir --config Release -- -j4
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
       with:
