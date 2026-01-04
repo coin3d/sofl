@@ -40,9 +40,9 @@
 
 
 #include <Inventor/Fl/widgets/SoFlThumbWheel.h>
-#include "FL/Fl.H"
+#include <FL/Fl.H>
 
-#include "common/SimpleFrame.h"
+
 
 // Define a new application type
 class MyApp : public wxApp

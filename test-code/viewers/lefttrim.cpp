@@ -37,45 +37,33 @@
 #include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #undef protected
 
+#include <iostream>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "FL/fl.h"
-#include "common/SimpleFrame.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 
-// Define a new application type
-class MyApp : public wxApp
+int main()
 {
-public:
-    virtual bool OnInit() wxOVERRIDE {
-        if ( !wxApp::OnInit() )
-            return false;
+    Fl_Window* window = SoFl::init("renderarea");
 
-        Fl_Window* window = SoFl::init("renderarea");
+    SoFlFullViewer* renderarea =
+        new SoFlFullViewer(window,
+                           "Renderarea demonstration",
+                           FALSE,
+                           SoFlFullViewer::BUILD_ALL,
+                           SoFlViewer::BROWSER,
+                           FALSE);
 
-        SoFlFullViewer * renderarea =
-                new SoFlFullViewer(window,
-                                   "Renderarea demonstration",
-                                   FALSE,
-                                   SoFlFullViewer::BUILD_ALL,
-                                   SoFlViewer::BROWSER,
-                                   FALSE);
-
-        SimpleFrame* asimpleframe = new SimpleFrame(0,
-                                                    "lefttrim",
-                                                    wxDefaultPosition,
-                                                    wxSize(50,200));
-        std::clog<<dumpWindowData(asimpleframe)<<std::endl;
-        Fl_Window* w = renderarea->buildLeftTrim(asimpleframe);
-        //asimpleframe->SetSize(w->GetSize());
-        std::clog<<dumpWindowData(asimpleframe)<<std::endl;
-        asimpleframe->Layout();
-        asimpleframe->Show();
-        return true;
-    }
-};
-
-wxIMPLEMENT_APP(MyApp);
-
-
+    std::clog << dumpWindowData(window) << std::endl;
+    Fl_Window* w = renderarea->buildLeftTrim(window);
+    //window->SetSize(w->GetSize());
+    std::clog << dumpWindowData(window) << std::endl;
+    w->show();
+    window->end();
+    window->show();
+    Fl::run();
+    return true;
+}

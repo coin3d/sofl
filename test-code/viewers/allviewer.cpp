@@ -32,34 +32,35 @@
 
 #include <Inventor/nodes/SoCone.h>
 
-#define VIEWER_TYPE  SoFlPlaneViewer
+#define VIEWER_TYPE  SoFlExaminerViewer
 
 #include <Inventor/Fl/SoFl.h>
 #include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/Fl/viewers/SoFlPlaneViewer.h>
 #include <Inventor/Fl/viewers/SoFlFlyViewer.h>
 
+
 // *************************************************************************
 
 int
 main(
-  int argc,
-  char ** argv )
+    int argc,
+    char** argv)
 {
-  Fl_Window* window = SoFl::init( argv[0] );
+    Fl_Window* window = SoFl::init(argv[0]);
 
-  SoNode * root = new SoCone;
+    SoNode* root = new SoCone;
 
-    VIEWER_TYPE * viewer = new VIEWER_TYPE( window );
+    VIEWER_TYPE* viewer = new VIEWER_TYPE(window);
 
-  viewer->setSceneGraph( root );
-  viewer->show();
-  SoFl::show( window );
+    viewer->setSceneGraph(root);
+    viewer->show();
+    SoFl::show(window);
 
-  SoFl::mainLoop();
+    SoFl::mainLoop();
 
-  delete viewer;
-  return 0;
+    delete viewer;
+    return 0;
 } // main()
 
 // *************************************************************************

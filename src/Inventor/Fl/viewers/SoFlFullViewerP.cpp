@@ -194,9 +194,9 @@ objectMap[PUBLIC(this)->objectName] = WheelFunctions(&SoFlFullViewer::objectName
                                                      &SoFlFullViewer::objectName ## Motion)
 void
 SoFlFullViewerP::initThumbWheelEventMap() {
-    ADD_DATA_IN_MAP(rightWheel);
-    ADD_DATA_IN_MAP(leftWheel);
-    ADD_DATA_IN_MAP(bottomWheel);
+//    ADD_DATA_IN_MAP(rightWheel);
+//    ADD_DATA_IN_MAP(leftWheel);
+//    ADD_DATA_IN_MAP(bottomWheel);
 }
 
 void

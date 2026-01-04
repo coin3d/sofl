@@ -64,7 +64,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <FL/gbsizer.h>
 
-#include "FL/fl.h"
+#include <FL/Fl.H>
 
 #include "Inventor/Fl/SoFlInternal.h"
 

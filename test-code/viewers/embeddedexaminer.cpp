@@ -37,107 +37,45 @@
 
 /***********************************************************************/
 
-#include "Inventor/Fl/SoFl.h"
-#include "Inventor/Fl/viewers/SoFlExaminerViewer.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Tile.H>
+#include <FL/Fl_Box.H>
+
+#include <Inventor/Fl/SoFl.h>
+#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/nodes/SoCone.h>
-#include <Inventor/nodes/SoSeparator.h>
 
-#include <FL/panel.h>
-#include <FL/gdicmn.h>
-#include <FL/colour.h>
-#include <FL/string.h>
-#include <FL/splitter.h>
-#include <FL/sizer.h>
-#include <FL/frame.h>
+#include "common/SceneBuilder.h"
 
-class SplitFrame : public wxFrame
-{
-private:
+int main(int argc, char **argv) {
 
-protected:
-    wxSplitterWindow* splitter;
-    wxPanel* panel1;
-    wxPanel* panel2;
+    Fl_Window* window = SoFl::init("SoFl Split Example");
+    window->size(800, 600);
 
-public:
+    Fl_Tile* tile = new Fl_Tile(0, 0, 800, 600);
 
-    SplitFrame( Fl_Window* parent,
-                  Fl_WidgetID id = wxID_ANY,
-                  const wxString& title = wxEmptyString,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxSize( 500,300 ),
-                  long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL )
-            : wxFrame( parent, id, title, pos, size, style )
-    {
-        this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+    Fl_Box* leftBox = new Fl_Box(0, 0, 200, 600, "Left panel");
+    leftBox->box(FL_FLAT_BOX);
+    leftBox->color(FL_DARK2);
+    leftBox->labelsize(14);
+    
+    SoFlExaminerViewer* viewer = new SoFlExaminerViewer(window);
+    viewer->setSize(SbVec2s(600,600));
+    viewer->getGLWidget()->position(200,0);
+    auto cameraAndCone = buildCameraAndCone();
+    cameraAndCone.first->viewAll(cameraAndCone.second,viewer->getViewportRegion());
 
-        wxBoxSizer* bSizer12;
-        bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+    viewer->setSceneGraph(cameraAndCone.second);
 
-        splitter = new wxSplitterWindow( this, wxID_ANY);
-        splitter->Connect( wxEVT_IDLE, wxIdleEventHandler( SplitFrame::onIdle ), NULL, this );
-        splitter->Bind( wxEVT_SPLITTER_SASH_POS_CHANGING, &SplitFrame::onSplitterMovement, this);
+    tile->end();
 
-        panel1 = new wxPanel( splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-        panel1->SetBackgroundColour(wxColour(125,0,125));
-        panel2 = new wxPanel( splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    window->resizable(tile);
+    window->show(argc, argv);
+    viewer->show();
 
-        // Construct a simple scenegraph.
-
-        SoSeparator * root = new SoSeparator;
-
-        SoCone * cone = new SoCone;
-        root->addChild(cone);
-
-        // Add the examinerviewer.
-
-        SoFlExaminerViewer * examinerviewer = new SoFlExaminerViewer(panel2);
-        examinerviewer->setSceneGraph(root);
-        examinerviewer->show();
-
-        splitter->SplitVertically( panel1, panel2, 0 );
-        bSizer12->Add( splitter, 1, wxEXPAND, 5 );
-
-        this->SetSizer( bSizer12 );
-        this->Layout();
-
-        this->Centre( wxBOTH );
-    }
-
-    ~SplitFrame() {
-    }
-
-    void onSplitterMovement(wxSplitterEvent& event) {
-        std::cerr<<"move: "<<event.GetSashPosition()<<std::endl;
-
-    }
-
-    void onIdle( int )
-    {
-        splitter->SetSashPosition( 0 );
-        splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SplitFrame::onIdle ), NULL, this );
-    }
-
-};
-
-/***********************************************************************/
-
-int
-main(int argc, char ** argv)
-{
-    // Initialize SoFl.
-    SoFl::init((Fl_Window *)NULL);
-
-    // Set up scrollview window.
-    SplitFrame * vp = new SplitFrame(0);
-
-    // show window
-    vp->Show();
-
-    // start event loop.
     SoFl::mainLoop();
 
-    // remove all resources
-    SoFl::done();
     return 0;
 }
+

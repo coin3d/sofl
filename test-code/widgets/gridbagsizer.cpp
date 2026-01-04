@@ -30,11 +30,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "FL/fl.h"
+#include <FL/Fl.H>
 #include "FL/button.h"
 #include "FL/gbsizer.h"
 
-#include "common/SimpleFrame.h"
+
 
 // Define a new application type
 class MyApp : public wxApp

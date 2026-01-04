@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#include "FL/fl.h"
+#include <FL/Fl.H>
 #include "FL/button.h"
 #include "FL/gbsizer.h"
 #define  SOFL_INTERNAL
@@ -44,9 +44,9 @@
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "FL/fl.h"
+#include <FL/Fl.H>
 
-#include "common/SimpleFrame.h"
+
 
 // Define a new application type
 class MyApp : public wxApp

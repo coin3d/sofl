@@ -36,41 +36,25 @@
 #include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #undef protected
 
-#include <Inventor/nodes/SoPerspectiveCamera.h>
-#include <Inventor/nodes/SoDirectionalLight.h>
-#include <Inventor/nodes/SoSeparator.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 
-#include "FL/fl.h"
-#include "common/SimpleFrame.h"
 
-// Define a new application type
-class MyApp : public wxApp
+int
+main(int /*argc*/, char** /*argv*/)
 {
-public:
-    virtual bool OnInit() wxOVERRIDE {
-        if ( !wxApp::OnInit() )
-            return false;
+    Fl_Window* window = SoFl::init("renderarea");
 
-        Fl_Window* window = SoFl::init("renderarea");
+    SoFlFullViewer* renderarea =
+        new SoFlFullViewer(window,
+                           "Renderarea demonstration",
+                           FALSE,
+                           SoFlFullViewer::BUILD_ALL,
+                           SoFlViewer::BROWSER,
+                           FALSE);
 
-        SoFlFullViewer * renderarea =
-                new SoFlFullViewer(window,
-                                   "Renderarea demonstration",
-                                   FALSE,
-                                   SoFlFullViewer::BUILD_ALL,
-                                   SoFlViewer::BROWSER,
-                                   FALSE);
-
-        SimpleFrame* asimpleframe = new SimpleFrame(0,
-                                                    "bottomtrim",
-                                                    wxDefaultPosition,
-                                                    wxSize(300,60));
-        renderarea->buildBottomTrim(asimpleframe);
-        asimpleframe->Show();
-        return true;
-    }
-};
-
-wxIMPLEMENT_APP(MyApp);
-
-
+    renderarea->buildBottomTrim(window);
+    window->show();
+    Fl::run();
+    return 0;
+}

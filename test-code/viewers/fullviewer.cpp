@@ -41,47 +41,35 @@
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-#include "FL/fl.h"
+#include <FL/Fl.H>
 
 #include "common/get_scene_graph.h"
 
-
-// Define a new application type
-class MyApp : public wxApp
+int main()
 {
-public:
-    virtual bool OnInit() wxOVERRIDE {
-        if ( !wxApp::OnInit() )
-            return false;
+    Fl_Window* window = SoFl::init("renderarea");
 
-        Fl_Window* window = SoFl::init("renderarea");
+    SoSeparator* root = new SoSeparator;
+    root->ref();
+    SoPerspectiveCamera* camera;
+    root->addChild(camera = new SoPerspectiveCamera);
+    root->addChild(new SoDirectionalLight);
+    SoSeparator* userroot = get_scene_graph();
+    root->addChild(userroot);
 
-        SoSeparator * root = new SoSeparator;
-        root->ref();
-        SoPerspectiveCamera * camera;
-        root->addChild(camera = new SoPerspectiveCamera);
-        root->addChild(new SoDirectionalLight);
-        SoSeparator * userroot = get_scene_graph();
-        root->addChild(userroot);
+    SoFlFullViewer* renderarea =
+        new SoFlFullViewer(window,
+                           "Renderarea demonstration",
+                           FALSE,
+                           SoFlFullViewer::BUILD_ALL,
+                           SoFlViewer::BROWSER,
+                           TRUE);
+    camera->viewAll(userroot, renderarea->getViewportRegion());
+    renderarea->setSceneGraph(root);
+    renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
+    renderarea->show();
 
-        SoFlFullViewer * renderarea =
-                new SoFlFullViewer(window,
-                                   "Renderarea demonstration",
-                                   FALSE,
-                                   SoFlFullViewer::BUILD_ALL,
-                                   SoFlViewer::BROWSER,
-                                   TRUE);
-        camera->viewAll( userroot, renderarea->getViewportRegion() );
-        renderarea->setSceneGraph(root);
-        renderarea->setBackgroundColor(SbColor(0.0f, 0.2f, 0.3f));
-        renderarea->show();
-
-        SoFl::show(window);
-        // SoFl::mainLoop();
-        return true;
-    }
-};
-
-wxIMPLEMENT_APP(MyApp);
-
-
+    SoFl::show(window);
+    // SoFl::mainLoop();
+    return true;
+}
