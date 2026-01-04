@@ -1,4 +1,5 @@
-[![Continuous Integration Build](https://github.com/famorcia/sofl/actions/workflows/continuous-integration-workflow.yml/badge.svg?branch=main)](https://github.com/famorcia/sofl/actions/workflows/continuous-integration-workflow.yml)
+[![Continuous Integration Build](https://github.com/coin3d/sofl/actions/workflows/continuous-integration-workflow.yml/badge.svg?branch=main)](https://github.com/coin3d/sofl/actions/workflows/continuous-integration-workflow.yml)
+[![CodeQL Advanced](https://github.com/coin3d/sofl/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/coin3d/sofl/actions/workflows/codeql.yml)
 
 # SoFl
 Coin GUI binding for FLTK
