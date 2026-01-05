@@ -319,31 +319,15 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent)
 Fl_Window*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
-    Fl_Window* p = nullptr;
-    /*
-    wxPanel* p = new wxPanel(parent);
-    p->SetName("leftTrim");
-    p->SetMinSize(wxSize(24,100));
-
-#if SOFL_DEBUG 
-    p->SetBackgroundColour(wxColour(255, 0, 255));
-#endif
-
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    SoFlThumbWheel * t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, p);
-    t->SetName("left thumb wheel");
+    auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
+    t->label("left thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->leftWheelVal = t->value();
     this->leftWheel = t;
-    sizer->Add(0,0,1,0);
-    sizer->Add(t, 0, wxALL |wxALIGN_CENTER_HORIZONTAL, 0);
-    p->SetSizer(sizer);
-    p->Fit();
-#if SOFL_DEBUG 
-    dumpWindowData(p);
+#if SOFL_DEBUG
+    dumpWindowData(t);
 #endif
-*/
-    return p;
+    return t;
 }
 
 Fl_Window*

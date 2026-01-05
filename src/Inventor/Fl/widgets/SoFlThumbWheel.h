@@ -39,6 +39,7 @@
 #include <FL/Fl_Window.H>
 
 #include <string>
+#include <FL/Fl_Box.H>
 #include <Inventor/SbVec2s.h>
 
 #include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
@@ -50,8 +51,8 @@ public:
     SoFlThumbWheel(const SoFlThumbWheel & wheel) = delete;
     SoFlThumbWheel & operator = (const SoFlThumbWheel & wheel) = delete;
 
-    explicit SoFlThumbWheel(Fl_Window * parent = nullptr, const char * name = nullptr);
-    explicit SoFlThumbWheel(Orientation, Fl_Window * parent = nullptr, const char * name = nullptr);
+    explicit SoFlThumbWheel(const SbVec2s& pos, const char * name = nullptr);
+    explicit SoFlThumbWheel(Orientation, const SbVec2s& pos, const char * name = nullptr);
     ~SoFlThumbWheel() override;
 
     void setOrientation(Orientation);
@@ -89,9 +90,9 @@ private:
                    const std::string& event_id);
 
 
-    enum State { Idle, Dragging, Disabled } state;
+    enum State { Idle, Dragging, Disabled } state {Disabled};
 
-    Orientation orient;
+    Orientation orient{Orientation::Horizontal};
     float wheelValue{}, tempWheelValue{};
     int mouseDownPos{}, mouseLastPos{};
 
@@ -99,10 +100,11 @@ private:
 
     SoAnyThumbWheel * wheel{};
     Fl_RGB_Image**   pixmaps{};
+    Fl_Box* box{};
+
     int numPixmaps{};
     int currentPixmap{};
-
-
+    SbVec2s position;
 
 }; // class SoFlThumbWheel
 

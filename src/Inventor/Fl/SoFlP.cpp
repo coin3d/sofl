@@ -39,10 +39,11 @@
 
 #include <FL/Fl_Window.H>
 
-#undef SOFL_DEBUG
 
-namespace {
-    void timerQueueTimerCB(void *userdata) {
+namespace
+{
+    void timerQueueTimerCB(void* userdata)
+    {
 #if SOFL_DEBUG
         SoDebugError::postInfo("timerQueueTimerCB",
                                "processing timer queue");
@@ -59,7 +60,8 @@ namespace {
     // The delay sensor timeout point has been reached, so process the
     // delay queue even though the system is not idle (to avoid
     // starvation).
-    void delayTimeoutTimerCB(void *userdata) {
+    void delayTimeoutTimerCB(void* userdata)
+    {
 #if SOFL_DEBUG
         SoDebugError::postInfo("delayTimeoutTimerCB",
                                "processing delay queue");
@@ -76,36 +78,47 @@ namespace {
 }
 
 
-SoFlP::SoFlP() {
+SoFlP::SoFlP()
+{
     init = false;
-    main_frame = nullptr;
-    main_app = nullptr;
+    main_window = nullptr;
     is_a_soflp_app = false;
 }
 
 
-void
-SoFlP::build_fl_window() {
-    if (!main_app) {
+Fl_Window*
+SoFlP::buildMainWindow(const char* title)
+{
+    if (!main_window)
+    {
         is_a_soflp_app = true;
-        main_frame = main_app = new Fl_Window(640, 480);
+        return (new Fl_Window(640, 480, title));
     }
 #if SOFL_DEBUG
     else
-    if (SOFL_DEBUG) {
+    {
         SoDebugError::postWarning("SoFlP::build_fl_window",
                                   "Fl_Window already built");
     }
 #endif
+    return nullptr;
+}
+
+void SoFlP::setMainWindow(Fl_Window* mainWindow)
+{
+    assert(mainWindow != nullptr && "main Window can not be null");
+    main_window =  mainWindow;
 }
 
 void
-SoGuiP::sensorQueueChanged(void *) {
+SoGuiP::sensorQueueChanged(void*)
+{
     SoFlP::sensorQueueChanged();
 }
 
 void
-SoFlP::sensorQueueChanged() {
+SoFlP::sensorQueueChanged()
+{
     // We need three different mechanisms to interface Coin sensor
     // handling with fltk event handling, which are:
     //
@@ -121,11 +134,12 @@ SoFlP::sensorQueueChanged() {
     // continually busy applications -- handled by
     // delayTimeoutTimerCB.
 
-    SoSensorManager *sm = SoDB::getSensorManager();
+    SoSensorManager* sm = SoDB::getSensorManager();
 
     // Set up a timer queue timeout if necessary.
     SbTime t;
-    if (sm->isTimerSensorPending(t)) {
+    if (sm->isTimerSensorPending(t))
+    {
         SbTime interval = t - SbTime::getTimeOfDay();
 
         // We also want to avoid setting it to 0.0, as that has a special
@@ -147,13 +161,15 @@ SoFlP::sensorQueueChanged() {
         Fl::add_timeout(timeout, timerQueueTimerCB, nullptr);
     }
     // Stop timerQueueTimerCB if the queue is completely empty.
-    else if (Fl::has_timeout(timerQueueTimerCB, nullptr)) {
+    else if (Fl::has_timeout(timerQueueTimerCB, nullptr))
+    {
         Fl::remove_timeout(timerQueueTimerCB, nullptr);
     }
 
 
     // Set up idle notification to delay queue processing if necessary.
-    if (sm->isDelaySensorPending()) {
+    if (sm->isDelaySensorPending())
+    {
 #if SOFL_DEBUG
         // debug
         SoDebugError::postInfo("SoFlP::sensorQueueChanged",
@@ -161,70 +177,75 @@ SoFlP::sensorQueueChanged() {
 #endif
 
 
-        if (!Fl::has_timeout(delayTimeoutTimerCB, nullptr)) {
-            const SbTime &delaySensorTimeout = SoDB::getDelaySensorTimeout();
-            if (delaySensorTimeout != SbTime::zero()) {
+        if (!Fl::has_timeout(delayTimeoutTimerCB, nullptr))
+        {
+            const SbTime& delaySensorTimeout = SoDB::getDelaySensorTimeout();
+            if (delaySensorTimeout != SbTime::zero())
+            {
                 double timeout = delaySensorTimeout.getValue();
                 Fl::add_timeout(timeout, delayTimeoutTimerCB, nullptr);
             }
         }
-    } else {
+    }
+    else
+    {
         if (Fl::has_timeout(delayTimeoutTimerCB, nullptr))
             Fl::remove_timeout(delayTimeoutTimerCB, nullptr);
     }
 }
 
-SoFlP *
-SoFlP::instance() {
+SoFlP*
+SoFlP::instance()
+{
     static SoFlP singleton;
     return (&singleton);
 }
 
 bool
-SoFlP::isInitialized() const {
+SoFlP::isInitialized() const
+{
     return (init);
 }
 
 void
-SoFlP::setInitialize(bool i) {
+SoFlP::setInitialize(bool i)
+{
     init = i;
 }
 
-Fl_Window *
-SoFlP::getMainFrame() const {
-    return (main_frame);
+Fl_Window*
+SoFlP::getMainWindow() const
+{
+    return (main_window);
 }
 
 void
-SoFlP::setMainFrame(Fl_Window *frame) {
-    main_frame = frame;
-}
-
-void
-SoFlP::stopTimers() {
+SoFlP::stopTimers()
+{
     Fl::remove_timeout(timerQueueTimerCB, nullptr);
     Fl::remove_timeout(delayTimeoutTimerCB, nullptr);
 }
 
 void
-SoFlP::finish() {
+SoFlP::finish()
+{
 #ifdef SOFL_DEBUG
     SoDebugError::postInfo("SoFlP::finish",
                            "remove all internal resources");
 #endif
-    // wxTheApp->Unbind(wxEVT_IDLE, &SoFlP::onIdle, SoFlP::instance());
 
     stopTimers();
 
     // only if the app is built by SoFl perform exit and cleanup
-    if (SoFlP::instance()->is_a_soflp_app) {
-        // wxTheApp->OnExit();
-        // wxEntryCleanup();
+    if (SoFlP::instance()->is_a_soflp_app)
+    {
+        Fl::program_should_quit();
     }
 }
 
 void
-SoFlP::onIdle(int event) {
+SoFlP::onIdle(int event)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlP::onIdle",
                            "idle sensor pending");
@@ -240,7 +261,8 @@ SoFlP::onIdle(int event) {
 }
 
 void
-SoFlP::onClose(int event) {
+SoFlP::onClose(int event)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlP::onClose",
                            "clean up in progress!");

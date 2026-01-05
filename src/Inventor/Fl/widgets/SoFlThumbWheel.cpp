@@ -38,41 +38,45 @@
 */
 
 
-#include <Inventor/Fl/widgets/SoFlThumbWheel.h>
+#include "SoFlThumbWheel.h"
+
 #include <Inventor/Fl/widgets/SoAnyThumbWheel.h>
 #include <Inventor/errors/SoDebugError.h>
 
-
 #include <FL/Fl_Pixmap.H>
-
-#include <cassert>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <stdint.h>
 #include <FL/Fl_Box.H>
 
+#include <cassert>
+#include <iostream>
+#include <sstream>
+#include <vector>
+
+constexpr short VERTICAL_WIDTH = 24;
+constexpr short VERTICAL_HEIGHT = 128;
+constexpr short HORIZONTAL_WIDTH = 128;
+constexpr short HORIZONTAL_HEIGHT = 24;
 
 static const int SHADEBORDERWIDTH = 0;
 
-SoFlThumbWheel::SoFlThumbWheel(Fl_Window* parent,
+SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
                                const char* name)
-    : Fl_Window(parent->x(),
-                parent->y(),
-                parent->w(),
-                parent->h(),
-                name)
+    : Fl_Window(pos[0], pos[1],
+                HORIZONTAL_WIDTH, HORIZONTAL_HEIGHT, name)
 {
-    this->constructor(SoFlThumbWheel::Vertical);
+    this->constructor(Vertical);
+#if SOFL_DEBUG
+    SoDebugError::postInfo("SoFlThumbWheel::SoFlThumbWheel",
+                           "<w: %d, h: %d>",
+                           w(), h());
+#endif
 }
 
 SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
-                               Fl_Window* parent,
+                               const SbVec2s& pos,
                                const char* name)
-    : Fl_Window(parent->x(),
-                parent->y(),
-                parent->w(),
-                parent->h(),
+    : Fl_Window(pos[0], pos[1],
+                orientation == Horizontal ? HORIZONTAL_WIDTH : VERTICAL_WIDTH,
+                orientation == Horizontal ? HORIZONTAL_HEIGHT : VERTICAL_HEIGHT,
                 name)
 {
     if (!name)
@@ -80,20 +84,11 @@ SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
     else
         this->label(name);
     this->constructor(orientation);
-}
-
-void
-SoFlThumbWheel::constructor(Orientation orientation)
-{
-    this->orient = orientation;
-    this->state = SoFlThumbWheel::Idle;
-    this->wheelValue = this->tempWheelValue = 0.0f;
-    this->wheel = new SoAnyThumbWheel;
-    this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
-    this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
-    this->pixmaps = nullptr;
-    this->numPixmaps = 0;
-    this->currentPixmap = -1;
+#if SOFL_DEBUG
+    SoDebugError::postInfo("SoFlThumbWheel::SoFlThumbWheel",
+                           "<w: %d, h: %d>",
+                           w(), h());
+#endif
 }
 
 SoFlThumbWheel::~SoFlThumbWheel()
@@ -113,17 +108,36 @@ SoFlThumbWheel::setOrientation(Orientation orientation)
     this->orient = orientation;
     this->redraw();
 }
+
+void
+SoFlThumbWheel::constructor(Orientation orientation)
+{
+    this->orient = orientation;
+    this->state = Idle;
+    this->wheelValue = this->tempWheelValue = 0.0f;
+    this->wheel = new SoAnyThumbWheel;
+    this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
+    this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
+    this->pixmaps = nullptr;
+    this->numPixmaps = 0;
+    this->currentPixmap = -1;
+    box = new Fl_Box(0, 0, this->w(), this->h());
+    this->end();
+}
+
 #if 0
 void
 SoFlThumbWheel::paintEvent(int event)
 {
+
+
 
 #if 0
 wxPaintDC dc(this);
 
 int w, dval;
 wxSize size = this->GetSize();
-    if (this->orient== SoFlThumbWheel::Vertical) {
+    if (this->orient== Vertical) {
         w = size.GetX() - 12;
         dval = size.GetY() - 6;
     } else {
@@ -203,12 +217,14 @@ void
 SoFlThumbWheel::mousePressEvent(int event)
 {
 
+
+
 #if 0
 if (this->state!= SoFlThumbWheel::Idle)
         return;
     this->state= SoFlThumbWheel::Dragging;
 
-    if (this->orient== SoFlThumbWheel::Vertical)
+    if (this->orient== Vertical)
         this->mouseDownPos= event.GetY()- SHADEBORDERWIDTH- 6;
     else
         this->mouseDownPos= event.GetX()- SHADEBORDERWIDTH- 6;
@@ -231,11 +247,13 @@ void
 SoFlThumbWheel::mouseMoveEvent(int event)
 {
 
+
+
 #if 0
 if (this->state!= SoFlThumbWheel::Dragging)
         return;
 
-    if (this->orient== SoFlThumbWheel::Vertical)
+    if (this->orient== Vertical)
         this->mouseLastPos= event.GetY()- SHADEBORDERWIDTH- 6;
     else
         this->mouseLastPos= event.GetX()- SHADEBORDERWIDTH- 6;
@@ -265,6 +283,8 @@ Refresh();
 void
 SoFlThumbWheel::mouseReleaseEvent(int event)
 {
+
+
 
 #if 0
 if (this->state!= SoFlThumbWheel::Dragging)
@@ -314,7 +334,7 @@ SoFlThumbWheel::getNormalizedValue(int pos) const
 int
 SoFlThumbWheel::getWheelLength() const
 {
-  return this->orient == SoFlThumbWheel::Vertical ?
+  return this->orient == Vertical ?
     this->GetSize().GetY() : this->GetSize().GetX();
 }
 */
@@ -343,8 +363,8 @@ void SoFlThumbWheel::draw()
 {
     int w = this->w();
     int h = this->h();
-    int dval {};
-    if (this->orient == SoFlThumbWheel::Vertical)
+    int dval{};
+    if (this->orient == Vertical)
     {
         w = w - 12;
         dval = h - 6;
@@ -380,12 +400,10 @@ void SoFlThumbWheel::draw()
         return;
     assert(pixmap < numPixmaps);
 
-    Fl_Box *box = new Fl_Box(50, 50, 200, 100);
     box->image(this->pixmaps[pixmap]);
     box->show();
     this->currentPixmap = pixmap;
 
-    redraw();
     Fl_Window::draw();
 }
 
@@ -406,29 +424,36 @@ SoFlThumbWheel::value() const
     return this->wheelValue;
 }
 
-/*
+//*
 void
-fill(std::vector<uint8_t> &buffer,
+fill(std::vector<uint8_t>& buffer,
      unsigned long n,
-     int channel = 3) {
-    if (channel > 3) {
+     int channel = 3)
+{
+    if (channel > 3)
+    {
         buffer.push_back((n >> 24) & 0xFF);
     }
     buffer.push_back((n >> 16) & 0xFF);
     buffer.push_back((n >> 8) & 0xFF);
     buffer.push_back(n & 0xFF);
 }
-uint8_t *
-toRGBChannel(const std::vector<unsigned int> &img) {
+
+uint8_t*
+toRGBChannel(const std::vector<unsigned int>& img)
+{
     std::vector<uint8_t> vout;
-    for (size_t i = 0; i < img.size(); ++i) {
-        fill(vout, img[i]);
+    for (unsigned int i : img)
+    {
+        fill(vout, i);
     }
     assert(vout.size() == img.size()*3);
-    uint8_t *out = static_cast<uint8_t *>(malloc(vout.size()));
+    auto out = static_cast<uint8_t*>(malloc(vout.size()));
     memcpy(out, &vout[0], vout.size());
     return (out);
-}*/
+}
+
+//*/
 
 void
 SoFlThumbWheel::initWheel(int diameter, int width)
@@ -460,10 +485,14 @@ SoFlThumbWheel::initWheel(int diameter, int width)
     for (int i = 0; i < this->numPixmaps; i++)
     {
         std::vector<unsigned int> buffer(pwidth * pheight);
-        this->wheel->drawBitmap(i, &buffer[0],
+        this->wheel->drawBitmap(i,
+                                &buffer[0],
                                 (this->orient == Vertical) ? SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
 
-        this->pixmaps[i] = new Fl_RGB_Image(reinterpret_cast<const uchar*>(&buffer[0]), pwidth, pheight, 3);
+        std::cerr << "sizeof:" << sizeof(unsigned int) << std::endl;
+        uint8_t* rgb = toRGBChannel(buffer);
+        this->pixmaps[i] = new Fl_RGB_Image(rgb, buffer.size() * 32, pwidth, pheight, 3, 36);
+        std::cerr << "ld:" << this->pixmaps[i]->ld() << std::endl;
     }
 }
 

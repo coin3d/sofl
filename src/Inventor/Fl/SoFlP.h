@@ -45,14 +45,15 @@ class SoFlP : public SoGuiP {
 public:
 
     bool init;
-    Fl_Window* main_frame;
-    Fl_Window* main_app;
+    bool is_a_soflp_app ;
+    Fl_Window* main_window;
+
     SoFlP();
-    bool is_a_soflp_app;
 
     static void stopTimers();
 
     static SoFlP* instance();
+
     bool isInitialized() const;
     void setInitialize(bool);
 
@@ -61,11 +62,9 @@ public:
     static void onIdle(int event);
     static void onClose(int event);
 
-    void build_fl_window();
-    //void setWxApp(wxAppConsole*);
-
-    void setMainFrame(Fl_Window*);
-    Fl_Window* getMainFrame() const;
+    Fl_Window* buildMainWindow(const char* title);
+    void setMainWindow(Fl_Window*);
+    Fl_Window* getMainWindow() const;
 
     static void finish();
 };
