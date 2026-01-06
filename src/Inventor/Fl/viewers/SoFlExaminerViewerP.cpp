@@ -69,7 +69,6 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
 
     if (build) {
         Fl_Window *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
-        //abort();
 #if 0
         widget->Bind( wxEVT_BUTTON,
                       &SoFlExaminerViewerP::cameratoggleClicked,

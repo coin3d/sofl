@@ -43,8 +43,7 @@ main(int argc,
 {
     Fl_Window* window = SoFl::init( argv[0] );
 
-    SoFlExaminerViewer * viewer = new SoFlExaminerViewer( window );
-    viewer->setSize(SbVec2s(800,800));
+    auto viewer = new SoFlExaminerViewer( window );
 
     SoNode * root = new SoCone;
     viewer->setSceneGraph( root );

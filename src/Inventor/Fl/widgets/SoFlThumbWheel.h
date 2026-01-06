@@ -38,11 +38,7 @@
 
 #include <FL/Fl_Window.H>
 
-#include <string>
-#include <FL/Fl_Box.H>
 #include <Inventor/SbVec2s.h>
-
-#include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
 
 class SOFL_DLL_API SoFlThumbWheel : public Fl_Window {
 public:
@@ -74,38 +70,28 @@ public:
 
     SbVec2s sizeHint() const;
 
-    void mousePressEvent(int );
-    void mouseReleaseEvent(int );
-    void mouseMoveEvent(int );
-    void mouseWheel(int );
-
-    void draw() override;
-    int handle(int event) override;
-
 private:
-    void constructor(Orientation);
-    void sendEvent(long id,
-                   const std::string& event_id);
-
 
     enum State { Idle, Dragging, Disabled } state {Disabled};
 
-    Orientation orient{Orientation::Horizontal};
+    Orientation orient{Horizontal};
     float wheelValue{}, tempWheelValue{};
     int mouseDownPos{}, mouseLastPos{};
-
-    void initWheel(int diameter, int width);
-
     SoAnyThumbWheel * wheel{};
-    uint8_t**    pixmaps{};
-
+    uint8_t** pixmaps{};
     int numPixmaps{};
     int currentPixmap{};
-    SbVec2s position;
+    SbVec2s th_position;
 
-}; // class SoFlThumbWheel
+    void constructor(Orientation);
+    void initWheel(int diameter, int width);
+    void mousePressEvent(int );
+    void mouseReleaseEvent(int );
+    void mouseMoveEvent(int );
+    // TODO: void mouseWheel(int);
 
-// *************************************************************************
-
+    void draw() override;
+    int handle(int event) override;
+};
 
 #endif //SOFL_SOFLTHUMBWHEEL_H

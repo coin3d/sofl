@@ -138,7 +138,12 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
     SoDebugError::postInfo("SoFlFullViewer::buildWidget", "[invoked]");
     parent->label("MainWindow");
     SoDebugError::postInfo("SoFlFullViewer::buildWidget", "Step-1");
-    dumpWindowData(parent);
+#ifdef SOFL_DEBUG
+    SoDebugError::postInfo("SoFlFullViewer::buildWidget",
+                           "%s",
+                           dumpWindowData(parent).c_str());
+#endif
+
 #endif
 
     PRIVATE(this)->viewerwidget = parent;
@@ -165,7 +170,12 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
 
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewer::buildWidget", "Step-2");
-    dumpWindowData(parent);
+#ifdef SOFL_DEBUG
+    SoDebugError::postInfo("SoFlFullViewer::buildWidget",
+                           "%s",
+                           dumpWindowData(parent).c_str());
+#endif
+
 #endif
 
     PRIVATE(this)->bindEvents(PRIVATE(this)->viewerwidget);
@@ -290,10 +300,8 @@ SoFlFullViewer::setViewing(SbBool enable)
         */
 }
 
-
 void
-SoFlFullViewer::buildDecoration(Fl_Window* parent)
-{
+SoFlFullViewer::buildDecoration(Fl_Window* parent) {
     this->leftDecoration = this->buildLeftTrim(parent);
 #if SOFL_DEBUG
     this->leftDecoration->color(FL_GREEN);
@@ -308,117 +316,68 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent)
 #endif
 
 #if SOFL_DEBUG
-    dumpWindowData(this->leftDecoration);
-    dumpWindowData(this->rightDecoration);
-    dumpWindowData(this->bottomDecoration);
+    SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                           "parent: %s",
+                           dumpWindowData(parent).c_str());
+    SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                           "leftDecoration: %s",
+                           dumpWindowData(this->leftDecoration).c_str());
+    SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                           "rightDecoration: %s",
+                           dumpWindowData(this->rightDecoration).c_str());
+    SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                           "bottomDecoration: %s",
+                           dumpWindowData(this->bottomDecoration).c_str());
 #endif
 
     PRIVATE(this)->initThumbWheelEventMap();
 }
 
+/*
+    // Centratura logica
+    int x = parent->x() + (parent->w() - t->w()) / 2;
+    int y = parent->y() + (parent->h() - t->h()) / 2;
+*/
+
 Fl_Window*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
+    int y = parent->y() + (parent->h() - t->h()) / 2;
+    t->position(0, y);
     t->label("left thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->leftWheelVal = t->value();
     this->leftWheel = t;
-#if SOFL_DEBUG
-    dumpWindowData(t);
-#endif
     return t;
 }
 
 Fl_Window*
 SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
 {
-    Fl_Window* w = nullptr;
-#if 0
-    Fl_Window* w = new wxPanel(parent);
-    w->SetName("bottomTrim");
-    w->SetMinSize(wxSize(100, 24));
-    wxStaticText* label = new wxStaticText(w, wxID_ANY, this->leftWheelStr);
-#if SOFL_DEBUG
-    label->SetBackgroundColour(wxColour(200, 200, 0));
-#endif
-    label->SetName("left wheel label");
-    this->leftWheelLabel = label;
-
-    label = new wxStaticText(w, wxID_ANY, this->bottomWheelStr, wxDefaultPosition, wxDefaultSize,
-                             wxALIGN_CENTER_HORIZONTAL);
-#if SOFL_DEBUG
-    label->SetBackgroundColour(wxColour(100, 100, 0));
-#endif
-    label->SetName("bottom wheel label");
-    this->bottomWheelLabel = label;
-
-    label = new wxStaticText(w, wxID_ANY, this->rightWheelStr, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-#if SOFL_DEBUG
-    label->SetBackgroundColour(wxColour(100, 50, 0));
-#endif
-    label->SetName("right wheel label");
-    this->rightWheelLabel = label;
-
-    SoFlThumbWheel* t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, w);
-    t->SetName("bottom thumb wheel");
-#if SOFL_DEBUG
-    t->SetBackgroundColour(wxColour(0, 0, 0));
-#endif
-
-    this->bottomWheel = t;
+    auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
+    int x = parent->x() + (parent->w() - t->w()) / 2;
+    int y = parent->h() - t->h();
+    t->position(x, y);
+    t->label("bottom thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
-
     this->bottomWheelVal = t->value();
-
-    wxFlexGridSizer* layout = new wxFlexGridSizer(0, 6, 0, 5);
-
-    layout->AddGrowableCol(1);
-    layout->AddGrowableCol(4);
-    layout->Add(this->leftWheelLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
-    layout->AddStretchSpacer();
-    layout->Add(this->bottomWheelLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
-    layout->Add(this->bottomWheel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
-    layout->AddStretchSpacer();
-    layout->Add(this->rightWheelLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 0);
-
-    w->SetSizer(layout);
-    w->Fit();
-#endif
-
-    return w;
+    this->bottomWheel = t;
+    return t;
 }
 
 Fl_Window*
 SoFlFullViewer::buildRightTrim(Fl_Window* parent)
 {
-    Fl_Window* p = nullptr;
-#if 0
-    wxPanel* p = new wxPanel(parent);
-    p->SetName("rightTrim");
-#if SOFL_DEBUG
-    p->SetBackgroundColour(wxColour(255, 0, 0));
-#endif
-    p->SetMinSize(wxSize(XPM_BUTTON_SIZE + 12, 100));
-    p->SetMaxSize(wxSize(XPM_BUTTON_SIZE + 12, -1));
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    SoFlThumbWheel* t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, p);
-    t->SetName("right thumb wheel");
-#if SOFL_DEBUG
-    t->SetBackgroundColour(wxColour(100, 250, 110));
-#endif
+    auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
+    int x = parent->w() - t->w();
+    int y = parent->y() + (parent->h() - t->h()) / 2;
+    t->position(x, y);
+    t->label("right thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
-    this->rightWheelVal = t->value();
-    this->rightWheel = t;
-    const int border_size = 0;
-    sizer->Add(this->buildViewerButtons(p), 1, wxALL | wxCENTER, border_size);
-    sizer->Add(0, 0, 1, wxEXPAND, border_size);
-    sizer->Add(t, 1, wxALL | wxCENTER, border_size);
-    p->SetSizer(sizer);
-    p->Layout();
-#endif
-
-    return p;
+    this->leftWheelVal = t->value();
+    this->leftWheel = t;
+    return t;
 }
 
 Fl_Window*

@@ -91,10 +91,19 @@ SoFlFullViewerP::showDecorationWidgets(SbBool onOff) {
         sizer->AddGrowableRow( 0 );
 
 #if SOFL_DEBUG && 0
-        dumpWindowData(PUBLIC(this)->leftDecoration);
-        dumpWindowData(this->canvas);
-        dumpWindowData(PUBLIC(this)->rightDecoration);
-        dumpWindowData(PUBLIC(this)->bottomDecoration);
+#if SOFL_DEBUG
+        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                               "%s",
+                               dumpWindowData(PUBLIC(this)->leftDecoration).c_str());
+        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                               "%s",
+                               dumpWindowData(this->canvas).c_str());
+        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                               "%s",
+                               dumpWindowData(PUBLIC(this)->rightDecoration).c_str());
+        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
+                               "%s",
+                               dumpWindowData(PUBLIC(this)->bottomDecoration).c_str());
 #endif
 
     } else {
@@ -112,13 +121,15 @@ SoFlFullViewerP::showDecorationWidgets(SbBool onOff) {
     this->viewerwidget->Layout();
 
 #if SOFL_DEBUG
-    SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets", "dumpWindowData");
-    dumpWindowData(this->viewerwidget);
+    SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets",
+        "dumpWindowData: %s",
+        dumpWindowData(this->viewerwidget).c_str());
 #endif
 
     wxSize size = this->viewerwidget->GetSize();
     SbVec2s resize = SbVec2s(size.GetX(), size.GetY());
     PUBLIC(this)->sizeChanged(resize);
+#endif
 #endif
 
 }

@@ -63,12 +63,10 @@ main(
     //*
     auto wheel_h = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(24, 0));
     wheel_h->color(FL_GREEN);
-    wheel_h->end();
     //*/
 //*
     auto wheel_v = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0, 24));
     wheel_v->color(FL_RED);
-    wheel_v->end();
     main_win->end();
 //*/
     std::clog << "main_win->children():" << main_win->children() << std::endl;
