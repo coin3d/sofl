@@ -74,13 +74,11 @@ public:
 
     SbVec2s sizeHint() const;
 
-    /*
-    void paintEvent(int );
     void mousePressEvent(int );
     void mouseReleaseEvent(int );
     void mouseMoveEvent(int );
     void mouseWheel(int );
-*/
+
     void draw() override;
     int handle(int event) override;
 
@@ -99,8 +97,7 @@ private:
     void initWheel(int diameter, int width);
 
     SoAnyThumbWheel * wheel{};
-    Fl_RGB_Image**   pixmaps{};
-    Fl_Box* box{};
+    uint8_t**    pixmaps{};
 
     int numPixmaps{};
     int currentPixmap{};
