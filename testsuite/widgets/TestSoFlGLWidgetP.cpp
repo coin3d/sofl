@@ -66,7 +66,8 @@ BOOST_AUTO_TEST_CASE(test_initGLModes_conversion) {
     // Test RGB mode
     private_impl->initGLModes(SO_GL_RGB);
     BOOST_CHECK(private_impl->gl_attributes & FL_RGB8);
-    Fl::run();
+
+    delete private_impl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

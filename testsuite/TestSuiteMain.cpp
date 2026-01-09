@@ -37,18 +37,16 @@
 #include <boost/test/included/unit_test.hpp>
 namespace utf = boost::unit_test;
 
-#include <Inventor/SoDB.h>
-#include <Inventor/SoInteraction.h>
+#include <Inventor/Fl/SoFl.h>
 
 
 int main(int argc, char* argv[])
 {
-    SoDB::init();
-    SoInteraction::init();
+    SoFl::init("SoFlTest");
 
     int rc = utf::unit_test_main(init_unit_test, argc, argv);
 
-    SoDB::finish();
+    SoFl::done();
 
     return rc;
 }
