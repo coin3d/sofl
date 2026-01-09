@@ -33,6 +33,8 @@
 #ifndef SOFL_SOFLTHUMBWHEEL_H
 #define SOFL_SOFLTHUMBWHEEL_H
 
+#include <FL/Fl_Box.H>
+
 #include "Inventor/Fl/SoFlBasic.h"
 #include "Inventor/Fl/widgets/SoAnyThumbWheel.h"
 
@@ -82,9 +84,11 @@ private:
     int numPixmaps{};
     int currentPixmap{};
     SbVec2s th_position;
+    Fl_Box *imageBox;
 
     void constructor(Orientation);
     void initWheel(int diameter, int width);
+    void cleanPixmaps();
     void mousePressEvent(int );
     void mouseReleaseEvent(int );
     void mouseMoveEvent(int );

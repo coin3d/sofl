@@ -42,7 +42,7 @@
 #include <string>
 #include <map>
 
-class SoFlFullViewerP : public SoGuiFullViewerP/*, public wxEvtHandler */{
+class SoFlFullViewerP : public SoGuiFullViewerP {
 public:
 
     explicit SoFlFullViewerP(SoFlFullViewer *pViewer);
@@ -112,13 +112,6 @@ public:
     void decreaseInteractiveCount();
 
     void bindEvents(Fl_Window*);
-
-    /*
-    // Return pointer to pushbutton in right-side decoration bar.
-    wxAnyButton * getViewerbutton(const int idx) {
-        return (wxAnyButton *)this->viewerbuttons->get(idx);
-    }*/
-
 };
 
 

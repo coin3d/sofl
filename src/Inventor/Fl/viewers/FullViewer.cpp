@@ -375,8 +375,8 @@ SoFlFullViewer::buildRightTrim(Fl_Window* parent)
     t->position(x, y);
     t->label("right thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
-    this->leftWheelVal = t->value();
-    this->leftWheel = t;
+    this->rightWheelVal = t->value();
+    this->rightWheel = t;
     return t;
 }
 

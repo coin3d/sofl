@@ -48,7 +48,39 @@
 #include <cassert>
 #include <vector>
 #include <FL/fl_draw.H>
+#include <FL/Fl_PNG_Image.H>
+#include <FL/Fl_RGB_Image.H>
+#include <iostream>
 
+
+#include <FL/Fl_Box.H>
+#include <FL/Enumerations.H>
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+std::string get_box_info_string(Fl_Box* box) {
+    if (!box) return "Errore: puntatore alla box nullo.";
+
+    std::ostringstream ss;
+
+    // Estrazione componenti RGB del colore di sfondo
+    uchar r, g, b;
+    Fl::get_color(box->color(), r, g, b);
+
+    ss << "--- INFO FL_BOX ---\n"
+       << "Label: " << (box->label() ? box->label() : "(null)") << "\n"
+       << "Geometry: x:" << box->x() << " y:" << box->y() << " w:" << box->w() << " h:" << box->h() << "\n"
+       << "Color (Hex): 0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << (unsigned int)box->color() << "\n"
+       << "Color (RGB): R:" << std::dec << (int)r << " G:" << (int)g << " B:" << (int)b << "\n"
+       << "Boxtype ID: " << (int)box->box() << "\n"
+       << "Align: " << (int)box->align() << "\n"
+       << "Visible: " << (box->visible() ? "Yes" : "No") << "\n"
+       << "Active: " << (box->active() ? "Yes" : "No") << "\n"
+       << "-------------------";
+
+    return ss.str();
+}
 namespace
 {
     constexpr short VERTICAL_WIDTH = 24;
@@ -56,10 +88,11 @@ namespace
     constexpr short HORIZONTAL_WIDTH = 122;
     constexpr short HORIZONTAL_HEIGHT = 24;
     constexpr int SHADEBORDERWIDTH = 0;
+
     void
-fill(std::vector<uint8_t>& buffer,
-     unsigned long n,
-     int channel = 3)
+    fill(std::vector<uint8_t>& buffer,
+         unsigned long n,
+         int channel = 3)
     {
         if (channel > 3)
         {
@@ -123,12 +156,7 @@ SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
 SoFlThumbWheel::~SoFlThumbWheel()
 {
     delete this->wheel;
-    if (this->pixmaps)
-    {
-        for (int i = 0; i < this->numPixmaps; i++)
-            delete this->pixmaps[i];
-        delete [] this->pixmaps;
-    }
+    this->cleanPixmaps();
 }
 
 void
@@ -153,6 +181,10 @@ SoFlThumbWheel::constructor(Orientation orientation)
     this->pixmaps = nullptr;
     this->numPixmaps = 0;
     this->currentPixmap = -1;
+    imageBox = new Fl_Box(0, 0, //need a position to be a valid Fl_Window!!!
+        w(), h(),
+        nullptr // require a null label to draw an image inside!!!
+        );
 }
 
 /*!
@@ -255,7 +287,7 @@ SoFlThumbWheel::sizeHint() const
     constexpr short length = HORIZONTAL_WIDTH;
     constexpr short thick = HORIZONTAL_HEIGHT;
 
-    if (this->orient == SoFlThumbWheel::Horizontal)
+    if (this->orient == Horizontal)
         return {length, thick};
     return {thick, length};
 }
@@ -266,10 +298,14 @@ SoFlThumbWheel::sizeHint() const
 void
 SoFlThumbWheel::draw()
 {
-    Fl_Window::draw();
-
     int w{};
     int dval{};
+#if SOFL_DEBUG
+    SoDebugError::postInfo("SoFlThumbWheel::draw",
+                           "orientation: %s <w,h>: <%d,%d>",
+                           orient == Vertical ? "Vertical" : "Horizontal",
+                           this->w(), this->h());
+#endif
     if (this->orient == Vertical)
     {
         w = this->w() - 12;
@@ -281,7 +317,7 @@ SoFlThumbWheel::draw()
         dval = this->w() - 6;
     }
 
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::draw",
                            "dval: %d and w: %d",
                            dval, w);
@@ -313,14 +349,22 @@ SoFlThumbWheel::draw()
 
     int image_w = w;
     int image_h = dval;
-    if (this->orientation() == SoFlThumbWheel::Horizontal)
+    if (this->orientation() == Horizontal)
     {
         std::swap(image_w, image_h);
     }
-    Fl::visual(FL_RGB);
 
-    fl_draw_image(this->pixmaps[pixmap], 0, 0, image_w, image_h, 3, 36);
+    Fl_RGB_Image img(this->pixmaps[pixmap], image_w, image_h, 4);
+    imageBox->image(img);
+#if SOFL_DEBUG
+    SoDebugError::postInfo("SoFlThumbWheel::draw",
+                           "imageBox: %s",
+                           get_box_info_string(imageBox).c_str());
+#endif
+
     this->currentPixmap = pixmap;
+    Fl_Window::draw();
+
 }
 
 /*!
@@ -385,26 +429,32 @@ SoFlThumbWheel::initWheel(int diameter, int width)
         pheight = width;
     }
 
-    if (this->pixmaps != nullptr)
-    {
-        for (int i = 0; i < this->numPixmaps; i++)
-            delete this->pixmaps[i];
-        delete [] this->pixmaps;
-    }
+    this->cleanPixmaps();
 
     this->numPixmaps = this->wheel->getNumBitmaps();
     this->pixmaps = new uint8_t*[this->numPixmaps];
 
     for (int i = 0; i < this->numPixmaps; i++)
     {
-        std::vector<unsigned int> buffer(pwidth * pheight);
+        auto buffer = new uint8_t [pwidth * pheight *4];
+        this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::RGBA);
         this->wheel->drawBitmap(i,
-                                &buffer[0],
-                                (this->orient == Vertical) ? SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
+                                buffer,
+                                (this->orient == Vertical) ?
+                                SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
 
-        this->pixmaps[i] = toRGBChannel(buffer);
+        this->pixmaps[i] = buffer;
     }
 }
+
+void
+SoFlThumbWheel::cleanPixmaps()
+{
+    for (int i = 0; i < this->numPixmaps; i++)
+        delete this->pixmaps[i];
+    delete [] this->pixmaps;
+}
+
 
 void
 SoFlThumbWheel::setEnabled(bool enable)

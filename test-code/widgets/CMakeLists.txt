@@ -1,5 +1,5 @@
 #TODO: porting on fltk
-executable(thumbwheel SOURCES thumbwheel.cpp LIBS SoFl)
+executable(thumbwheel SOURCES thumbwheel.cpp LIBS SoFl fltk::images)
 
 #[[
 executable(gridbagsizer SOURCES gridbagsizer.cpp LIBS SoFl)
