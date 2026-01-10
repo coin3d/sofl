@@ -37,7 +37,7 @@
 #include "sofldefs.h"
 
 
-SoFlGLArea::SoFlGLArea(Fl_Window *parent,
+SoFlGLArea::SoFlGLArea(Fl_Widget *parent,
                        SoFlGLWidgetP *parentW,
                        Fl_Mode attributes)
     : Fl_Gl_Window(parent->x(),

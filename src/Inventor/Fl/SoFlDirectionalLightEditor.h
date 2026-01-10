@@ -63,7 +63,7 @@ SOFL_OBJECT_HEADER(SoFlDirectionalLightEditor, SoFlComponent);
 
 public:
     SoFlDirectionalLightEditor(
-            Fl_Window* parent = NULL,
+            Fl_Widget* parent = NULL,
             const char * const name = NULL,
             SbBool embed = TRUE);
     ~SoFlDirectionalLightEditor();
@@ -85,7 +85,7 @@ public:
 
 protected:
     SoFlDirectionalLightEditor(
-            Fl_Window* parent,
+            Fl_Widget* parent,
             const char * const name,
             SbBool embed,
             SbBool build);
@@ -117,7 +117,7 @@ protected:
     void updateLocalComponents(void);
 
 private:
-    Fl_Window* buildWidget(Fl_Window* parent);
+    Fl_Widget* buildWidget(Fl_Widget* parent);
     void constructor(SbBool build);
 
 }; // class SoFlDirectionalLightEditor

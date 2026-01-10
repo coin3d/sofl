@@ -93,7 +93,7 @@
 
 int main()
 {
-    Fl_Window* window = SoFl::init("renderarea");
+    auto window = SoFl::init("renderarea");
 
     SoFlFullViewer* renderarea =
         new SoFlFullViewer(window,
@@ -104,11 +104,11 @@ int main()
                            FALSE);
 
     std::clog << dumpWindowData(window) << std::endl;
-    Fl_Window* w = renderarea->buildRightTrim(window);
+    auto w = renderarea->buildRightTrim(window);
     //window->SetSize(w->GetSize());
     std::clog << dumpWindowData(window) << std::endl;
     w->show();
-    window->end();
+    //window->end();
     window->show();
     Fl::run();
     return true;

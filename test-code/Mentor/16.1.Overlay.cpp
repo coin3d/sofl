@@ -91,7 +91,7 @@ int
 main(int , char **argv)
 {
     // Initialize Inventor and Fl
-    Fl_Window* myWindow = SoFl::init(argv[0]);
+    auto myWindow = SoFl::init(argv[0]);
 
     // read the scene graph in
     SoNode *scene;

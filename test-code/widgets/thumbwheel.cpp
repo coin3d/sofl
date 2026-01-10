@@ -44,6 +44,7 @@
 #include <Inventor/Fl/widgets/SoFlThumbWheel.h>
 #include <Inventor/Fl/SoFl.h>
 #include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 
 // *************************************************************************

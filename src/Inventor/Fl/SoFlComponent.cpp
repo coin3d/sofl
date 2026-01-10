@@ -60,7 +60,7 @@ SoFlComponent::~SoFlComponent(){
 
 }
 
-SoFlComponent::SoFlComponent(Fl_Window* const parent,
+SoFlComponent::SoFlComponent(Fl_Widget* const parent,
                              const char * const name,
                              const SbBool embed) {
     PRIVATE(this) = new SoFlComponentP(this);
@@ -120,7 +120,7 @@ SoFlComponent::setClassName(const char * const name) {
 }
 
 void
-SoFlComponent::setBaseWidget(Fl_Window* w) {
+SoFlComponent::setBaseWidget(Fl_Widget* w) {
 
 #ifdef SOFL_DEBUG
     SoDebugError::postInfo("SoFl::setBaseWidget",
@@ -170,7 +170,7 @@ void
 SoFlComponent::show() {
     if(SOFL_DEBUG && !PRIVATE(this)->widget) { // debug
         SoDebugError::postWarning("SoFlComponent::show",
-                                  "Called while no Fl_Window has been set.");
+                                  "Called while no Fl_Widget has been set.");
         return;
     }
 
@@ -221,7 +221,7 @@ SoFlComponent::setComponentCursor(const SoFlCursor & cursor) {
 }
 
 void
-SoFlComponent::setWidgetCursor(Fl_Window* w, const SoFlCursor & cursor) {
+SoFlComponent::setWidgetCursor(Fl_Widget* w, const SoFlCursor & cursor) {
 
     if(!w) {
         return;
@@ -268,7 +268,7 @@ SoFlComponent::isFullScreen() const {
 
 SbBool
 SoFlComponent::setFullScreen(const SbBool onoff) {
-    Fl_Window * w = this->getShellWidget();
+    Fl_Widget * w = this->getShellWidget();
     if (w == nullptr) w = this->getParentWidget();
     if (w == nullptr) w = this->getWidget();
     if (!w) { return false; }
@@ -300,24 +300,24 @@ SoFlComponent::isTopLevelShell() const {
 #if SOFL_DEBUG
     if (! PRIVATE(this)->widget) {
         SoDebugError::postWarning("SoFlComponent::isTopLevelShell",
-                                  "Called while no Fl_Window has been set.");
+                                  "Called while no Fl_Widget has been set.");
         return false;
     }
 #endif // SOFL_DEBUG
     return PRIVATE(this)->embedded ? false : true;
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlComponent::getWidget() const {
     return this->getBaseWidget();
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlComponent::getBaseWidget() const {
     return PRIVATE(this)->widget;
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlComponent::getParentWidget() const {
     return PRIVATE(this)->parent;
 }
@@ -360,7 +360,7 @@ SoFlComponent::setSize(const SbVec2s size) {
 #endif // debug
     const SbBool yetbuilt = (this->getWidget() != nullptr);
     if (yetbuilt) {
-        Fl_Window * shell = this->getShellWidget();
+        Fl_Widget * shell = this->getShellWidget();
         if (shell) {
             shell->size(size[0], size[1]);
         }

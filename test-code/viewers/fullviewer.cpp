@@ -47,7 +47,7 @@
 
 int main()
 {
-    Fl_Window* window = SoFl::init("renderarea");
+    auto window = SoFl::init("renderarea");
 
     SoSeparator* root = new SoSeparator;
     root->ref();

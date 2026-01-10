@@ -41,7 +41,7 @@ class SoFlGLWidgetP;
 class SoFlGLArea : public Fl_Gl_Window {
 public:
 
-    SoFlGLArea(Fl_Window *parent,
+    SoFlGLArea(Fl_Widget *parent,
                SoFlGLWidgetP *parentWidget,
                Fl_Mode );
 

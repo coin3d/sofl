@@ -43,7 +43,7 @@
 int
 main(int /*argc*/, char** /*argv*/)
 {
-    Fl_Window* window = SoFl::init("renderarea");
+    auto window = SoFl::init("renderarea");
 
     SoFlFullViewer* renderarea =
         new SoFlFullViewer(window,

@@ -40,7 +40,7 @@
 #include "ButtonIndexValues.h"
 
 // Button icons.
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Widget.H>
 #include <Inventor/Fl/common/pixmaps/pick.xpm>
 #include <Inventor/Fl/common/pixmaps/view.xpm>
 #include <Inventor/Fl/common/pixmaps/home.xpm>
@@ -56,7 +56,7 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlFullViewer);
 
 constexpr int XPM_BUTTON_SIZE = 24;
 
-SoFlFullViewer::SoFlFullViewer(Fl_Window* parent,
+SoFlFullViewer::SoFlFullViewer(Fl_Widget* parent,
                                const char* name,
                                SbBool embed,
                                BuildFlag buildFlag,
@@ -115,7 +115,7 @@ SoFlFullViewer::SoFlFullViewer(Fl_Window* parent,
     if (!build) return;
 
     this->setClassName("SoFlFullViewer");
-    Fl_Window* viewer = this->buildWidget(this->getParentWidget());
+    Fl_Widget* viewer = this->buildWidget(this->getParentWidget());
     this->setBaseWidget(viewer);
 }
 
@@ -130,8 +130,8 @@ SoFlFullViewer::~SoFlFullViewer()
     delete this->prefmenu;
 }
 
-Fl_Window*
-SoFlFullViewer::buildWidget(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildWidget(Fl_Widget* parent)
 {
     // This will build the main view widgets, along with the decorations
     // widgets and popup menu if they are enabled.
@@ -231,7 +231,7 @@ SoFlFullViewer::isPopupMenuEnabled() const
     return (PRIVATE(this)->menuenabled);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlFullViewer::getAppPushButtonParent() const
 {
     SOFL_STUB();
@@ -239,25 +239,25 @@ SoFlFullViewer::getAppPushButtonParent() const
 }
 
 void
-SoFlFullViewer::addAppPushButton(Fl_Window* newButton)
+SoFlFullViewer::addAppPushButton(Fl_Widget* newButton)
 {
     SOFL_STUB();
 }
 
 void
-SoFlFullViewer::insertAppPushButton(Fl_Window* newButton, int index)
+SoFlFullViewer::insertAppPushButton(Fl_Widget* newButton, int index)
 {
     SOFL_STUB();
 }
 
 void
-SoFlFullViewer::removeAppPushButton(Fl_Window* oldButton)
+SoFlFullViewer::removeAppPushButton(Fl_Widget* oldButton)
 {
     SOFL_STUB();
 }
 
 int
-SoFlFullViewer::findAppPushButton(Fl_Window* oldButton) const
+SoFlFullViewer::findAppPushButton(Fl_Widget* oldButton) const
 {
     SOFL_STUB();
     return (0);
@@ -270,7 +270,7 @@ SoFlFullViewer::lengthAppPushButton() const
     return (0);
 }
 
-Fl_Window*
+Fl_Widget*
 SoFlFullViewer::getRenderAreaWidget() const
 {
     return (PRIVATE(this)->canvas);
@@ -302,7 +302,7 @@ SoFlFullViewer::setViewing(SbBool enable)
 }
 
 void
-SoFlFullViewer::buildDecoration(Fl_Window* parent) {
+SoFlFullViewer::buildDecoration(Fl_Widget* parent) {
     this->leftDecoration = this->buildLeftTrim(parent);
 #if SOFL_DEBUG
     this->leftDecoration->color(FL_GREEN);
@@ -340,8 +340,8 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
     int y = parent->y() + (parent->h() - t->h()) / 2;
 */
 
-Fl_Group*
-SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildLeftTrim(Fl_Widget* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
     int y = (parent->h() - t->h()) / 2;
@@ -353,8 +353,8 @@ SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
     return t;
 }
 
-Fl_Group*
-SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildBottomTrim(Fl_Widget* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
     int x = (parent->w() - t->w()) / 2;
@@ -367,8 +367,8 @@ SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
     return t;
 }
 
-Fl_Group*
-SoFlFullViewer::buildRightTrim(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildRightTrim(Fl_Widget* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
     int x = parent->w() - t->w();
@@ -381,17 +381,17 @@ SoFlFullViewer::buildRightTrim(Fl_Window* parent)
     return t;
 }
 
-Fl_Window*
-SoFlFullViewer::buildAppButtons(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildAppButtons(Fl_Widget* parent)
 {
     SOFL_STUB();
     return (0);
 }
 
-Fl_Window*
-SoFlFullViewer::buildViewerButtons(Fl_Window* parent)
+Fl_Widget*
+SoFlFullViewer::buildViewerButtons(Fl_Widget* parent)
 {
-    Fl_Window* w = nullptr;
+    Fl_Widget* w = nullptr;
 #if 0
     wxPanel* w = new wxPanel(parent);
     w->SetName("viewerButtons");
@@ -415,7 +415,7 @@ SoFlFullViewer::buildViewerButtons(Fl_Window* parent)
 }
 
 void
-SoFlFullViewer::createViewerButtons(Fl_Window* parent,
+SoFlFullViewer::createViewerButtons(Fl_Widget* parent,
                                     SbPList* button_list)
 {
 #if 0

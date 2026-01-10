@@ -35,7 +35,7 @@
 #include "Inventor/Fl/SoGuiComponentP.h"
 #include "Inventor/Fl/SoFlComponent.h"
 #include <Inventor/Fl/SoFlCursor.h>
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Widget.H>
 #include <FL/Enumerations.H>
 #include <string>
 
@@ -51,8 +51,8 @@ public:
 
     // Variables.
 
-    Fl_Window * parent;
-    Fl_Window * widget;
+    Fl_Widget * parent;
+    Fl_Widget * widget;
     SbBool embedded, shelled;
     std::string classname, widgetname;
     SoFlComponentCB * closeCB;

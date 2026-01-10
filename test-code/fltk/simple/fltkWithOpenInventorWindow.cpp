@@ -162,9 +162,11 @@ int main(int argc, char **argv) {
     Fl::use_high_res_GL(1);
     Fl_Window *topwin = new Fl_Window(800, 300);
     auto *win = buildFlRenderArea(topwin,0, 0, 300, 300);
+    /*
     win->getGLWidget()->end();
     output_win(win->getGLWidget());
     add_widgets(win->getGLWidget());
+    */
     topwin->end();
     topwin->resizable(win->getGLWidget());
     topwin->label("Click GL panel to reshape");

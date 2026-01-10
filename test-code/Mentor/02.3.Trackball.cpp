@@ -54,7 +54,7 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Fl_Window* myWindow = SoFl::init(argv[0]);
+   auto myWindow = SoFl::init(argv[0]);
    if (myWindow == NULL) exit(1);
 
    SoSeparator *root = new SoSeparator;

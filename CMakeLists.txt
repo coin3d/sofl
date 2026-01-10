@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(gui fl)
 set(Gui Fl)
 set(GUI FL)
-set(WIDGET Fl_Window*)
+set(WIDGET Fl_Widget*)
 set(EVENT int)
 
 set (CMAKE_CXX_STANDARD 11)

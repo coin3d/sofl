@@ -33,14 +33,15 @@
 #include "Inventor/Fl/SoFl.h"
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
 
 #include "Inventor/Fl/SoFlP.h"
 #include "Inventor/Fl/SoFlInternal.h"
 #include "sofldefs.h"
 
-Fl_Window*
+Fl_Widget*
 SoFl::init(int& argc,
            char** argv,
            const char* appname,
@@ -81,7 +82,7 @@ SoFl::init(int& argc,
 }
 
 void
-SoFl::init(Fl_Window* w )
+SoFl::init(Fl_Widget* w )
 {
     if (!SoFlP::instance()->isInitialized())
     {
@@ -91,7 +92,7 @@ SoFl::init(Fl_Window* w )
         // if Fl_Windows is not already created
         if (Fl::first_window() == nullptr)
         {
-            SoFlP::instance()->setMainWindow(w);
+            SoFlP::instance()->setMainWindow(dynamic_cast<Fl_Window*>(w));
         }
 
         assert(SoFlP::instance());
@@ -147,20 +148,20 @@ SoFl::done()
 }
 
 void
-SoFl::show(Fl_Window* const widget)
+SoFl::show(Fl_Widget* const widget)
 {
     assert(widget != nullptr && "widget can not be null");
     widget->show();
 }
 
 void
-SoFl::hide(Fl_Window* const widget)
+SoFl::hide(Fl_Widget* const widget)
 {
     widget->hide();
 }
 
 void
-SoFl::createSimpleErrorDialog(Fl_Window* widget,
+SoFl::createSimpleErrorDialog(Fl_Widget* widget,
                               const char* title,
                               const char* string1,
                               const char* string2)
@@ -168,7 +169,7 @@ SoFl::createSimpleErrorDialog(Fl_Window* widget,
     SOFL_STUB();
 }
 
-Fl_Window*
+Fl_Widget*
 getTopLevelWidget()
 {
 #if SOFL_DEBUG
@@ -177,8 +178,8 @@ getTopLevelWidget()
     return (Fl::first_window());
 }
 
-Fl_Window*
-SoFl::getShellWidget(const Fl_Window* /*widget*/)
+Fl_Widget*
+SoFl::getShellWidget(const Fl_Widget* /*widget*/)
 {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFl::getShellWidget", "%s", __FUNCTION__);
@@ -187,7 +188,7 @@ SoFl::getShellWidget(const Fl_Window* /*widget*/)
 }
 
 void
-SoFl::setWidgetSize(Fl_Window* const widget, const SbVec2s size)
+SoFl::setWidgetSize(Fl_Widget* const widget, const SbVec2s size)
 {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFl::setWidgetSize", "%s", __FUNCTION__);
@@ -208,7 +209,7 @@ SoFl::setWidgetSize(Fl_Window* const widget, const SbVec2s size)
 
 
 SbVec2s
-SoFl::getWidgetSize(const Fl_Window* widget)
+SoFl::getWidgetSize(const Fl_Widget* widget)
 {
     SbVec2s size(-1, -1);
     if (widget)

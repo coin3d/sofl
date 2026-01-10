@@ -36,12 +36,12 @@
 
 SOFL_OBJECT_SOURCE(SoFlDirectionalLightEditor);
 
-SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(Fl_Window *parent, const char *const name, SbBool embed)
+SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(Fl_Widget *parent, const char *const name, SbBool embed)
         : SoFlComponent(parent, name, embed) {
 
 }
 
-SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(Fl_Window *parent, const char *const name, SbBool embed,
+SoFlDirectionalLightEditor::SoFlDirectionalLightEditor(Fl_Widget *parent, const char *const name, SbBool embed,
                                                        SbBool build) {
     SOFL_STUB();
 }

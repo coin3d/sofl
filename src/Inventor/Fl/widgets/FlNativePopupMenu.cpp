@@ -414,7 +414,7 @@ FlNativePopupMenu::build_fltk_menu(int menuid,
 
 // Doc in superclass.
 void
-FlNativePopupMenu::popUp(Fl_Window * inside, int x, int y) {
+FlNativePopupMenu::popUp(Fl_Widget * inside, int x, int y) {
     std::vector<Fl_Menu_Item> fl_items;
     this->build_fltk_menu(0, fl_items);
 

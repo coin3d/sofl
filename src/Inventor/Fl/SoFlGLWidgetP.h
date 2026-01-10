@@ -65,7 +65,7 @@ public:
     Fl_Window * previousglwidget{};
     SoFlGLArea * currentglarea{};
     SoFlGLArea * previousglarea{};
-    Fl_Window * glparent{};
+    Fl_Widget * glparent{};
 
     int borderthickness;
 
@@ -84,7 +84,7 @@ public:
     bool hasOverlay() const;
 
     // Required by the common code
-    static void eventHandler(Fl_Window*, void*, int, bool*);
+    static void eventHandler(Fl_Widget*, void*, int, bool*);
 
 protected:
     virtual SbBool isDirectRendering(void);

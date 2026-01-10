@@ -212,7 +212,7 @@ SoFlFullViewerP::viewbuttonClicked(int) {
 
 }
 
-void SoFlFullViewerP::bindEvents(Fl_Window *w) {
+void SoFlFullViewerP::bindEvents(Fl_Widget *w) {
     assert(w && "window can not be null!");
     /*
     w->Bind(SO_WX_MOUSE_WHEEL_PRESSED, &SoFlFullViewerP::wheelPressed, this, FULL_VIEWER_P);

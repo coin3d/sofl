@@ -51,7 +51,7 @@
 
 SOFL_OBJECT_SOURCE(SoFlExaminerViewer);
 
-SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
+SoFlExaminerViewer::SoFlExaminerViewer(Fl_Widget* parent,
                                        char const* name,
                                        int embed,
                                        SoFlFullViewer::BuildFlag flag,
@@ -61,7 +61,7 @@ SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
     PRIVATE(this)->constructor(TRUE);
 }
 
-SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window *parent,
+SoFlExaminerViewer::SoFlExaminerViewer(Fl_Widget *parent,
                                        const char *name,
                                        SbBool embed,
                                        SoFlFullViewer::BuildFlag flag,
@@ -112,7 +112,7 @@ SoFlExaminerViewer::setCamera(SoCamera * newCamera) {
 }
 
 void
-SoFlExaminerViewer::createViewerButtons(Fl_Window* parent,
+SoFlExaminerViewer::createViewerButtons(Fl_Widget* parent,
                                         SbPList * buttonlist) {
 
     inherited::createViewerButtons(parent, buttonlist);

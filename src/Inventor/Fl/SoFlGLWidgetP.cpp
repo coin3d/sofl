@@ -341,7 +341,7 @@ void SoFlGLWidgetP::initGLModes(GLModes glModes) {
 }
 
 void
-SoFlGLWidgetP::eventHandler(Fl_Window * /*widget*/, void *closure, int event, bool *) {
+SoFlGLWidgetP::eventHandler(Fl_Widget * /*widget*/, void *closure, int event, bool *) {
     SOFL_STUB();
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidgetP::eventHandler",

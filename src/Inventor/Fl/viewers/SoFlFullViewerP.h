@@ -49,8 +49,8 @@ public:
     ~SoFlFullViewerP();
 
     std::string popupmenutitle;
-    Fl_Window * viewerwidget;
-    Fl_Window * canvas;
+    Fl_Widget * viewerwidget;
+    Fl_Widget * canvas;
     Fl_Toggle_Button * interactbutton;
     Fl_Toggle_Button * viewbutton;
     SbBool decorations;
@@ -111,7 +111,7 @@ public:
     void increaseInteractiveCount();
     void decreaseInteractiveCount();
 
-    void bindEvents(Fl_Window*);
+    void bindEvents(Fl_Widget*);
 };
 
 

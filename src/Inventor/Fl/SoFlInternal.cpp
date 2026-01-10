@@ -42,6 +42,11 @@ dumpWindowData(const Fl_Window* window) {
 }
 
 std::string
+dumpWindowData(const Fl_Widget* window) {
+    return dumpWidgetData(window);
+}
+
+std::string
 dumpWidgetData(const Fl_Widget* widget) {
     if(widget == nullptr) return "null widget!!!";
     std::ostringstream oss;

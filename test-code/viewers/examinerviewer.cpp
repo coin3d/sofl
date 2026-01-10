@@ -41,7 +41,7 @@ int
 main(int argc,
      char ** argv )
 {
-    Fl_Window* window = SoFl::init( argv[0] );
+    auto window = SoFl::init( argv[0] );
 
     auto viewer = new SoFlExaminerViewer( window );
 

@@ -50,7 +50,7 @@
 
 int main(int argc, char **argv) {
 
-    Fl_Window* window = SoFl::init("SoFl Split Example");
+    auto window = SoFl::init("SoFl Split Example");
     window->size(800, 600);
 
     Fl_Tile* tile = new Fl_Tile(0, 0, 800, 600);
@@ -70,8 +70,8 @@ int main(int argc, char **argv) {
 
     tile->end();
 
-    window->resizable(tile);
-    window->show(argc, argv);
+    dynamic_cast<Fl_Window*>(window)->resizable(tile);
+    //window->show(argc, argv);
     viewer->show();
 
     SoFl::mainLoop();
