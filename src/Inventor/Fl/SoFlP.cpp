@@ -92,7 +92,9 @@ SoFlP::buildMainWindow(const char* title)
     if (!main_window)
     {
         is_a_soflp_app = true;
-        return (new Fl_Window(640, 480, title));
+        auto w = new Fl_Window(640, 480);
+        w->copy_label(title);
+        return w;
     }
 #if SOFL_DEBUG
     else

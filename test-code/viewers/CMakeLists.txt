@@ -12,6 +12,5 @@ executable(embeddedexaminer SOURCES embeddedexaminer.cpp LIBS SoFl)
 
 executable(allviewer SOURCES allviewer.cpp LIBS SoFl)
 
-
 executable(background_canvas SOURCES background_canvas.cpp LIBS SoFl GL)
 

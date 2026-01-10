@@ -70,6 +70,8 @@ int main()
     renderarea->show();
 
     SoFl::show(window);
-    // SoFl::mainLoop();
-    return true;
+    SoFl::mainLoop();
+    SoFl::done();
+
+    return 0;
 }

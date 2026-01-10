@@ -39,25 +39,30 @@
 #include "FlNativePopupMenu.h"
 #include "Inventor/Fl/viewers/SoFlExaminerViewerP.h"
 #include "sofldefs.h"
-#include <FL/Fl_Menu_Window.H>
+#include <FL/Fl.H>
 #include <FL/Fl_Menu_Item.H>
 #include <string>
+#include <vector>
+#include <stdint.h>
 
+struct ChildRecord {
+    enum Type { ITEM, MENU, SEPARATOR };
+    Type type = SEPARATOR;
+    int id = -1;
+};
 
 struct MenuRecord {
-    int menuid;
+    int menuid = -1;
     std::string name;
     std::string title;
-    Fl_Menu_Window* menu;
-    Fl_Menu_Window* parent;
+    std::vector<ChildRecord> children;
 };
+
 struct ItemRecord {
-    int itemid;
-    int flags;
+    int itemid = -1;
+    int flags = 0;
     std::string name;
     std::string title;
-    Fl_Menu_Window* parent;
-    Fl_Menu_Item * action;
 };
 
 #define ITEM_MARKED       0x0001
@@ -80,20 +85,18 @@ FlNativePopupMenu::~FlNativePopupMenu() {
 
     int i;
     for (i = 0; i < numMenus; i++) {
-        MenuRecord * rec = (MenuRecord *) (*this->menus)[i];
-        delete rec->menu;
+        MenuRecord * rec = static_cast<MenuRecord *>((*this->menus)[i]);
         delete rec;
     }
 
     const int numItems = this->items->getLength();
     for (i = 0; i < numItems; i++) {
-        ItemRecord * rec = (ItemRecord *) (*this->items)[i];
+        ItemRecord * rec = static_cast<ItemRecord *>((*this->items)[i]);
         delete rec;
     }
 
     delete this->menus;
     delete this->items;
-
 }
 
 /*!
@@ -106,9 +109,9 @@ FlNativePopupMenu::newMenu(const char * name,
     int id = menuid;
     if (id == -1) {
         id = 1;
-        while (this->getMenuRecord(id) != NULL) id++;
+        while (this->getMenuRecord(id) != nullptr) id++;
     } else {
-        assert(this->getMenuRecord(id) == NULL &&
+        assert(this->getMenuRecord(id) == nullptr &&
                "requested menuid already taken");
     }
 
@@ -126,7 +129,7 @@ FlNativePopupMenu::getMenu(const char * name) {
     const int numMenus = this->menus->getLength();
     int i;
     for (i = 0; i < numMenus; i++) {
-        MenuRecord * rec = (MenuRecord *) (*this->menus)[i];
+        MenuRecord * rec = static_cast<MenuRecord *>((*this->menus)[i]);
         if (rec->name == name)
             return rec->menuid;
     }
@@ -141,11 +144,6 @@ FlNativePopupMenu::setMenuTitle(int menuid,
     MenuRecord * rec = this->getMenuRecord(menuid);
     assert(rec && "no such menu");
     rec->title = title;
-
-    if (rec->parent)  {
-        rec->menu->label(rec->title.c_str());
-        getMenuRecord(rec->menuid)->menu->label(rec->title.c_str());
-    }
 }
 
 /*!
@@ -165,9 +163,9 @@ FlNativePopupMenu::newMenuItem(const char * name,
     int id = itemid;
     if (id == -1) {
         id = 1;
-        while (this->getItemRecord(id) != NULL) id++;
+        while (this->getItemRecord(id) != nullptr) id++;
     } else {
-        assert(this->getItemRecord(itemid) == NULL &&
+        assert(this->getItemRecord(itemid) == nullptr &&
                "requested itemid already taken");
     }
     ItemRecord * rec = createItemRecord(name);
@@ -183,7 +181,7 @@ FlNativePopupMenu::getMenuItem(const char * name) {
     const int numItems = this->items->getLength();
     int i;
     for (i = 0; i < numItems; i++) {
-        ItemRecord * rec = (ItemRecord *) (*this->items)[i];
+        ItemRecord * rec = static_cast<ItemRecord *>((*this->items)[i]);
         if (rec->name == name)
             return rec->itemid;
     }
@@ -196,11 +194,8 @@ void
 FlNativePopupMenu::setMenuItemTitle(int itemid,
                                     const char * title) {
     ItemRecord * rec = this->getItemRecord(itemid);
-    assert(rec && "no such menu");
+    assert(rec && "no such item");
     rec->title = title;
-    if (rec->parent) {
-        rec->action->label(rec->title.c_str());
-    }
 }
 
 /*!
@@ -219,8 +214,10 @@ FlNativePopupMenu::setMenuItemEnabled(int itemid,
                                       SbBool enabled) {
     ItemRecord * rec = this->getItemRecord(itemid);
     if (rec) {
-        rec->action->value(enabled ? true : false);
-        return;
+        if (enabled)
+            rec->flags |= ITEM_ENABLED;
+        else
+            rec->flags &= ~ITEM_ENABLED;
     }
 }
 
@@ -229,9 +226,8 @@ FlNativePopupMenu::setMenuItemEnabled(int itemid,
 SbBool
 FlNativePopupMenu::getMenuItemEnabled(int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
-
     if (rec) {
-        return  (rec->action->value());
+        return (rec->flags & ITEM_ENABLED) ? TRUE : FALSE;
     }
     return (FALSE);
 }
@@ -241,16 +237,12 @@ FlNativePopupMenu::getMenuItemEnabled(int itemid) {
 void
 FlNativePopupMenu::_setMenuItemMarked(int itemid, SbBool marked) {
     ItemRecord * rec = this->getItemRecord(itemid);
-    if (rec == NULL)
+    if (rec == nullptr)
         return;
     if (marked)
         rec->flags |= ITEM_MARKED;
     else
         rec->flags &= ~ITEM_MARKED;
-
-    if (rec->parent  && rec->action) {
-        rec->action->value(marked != 0);
-    }
 }
 
 /*!
@@ -259,10 +251,7 @@ SbBool
 FlNativePopupMenu::getMenuItemMarked( int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such menu");
-    if (rec->parent == NULL)
-        return (rec->flags & ITEM_MARKED) ? TRUE : FALSE;
-
-    return (rec->action->value());
+    return (rec->flags & ITEM_MARKED) ? TRUE : FALSE;
 }
 
 /*!
@@ -275,17 +264,15 @@ FlNativePopupMenu::addMenu(int menuid,
     MenuRecord * sub = this->getMenuRecord(submenuid);
     assert(super && sub && "no such menu");
 
-    /*
-    wxMenuItem* action = 0;
-    if (pos == -1) {
-        action = super->menu->AppendSubMenu(sub->menu, sub->title);
+    ChildRecord child;
+    child.type = ChildRecord::MENU;
+    child.id = submenuid;
+
+    if (pos == -1 || pos >= (int)super->children.size()) {
+        super->children.push_back(child);
+    } else {
+        super->children.insert(super->children.begin() + pos, child);
     }
-    else {
-        super->menu->Insert(pos, sub->menuid,  sub->title, sub->menu);
-    }
-    action->SetItemLabel(sub->title);
-    */
-    sub->parent = super->menu;
 }
 
 /*!
@@ -297,22 +284,17 @@ FlNativePopupMenu::addMenuItem(int menuid,
     MenuRecord * menu = this->getMenuRecord(menuid);
     assert(menu && "invalid parent menu id");
     ItemRecord * item = this->getItemRecord(itemid);
-    assert(item && "invalid child menu id");
-/*
-    if (pos == -1) {
-        item->action = menu->menu->AppendCheckItem(itemid, item->title);
-    }
-    else {
-        item->action =  menu->menu->InsertCheckItem(pos,itemid,  item->title);
-    }
-    assert(item->action);
-    item->parent = menu->menu;
+    assert(item && "invalid child item id");
 
-    item->action->Check(true);
-    if (item->flags & ITEM_MARKED) {
-        item->action->Check(true);
+    ChildRecord child;
+    child.type = ChildRecord::ITEM;
+    child.id = itemid;
+
+    if (pos == -1 || pos >= (int)menu->children.size()) {
+        menu->children.push_back(child);
+    } else {
+        menu->children.insert(menu->children.begin() + pos, child);
     }
-    */
 }
 
 void
@@ -321,12 +303,15 @@ FlNativePopupMenu::addSeparator(int menuid,
     MenuRecord * menu = this->getMenuRecord(menuid);
     assert(menu && "no such menu");
 
-    ItemRecord * rec = createItemRecord("separator");
-    /*
-    menu->menu->InsertSeparator(pos);
-    */
-    rec->flags |= ITEM_SEPARATOR;
-    this->items->append(rec);
+    ChildRecord child;
+    child.type = ChildRecord::SEPARATOR;
+    child.id = -1;
+
+    if (pos == -1 || pos >= (int)menu->children.size()) {
+        menu->children.push_back(child);
+    } else {
+        menu->children.insert(menu->children.begin() + pos, child);
+    }
 }
 
 /*!
@@ -341,19 +326,21 @@ FlNativePopupMenu::removeMenu(int menuid) {
     assert(rec && "no such menu");
 
     if (rec->menuid == 0) {
-#if SOFL_DEBUG && 0
-        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "can't remove root");
-#endif
         return;
     }
-    if (rec->parent == NULL) {
-#if SOFL_DEBUG && 0
-        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "menu not attached");
-#endif
-        return;
+
+    // Remove from all parents
+    const int numMenus = this->menus->getLength();
+    for (int i = 0; i < numMenus; i++) {
+        MenuRecord * m = static_cast<MenuRecord *>((*this->menus)[i]);
+        for (auto it = m->children.begin(); it != m->children.end(); ) {
+            if (it->type == ChildRecord::MENU && it->id == menuid) {
+                it = m->children.erase(it);
+            } else {
+                ++it;
+            }
+        }
     }
- //   rec->parent->Delete(rec->menuid);
-    rec->parent = NULL;
 }
 
 /*!
@@ -367,21 +354,80 @@ FlNativePopupMenu::removeMenuItem(int itemid) {
     ItemRecord * rec = this->getItemRecord(itemid);
     assert(rec && "no such item");
 
-    if (rec->parent == NULL) {
-#if SOFL_DEBUG && 0
-        SoDebugError::postInfo("SoFlNativePopupMenu::RemoveMenu", "item not attached");
-#endif
-        return;
+    // Remove from all parents
+    const int numMenus = this->menus->getLength();
+    for (int i = 0; i < numMenus; i++) {
+        MenuRecord * m = static_cast<MenuRecord *>((*this->menus)[i]);
+        for (auto it = m->children.begin(); it != m->children.end(); ) {
+            if (it->type == ChildRecord::ITEM && it->id == itemid) {
+                it = m->children.erase(it);
+            } else {
+                ++it;
+            }
+        }
     }
-    //rec->parent->Remove(rec->itemid);
-    rec->parent = NULL;
+}
+
+// Helper to build FLTK menu items
+void
+FlNativePopupMenu::build_fltk_menu(int menuid,
+                                   std::vector<Fl_Menu_Item> & fl_items) {
+    MenuRecord * menu = this->getMenuRecord(menuid);
+    if (!menu) return;
+
+    for (const auto & child : menu->children) {
+        if (child.type == ChildRecord::ITEM) {
+            ItemRecord * item = this->getItemRecord(child.id);
+            if (item) {
+                Fl_Menu_Item fl_item;
+                memset(&fl_item, 0, sizeof(fl_item));
+                fl_item.text = item->title.c_str();
+                fl_item.user_data_ = reinterpret_cast<void *>(static_cast<uintptr_t>(item->itemid));
+                fl_item.flags = 0;
+                if (!(item->flags & ITEM_ENABLED)) fl_item.flags |= FL_MENU_INACTIVE;
+                if (item->flags & ITEM_MARKED) fl_item.flags |= FL_MENU_TOGGLE | FL_MENU_VALUE;
+                fl_items.push_back(fl_item);
+            }
+        } else if (child.type == ChildRecord::MENU) {
+            MenuRecord * sub = this->getMenuRecord(child.id);
+            if (sub) {
+                Fl_Menu_Item fl_item;
+                memset(&fl_item, 0, sizeof(fl_item));
+                fl_item.text = sub->title.c_str();
+                fl_item.flags = FL_SUBMENU;
+                fl_items.push_back(fl_item);
+
+                this->build_fltk_menu(child.id, fl_items);
+
+                // Close submenu
+                memset(&fl_item, 0, sizeof(fl_item));
+                fl_item.text = nullptr;
+                fl_items.push_back(fl_item);
+            }
+        } else if (child.type == ChildRecord::SEPARATOR) {
+            if (!fl_items.empty()) {
+                fl_items.back().flags |= FL_MENU_DIVIDER;
+            }
+        }
+    }
 }
 
 // Doc in superclass.
 void
 FlNativePopupMenu::popUp(Fl_Window * inside, int x, int y) {
-    MenuRecord * rec = this->getMenuRecord(0);
-    //inside->PopupMenu(rec->menu);
+    std::vector<Fl_Menu_Item> fl_items;
+    this->build_fltk_menu(0, fl_items);
+
+    // End of menu
+    Fl_Menu_Item end_item;
+    memset(&end_item, 0, sizeof(end_item));
+    fl_items.push_back(end_item);
+
+    const Fl_Menu_Item * picked = fl_items.data()->popup(x, y);
+    if (picked && picked->user_data_) {
+        int itemid = static_cast<int>(reinterpret_cast<uintptr_t>(picked->user_data_));
+        this->invokeMenuSelection(itemid);
+    }
 }
 
 /*!
@@ -391,9 +437,9 @@ FlNativePopupMenu::getMenuRecord(int menuid) {
     const int numMenus = this->menus->getLength();
     int i;
     for (i = 0; i < numMenus; i++)
-        if (((MenuRecord *) (*this->menus)[i])->menuid == menuid)
-            return (MenuRecord *) (*this->menus)[i];
-    return (MenuRecord *) NULL;
+        if (static_cast<MenuRecord *>((*this->menus)[i])->menuid == menuid)
+            return static_cast<MenuRecord *>((*this->menus)[i]);
+    return nullptr;
 }
 
 /*!
@@ -402,12 +448,12 @@ ItemRecord *
 FlNativePopupMenu::getItemRecord(int itemid) {
     const int numItems = this->items->getLength();
     for (int i = 0; i < numItems; i++) {
-        const int recid = ((ItemRecord *) (*this->items)[i])->itemid;
+        const int recid = static_cast<ItemRecord *>((*this->items)[i])->itemid;
         if (recid == itemid) {
-            return (ItemRecord *) (*this->items)[i];
+            return static_cast<ItemRecord *>((*this->items)[i]);
         }
     }
-    return (ItemRecord *) NULL;
+    return nullptr;
 }
 
 /*!
@@ -418,15 +464,6 @@ FlNativePopupMenu::createMenuRecord(const char * name) {
     rec->menuid = -1;
     rec->name =  name;
     rec->title = name;
-
-    /*
-    rec->menu = new  wxMenu("");
-    rec->menu->Connect(wxEVT_COMMAND_MENU_SELECTED,
-                       wxCommandEventHandler(FlNativePopupMenu::itemActivation),
-                       0,
-                       this);
-*/
-    rec->parent = NULL;
     return rec;
 }
 
@@ -439,8 +476,6 @@ FlNativePopupMenu::createItemRecord(const char * name) {
     rec->flags = 0;
     rec->name = name;
     rec->title =  name;
-    rec->parent = NULL;
-    rec->action = NULL;
     return rec;
 }
 
@@ -448,11 +483,11 @@ ItemRecord *
 FlNativePopupMenu::getItemRecordFromId(int itemid) {
     const int numItems = this->items->getLength();
     for (int i = 0; i < numItems; i++) {
-        const ItemRecord * rec = static_cast<ItemRecord *>((*this->items)[i]);
-        if (rec->itemid == itemid) { return (ItemRecord *) (*this->items)[i]; }
+        const auto * rec = static_cast<const ItemRecord *>((*this->items)[i]);
+        if (rec->itemid == itemid) { return static_cast<ItemRecord *>((*this->items)[i]); }
     }
 
-    return (ItemRecord *) NULL;
+    return nullptr;
 }
 
 void

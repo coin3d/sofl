@@ -127,6 +127,7 @@ SoFlFullViewer::~SoFlFullViewer()
     delete [] this->leftWheelStr;
     delete [] this->bottomWheelStr;
     delete PRIVATE(this);
+    delete this->prefmenu;
 }
 
 Fl_Window*
@@ -136,7 +137,7 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
     // widgets and popup menu if they are enabled.
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewer::buildWidget", "[invoked]");
-    parent->label("MainWindow");
+    parent->copy_label("MainWindow");
     SoDebugError::postInfo("SoFlFullViewer::buildWidget", "Step-1");
 #ifdef SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewer::buildWidget",
@@ -147,12 +148,12 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
 #endif
 
     PRIVATE(this)->viewerwidget = parent;
-    PRIVATE(this)->viewerwidget->label("viewer_widget");
+    PRIVATE(this)->viewerwidget->copy_label("viewer_widget");
 
     this->registerWidget(PRIVATE(this)->viewerwidget);
 
 #if SOFL_DEBUG
-    PRIVATE(this)->viewerwidget->color(FL_RED);
+    PRIVATE(this)->viewerwidget->color(FL_LIGHT3);
 #endif
 
     PRIVATE(this)->canvas = inherited::buildWidget(PRIVATE(this)->viewerwidget);
@@ -321,13 +322,13 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
                            dumpWindowData(parent).c_str());
     SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
                            "leftDecoration: %s",
-                           dumpWindowData(this->leftDecoration).c_str());
+                           dumpWidgetData(this->leftDecoration).c_str());
     SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
                            "rightDecoration: %s",
-                           dumpWindowData(this->rightDecoration).c_str());
+                           dumpWidgetData(this->rightDecoration).c_str());
     SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
                            "bottomDecoration: %s",
-                           dumpWindowData(this->bottomDecoration).c_str());
+                           dumpWidgetData(this->bottomDecoration).c_str());
 #endif
 
     PRIVATE(this)->initThumbWheelEventMap();
@@ -339,41 +340,41 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
     int y = parent->y() + (parent->h() - t->h()) / 2;
 */
 
-Fl_Window*
+Fl_Group*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
-    int y = parent->y() + (parent->h() - t->h()) / 2;
+    int y = (parent->h() - t->h()) / 2;
     t->position(0, y);
-    t->label("left thumb wheel");
+    t->copy_label("left thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->leftWheelVal = t->value();
     this->leftWheel = t;
     return t;
 }
 
-Fl_Window*
+Fl_Group*
 SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
-    int x = parent->x() + (parent->w() - t->w()) / 2;
+    int x = (parent->w() - t->w()) / 2;
     int y = parent->h() - t->h();
     t->position(x, y);
-    t->label("bottom thumb wheel");
+    t->copy_label("bottom thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->bottomWheelVal = t->value();
     this->bottomWheel = t;
     return t;
 }
 
-Fl_Window*
+Fl_Group*
 SoFlFullViewer::buildRightTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
     int x = parent->w() - t->w();
-    int y = parent->y() + (parent->h() - t->h()) / 2;
+    int y = (parent->h() - t->h()) / 2;
     t->position(x, y);
-    t->label("right thumb wheel");
+    t->copy_label("right thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->rightWheelVal = t->value();
     this->rightWheel = t;
@@ -519,51 +520,62 @@ void
 SoFlFullViewer::setLeftWheelString(const char* const name)
 {
     initString(this->leftWheelStr, name);
-
     if (this->leftWheelLabel)
-        this->leftWheelLabel->label(name ? name : "");
+        this->leftWheelLabel->copy_label(name ? name : "");
 }
 
 void
 SoFlFullViewer::setBottomWheelString(const char* const name)
 {
     initString(this->bottomWheelStr, name);
-
     if (this->bottomWheelLabel)
-        this->leftWheelLabel->label(name ? name : "");
+        this->bottomWheelLabel->copy_label(name ? name : "");
 }
 
 void
 SoFlFullViewer::setRightWheelString(const char* const name)
 {
     initString(this->rightWheelStr, name);
-
     if (this->rightWheelLabel)
     {
-        this->rightWheelLabel->label(name ? name : "");
+        this->rightWheelLabel->copy_label(name ? name : "");
     }
 }
 
 void
 SoFlFullViewer::sizeChanged(const SbVec2s& size)
 {
+    if (size[0] <= 0 || size[1] <= 0) return;
+
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewer::sizeChanged", "(%d, %d)",
                            size[0], size[1]);
 #endif
 
     SbVec2s new_size(size);
-    // fltk already has only size of gl area
-    // decorations size do not need to be removed
-    /*
-     if (PRIVATE(this)->decorations) {
-        new_size[0] -= width(this->leftDecoration);
-        new_size[0] -= width(this->rightDecoration);
-        new_size[1] -= height(this->bottomDecoration);
+
+    if (PRIVATE(this)->viewerwidget) {
+        if (PRIVATE(this)->canvas) {
+            PRIVATE(this)->canvas->size(size[0], size[1]);
+        }
+
+        if (PRIVATE(this)->decorations) {
+            if (this->leftWheel) {
+                int y = (size[1] - this->leftWheel->h()) / 2;
+                this->leftWheel->position(0, y);
+            }
+            if (this->bottomWheel) {
+                int x = (size[0] - this->bottomWheel->w()) / 2;
+                int y = size[1] - this->bottomWheel->h();
+                this->bottomWheel->position(x, y);
+            }
+            if (this->rightWheel) {
+                int x = size[0] - this->rightWheel->w();
+                int y = (size[1] - this->rightWheel->h()) / 2;
+                this->rightWheel->position(x, y);
+            }
+        }
     }
-    new_size = SbVec2s(SoFlMax(new_size[0], (short)1),
-                      SoFlMax(new_size[1], (short)1));
-*/
 
     inherited::sizeChanged(new_size);
 }

@@ -33,16 +33,15 @@
 #ifndef SOFL_SOFLTHUMBWHEEL_H
 #define SOFL_SOFLTHUMBWHEEL_H
 
-#include <FL/Fl_Box.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_RGB_Image.H>
 
 #include "Inventor/Fl/SoFlBasic.h"
 #include "Inventor/Fl/widgets/SoAnyThumbWheel.h"
 
-#include <FL/Fl_Window.H>
-
 #include <Inventor/SbVec2s.h>
 
-class SOFL_DLL_API SoFlThumbWheel : public Fl_Window {
+class SOFL_DLL_API SoFlThumbWheel : public Fl_Group {
 public:
     enum Orientation { Horizontal, Vertical };
 
@@ -81,10 +80,10 @@ private:
     int mouseDownPos{}, mouseLastPos{};
     SoAnyThumbWheel * wheel{};
     uint8_t** pixmaps{};
+    Fl_RGB_Image** fl_images{};
     int numPixmaps{};
     int currentPixmap{};
     SbVec2s th_position;
-    Fl_Box *imageBox;
 
     void constructor(Orientation);
     void initWheel(int diameter, int width);

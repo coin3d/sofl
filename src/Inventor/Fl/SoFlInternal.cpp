@@ -38,12 +38,17 @@
 
 std::string
 dumpWindowData(const Fl_Window* window) {
-    if(window == nullptr) return "null widget!!!";
+    return dumpWidgetData(window);
+}
+
+std::string
+dumpWidgetData(const Fl_Widget* widget) {
+    if(widget == nullptr) return "null widget!!!";
     std::ostringstream oss;
-    oss<<"title:"<<window->label()<<","
-        <<"x:"<<window->x()<<","
-    <<"y:"<<window->y()<<","
-    <<"w:"<<window->w()<<","
-    <<"h:"<<window->h();
+    oss<<"title:"<<(widget->label() ? widget->label() : "none")<<","
+        <<"x:"<<widget->x()<<","
+    <<"y:"<<widget->y()<<","
+    <<"w:"<<widget->w()<<","
+    <<"h:"<<widget->h();
     return oss.str();
 }

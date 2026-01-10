@@ -37,6 +37,7 @@
 #include "Inventor/Fl/SoFlInternal.h"
 #include "ButtonIndexValues.h"
 #include "sofldefs.h"
+#include <FL/Fl_Window.H>
 
 
 #define PUBLIC(o) (o->pub)
@@ -52,86 +53,28 @@ SoFlFullViewerP::~SoFlFullViewerP() {
 }
 
 void
-SoFlFullViewerP::setThumbWheelValue(Fl_Window* wheel, float val) {
+SoFlFullViewerP::setThumbWheelValue(Fl_Widget* wheel, float val) {
     dynamic_cast<SoFlThumbWheel*>(wheel)->setValue(val);
 }
 
 void
 SoFlFullViewerP::showDecorationWidgets(SbBool onOff) {
 #if SOFL_DEBUG
-    SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets", "[invoked]");
+    SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets", "[invoked] %s", onOff ? "ON" : "OFF");
 #endif
-#if 0
-    // remove old one
-    this->viewerwidget->SetSizer(0);
-
-    assert(this->viewerwidget);
-
-    assert(PUBLIC(this)->leftDecoration && PUBLIC(this)->bottomDecoration && PUBLIC(this)->rightDecoration);
-    const int border_size = 0;
-
-    wxGridBagSizer* sizer = new wxGridBagSizer( 0, 0 );
-    sizer->SetFlexibleDirection( wxBOTH );
-    sizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
-    sizer->SetEmptyCellSize(wxSize(0,0));
-
     if (onOff) {
-        PUBLIC(this)->leftDecoration->Show();
-        PUBLIC(this)->bottomDecoration->Show();
-        PUBLIC(this)->rightDecoration->Show();
-
-        sizer->Add( PUBLIC(this)->leftDecoration, wxGBPosition( 0, 0 ), wxGBSpan(1,1), wxEXPAND | wxALL, 0 );
-
-        sizer->Add( this->canvas, wxGBPosition( 0, 1 ), wxGBSpan(1,1), wxEXPAND | wxALL, 0 );
-
-        sizer->Add( PUBLIC(this)->rightDecoration, wxGBPosition( 0, 2 ), wxGBSpan(1,1), wxEXPAND | wxALL, 0 );
-        sizer->Add( PUBLIC(this)->bottomDecoration, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND | wxALL, 0 );
-
-        sizer->AddGrowableCol( 1 );
-        sizer->AddGrowableRow( 0 );
-
-#if SOFL_DEBUG
-#if SOFL_DEBUG
-        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
-                               "%s",
-                               dumpWindowData(PUBLIC(this)->leftDecoration).c_str());
-        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
-                               "%s",
-                               dumpWindowData(this->canvas).c_str());
-        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
-                               "%s",
-                               dumpWindowData(PUBLIC(this)->rightDecoration).c_str());
-        SoDebugError::postInfo("SoFlFullViewer::buildDecoration",
-                               "%s",
-                               dumpWindowData(PUBLIC(this)->bottomDecoration).c_str());
-#endif
-
+        if (PUBLIC(this)->leftDecoration) PUBLIC(this)->leftDecoration->show();
+        if (PUBLIC(this)->bottomDecoration) PUBLIC(this)->bottomDecoration->show();
+        if (PUBLIC(this)->rightDecoration) PUBLIC(this)->rightDecoration->show();
     } else {
-        sizer->Add(this->canvas, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND | wxALL, 0 );
-        //sizer->Add(this->canvas,  0,  wxEXPAND | wxALL, border_size );
-        sizer->AddGrowableCol( 0 );
-        sizer->AddGrowableRow( 0 );
-        PUBLIC(this)->leftDecoration->Hide();
-        PUBLIC(this)->bottomDecoration->Hide();
-        PUBLIC(this)->rightDecoration->Hide();
+        if (PUBLIC(this)->leftDecoration) PUBLIC(this)->leftDecoration->hide();
+        if (PUBLIC(this)->bottomDecoration) PUBLIC(this)->bottomDecoration->hide();
+        if (PUBLIC(this)->rightDecoration) PUBLIC(this)->rightDecoration->hide();
     }
-
-    this->mainlayout = sizer;
-    this->viewerwidget->SetSizer(this->mainlayout);
-    this->viewerwidget->Layout();
-
-#if SOFL_DEBUG
-    SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets",
-        "dumpWindowData: %s",
-        dumpWindowData(this->viewerwidget).c_str());
-#endif
-
-    wxSize size = this->viewerwidget->GetSize();
-    SbVec2s resize = SbVec2s(size.GetX(), size.GetY());
-    PUBLIC(this)->sizeChanged(resize);
-#endif
-#endif
-
+    if (this->viewerwidget) {
+        SbVec2s size(this->viewerwidget->w(), this->viewerwidget->h());
+        PUBLIC(this)->sizeChanged(size);
+    }
 }
 
 void
@@ -139,7 +82,7 @@ SoFlFullViewerP::wheelPressed(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelPressed", "event arrived!");
 #endif
-    MapEvent::iterator it = objectMap.find( static_cast<Fl_Window*>(nullptr));//event.GetEventObject()));
+    MapEvent::iterator it = objectMap.find( static_cast<Fl_Widget*>(nullptr));//event.GetEventObject()));
     if( it != objectMap.end() ) {
         VoidFuncNoPar function = it->second.onPress;
         (PUBLIC(this)->*function)();
@@ -159,7 +102,7 @@ SoFlFullViewerP::wheelReleased(int event) {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelReleased", "event arrived!");
 #endif
-    MapEvent::iterator it = objectMap.find( static_cast<Fl_Window*>(nullptr));//event.GetEventObject()));
+    MapEvent::iterator it = objectMap.find( static_cast<Fl_Widget*>(nullptr));//event.GetEventObject()));
     if( it != objectMap.end() ) {
         VoidFuncNoPar function = it->second.onRelease;
         (PUBLIC(this)->*function)();
@@ -179,7 +122,7 @@ SoFlFullViewerP::wheelMoved(int event) {
     SoDebugError::postInfo("SoFlFullViewerP::wheelMoved", "event arrived!");
 #endif
 
-    Fl_Window* emitting_thumb_wheel = nullptr; //static_cast<Fl_Window*>(event.GetEventObject());
+    Fl_Widget* emitting_thumb_wheel = nullptr; //static_cast<Fl_Widget*>(event.GetEventObject());
     MapEvent::iterator it = objectMap.find( emitting_thumb_wheel);
     if( it != objectMap.end() ) {
         VoidFuncOnePar function = it->second.onMove;

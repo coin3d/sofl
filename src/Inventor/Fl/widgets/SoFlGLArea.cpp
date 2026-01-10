@@ -47,7 +47,7 @@ SoFlGLArea::SoFlGLArea(Fl_Window *parent,
 , widget_p(parentW)
 , gl_format(attributes){
     mode(gl_format);
-    this->label("SoFlGLArea");
+    this->copy_label("SoFlGLArea");
     gl_real_context = nullptr;
     is_gl_initialized = false;
 }

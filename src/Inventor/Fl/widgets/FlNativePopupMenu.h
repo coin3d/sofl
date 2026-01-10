@@ -35,41 +35,43 @@
 
 #include <Inventor/Fl/widgets/SoFlPopupMenu.h>
 
+#include <vector>
+#include <FL/Fl_Menu_Item.H>
+
 struct MenuRecord;
 struct ItemRecord;
 
 class FlNativePopupMenu
-        : public SoFlPopupMenu
-        /*, public  wxEvtHandler*/{
+        : public SoFlPopupMenu {
     typedef SoFlPopupMenu inherited;
 public:
-    FlNativePopupMenu(void);
+    FlNativePopupMenu();
     virtual ~FlNativePopupMenu();
-    virtual int newMenu(const char * name, int menuid = -1) ;
-    virtual int getMenu(const char * name) ;
-    virtual void setMenuTitle(int id, const char * title) ;
-    virtual const char * getMenuTitle(int id) ;
+    virtual int newMenu(const char * name, int menuid = -1) override;
+    virtual int getMenu(const char * name) override;
+    virtual void setMenuTitle(int id, const char * title) override;
+    virtual const char * getMenuTitle(int id) override;
 
-    virtual int newMenuItem(const char * name, int itemid = -1) ;
-    virtual int getMenuItem(const char * name) ;
-    virtual void setMenuItemTitle(int itemid, const char * title) ;
-    virtual const char * getMenuItemTitle(int itemid) ;
-    virtual void setMenuItemEnabled(int itemid, SbBool enabled) ;
-    virtual SbBool getMenuItemEnabled(int itemid) ;
+    virtual int newMenuItem(const char * name, int itemid = -1) override;
+    virtual int getMenuItem(const char * name) override;
+    virtual void setMenuItemTitle(int itemid, const char * title) override;
+    virtual const char * getMenuItemTitle(int itemid) override;
+    virtual void setMenuItemEnabled(int itemid, SbBool enabled) override;
+    virtual SbBool getMenuItemEnabled(int itemid) override;
     void setMenuItemMarked(int itemid, SbBool marked);
-    virtual SbBool getMenuItemMarked(int itemid) ;
+    virtual SbBool getMenuItemMarked(int itemid) override;
 
-    virtual void addMenu(int menuid, int submenuid, int pos = -1) ;
-    virtual void addMenuItem(int menuid, int itemid, int pos = -1) ;
-    virtual void addSeparator(int menuid, int pos = -1) ;
-    virtual void removeMenu(int menuid) ;
-    virtual void removeMenuItem(int itemid) ;
+    virtual void addMenu(int menuid, int submenuid, int pos = -1) override;
+    virtual void addMenuItem(int menuid, int itemid, int pos = -1) override;
+    virtual void addSeparator(int menuid, int pos = -1) override;
+    virtual void removeMenu(int menuid) override;
+    virtual void removeMenuItem(int itemid) override;
 
-    virtual void popUp(Fl_Window* inside, int x, int y) ;
+    virtual void popUp(Fl_Window* inside, int x, int y) override;
 
 protected:
 
-    virtual void _setMenuItemMarked(int itemid, SbBool marked) ;
+    virtual void _setMenuItemMarked(int itemid, SbBool marked) override;
 
     MenuRecord * getMenuRecord(int menuid);
     ItemRecord * getItemRecord(int itemid);
@@ -78,6 +80,8 @@ protected:
     ItemRecord * createItemRecord(const char * name);
 
     void itemActivation(int);
+
+    void build_fltk_menu(int menuid, std::vector<Fl_Menu_Item> & items);
 
 private:
     SbPList * menus;

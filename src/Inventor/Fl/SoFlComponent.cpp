@@ -156,13 +156,14 @@ SoFlComponent::setBaseWidget(Fl_Window* w) {
 
     if (!PRIVATE(this)->parent /*|| PRIVATE(this)->parent->IsTopLevel()*/) {
 
-        if (std::string(PRIVATE(this)->widget->label()).empty()) {
+        const char* label = PRIVATE(this)->widget->label();
+        if (label == nullptr || label[0] == '\0') {
             this->setTitle(this->getDefaultTitle());
         }
 
-        SoFl::getShellWidget(this->getWidget())->label(iconText.c_str());
+        SoFl::getShellWidget(this->getWidget())->copy_label(iconText.c_str());
     }
-    PRIVATE(this)->widget->label(widgetName.c_str());
+    PRIVATE(this)->widget->copy_label(widgetName.c_str());
 }
 
 void
@@ -181,9 +182,11 @@ SoFlComponent::show() {
                                PRIVATE(this)->storesize[1]);
     }
 
-    // only parent has power for setting the correct size
-    PRIVATE(this)->parent->size(PRIVATE(this)->storesize[0],
-                                         PRIVATE(this)->storesize[1]);
+    if (PRIVATE(this)->storesize[0] > 0 && PRIVATE(this)->storesize[1] > 0) {
+        // only parent has power for setting the correct size
+        PRIVATE(this)->parent->size(PRIVATE(this)->storesize[0],
+                                             PRIVATE(this)->storesize[1]);
+    }
 
     if (SOFLCOMP_RESIZE_DEBUG) {  // debug
         SoDebugError::postInfo("SoFlComponent::show-2",
@@ -376,7 +379,7 @@ void
 SoFlComponent::setTitle(const char * const title) {
     auto shell = SoFl::getShellWidget(this->getWidget());
     if (shell)
-        shell->label(title);
+        shell->copy_label(title);
     else {
         SoDebugError::postWarning("SoFlComponent::setTitle",
                                   "No shell widget for %p",

@@ -48,6 +48,8 @@ SoFlExaminerViewerP::SoFlExaminerViewerP(SoFlExaminerViewer *publ)
 
 SoFlExaminerViewerP::~SoFlExaminerViewerP() {
     this->genericDestructor();
+    delete this->orthopixmap;
+    delete this->perspectivepixmap;
 }
 
 void

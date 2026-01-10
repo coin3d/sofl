@@ -120,7 +120,7 @@ namespace
 
 SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
                                const char* name)
-    : Fl_Window(pos[0], pos[1],
+    : Fl_Group(pos[0], pos[1],
                 HORIZONTAL_WIDTH, HORIZONTAL_HEIGHT, name)
 {
     this->constructor(Vertical);
@@ -134,15 +134,15 @@ SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
 SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
                                const SbVec2s& pos,
                                const char* name)
-    : Fl_Window(pos[0], pos[1],
+    : Fl_Group(pos[0], pos[1],
                 orientation == Horizontal ? HORIZONTAL_WIDTH : VERTICAL_WIDTH,
                 orientation == Horizontal ? HORIZONTAL_HEIGHT : VERTICAL_HEIGHT,
                 name)
 {
     if (!name)
-        this->label("SoFlThumbWheel");
+        this->copy_label("SoFlThumbWheel");
     else
-        this->label(name);
+        this->copy_label(name);
     this->constructor(orientation);
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::SoFlThumbWheel",
@@ -179,12 +179,9 @@ SoFlThumbWheel::constructor(Orientation orientation)
     this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
     this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
     this->pixmaps = nullptr;
+    this->fl_images = nullptr;
     this->numPixmaps = 0;
     this->currentPixmap = -1;
-    imageBox = new Fl_Box(0, 0, //need a position to be a valid Fl_Window!!!
-        w(), h(),
-        nullptr // require a null label to draw an image inside!!!
-        );
 }
 
 /*!
@@ -298,7 +295,7 @@ SoFlThumbWheel::sizeHint() const
 void
 SoFlThumbWheel::draw()
 {
-    int w{};
+    int w_val{};
     int dval{};
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::draw",
@@ -308,63 +305,33 @@ SoFlThumbWheel::draw()
 #endif
     if (this->orient == Vertical)
     {
-        w = this->w() - 12;
+        w_val = this->w() - 12;
         dval = this->h() - 6;
     }
     else
     {
-        w = this->h() - 12;
+        w_val = this->h() - 12;
         dval = this->w() - 6;
     }
 
-#if SOFL_DEBUG
-    SoDebugError::postInfo("SoFlThumbWheel::draw",
-                           "dval: %d and w: %d",
-                           dval, w);
-#endif
-
     // Handle resizing to too small dimensions gracefully.
-    if ((dval <= 0) || (w <= 0)) return;
+    if ((dval <= 0) || (w_val <= 0)) return;
 
-    this->initWheel(dval, w);
-#if SOFL_DEBUG && 0
-    SoDebugError::postInfo("SoFlThumbWheel::draw",
-                           "tempWheelValue %f",
-                           this->tempWheelValue);
-#endif
+    this->initWheel(dval, w_val);
 
     int pixmap = this->wheel->getBitmapForValue(this->tempWheelValue,
                                                 (this->state == Disabled)
                                                     ? SoAnyThumbWheel::DISABLED
                                                     : SoAnyThumbWheel::ENABLED);
-#if SOFL_DEBUG && 0
-    SoDebugError::postInfo("SoFlThumbWheel::draw",
-                           "pixmap value is: %d and bitmap pointer is %p",
-                           pixmap, this->pixmaps);
-#endif
 
     if (pixmap >= numPixmaps)
         return;
     assert(pixmap < numPixmaps);
 
-    int image_w = w;
-    int image_h = dval;
-    if (this->orientation() == Horizontal)
-    {
-        std::swap(image_w, image_h);
-    }
-
-    Fl_RGB_Image img(this->pixmaps[pixmap], image_w, image_h, 4);
-    imageBox->image(img);
-#if SOFL_DEBUG
-    SoDebugError::postInfo("SoFlThumbWheel::draw",
-                           "imageBox: %s",
-                           get_box_info_string(imageBox).c_str());
-#endif
+    this->fl_images[pixmap]->draw(x(), y());
 
     this->currentPixmap = pixmap;
-    Fl_Window::draw();
-
+    Fl_Group::draw();
 }
 
 /*!
@@ -397,7 +364,7 @@ SoFlThumbWheel::handle(int event)
     default:
         break;
     }
-    return Fl_Window::handle(event);
+    return Fl_Group::handle(event);
 }
 
 SoFlThumbWheel::Orientation
@@ -415,6 +382,7 @@ SoFlThumbWheel::value() const
 void
 SoFlThumbWheel::initWheel(int diameter, int width)
 {
+    if (diameter <= 0 || width <= 0) return;
     int dval, w;
     this->wheel->getSize(dval, w);
     if (dval == diameter && w == width) return;
@@ -433,6 +401,7 @@ SoFlThumbWheel::initWheel(int diameter, int width)
 
     this->numPixmaps = this->wheel->getNumBitmaps();
     this->pixmaps = new uint8_t*[this->numPixmaps];
+    this->fl_images = new Fl_RGB_Image*[this->numPixmaps];
 
     for (int i = 0; i < this->numPixmaps; i++)
     {
@@ -444,6 +413,7 @@ SoFlThumbWheel::initWheel(int diameter, int width)
                                 SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
 
         this->pixmaps[i] = buffer;
+        this->fl_images[i] = new Fl_RGB_Image(buffer, pwidth, pheight, 4);
     }
 }
 
@@ -451,8 +421,15 @@ void
 SoFlThumbWheel::cleanPixmaps()
 {
     for (int i = 0; i < this->numPixmaps; i++)
+    {
+        delete this->fl_images[i];
         delete this->pixmaps[i];
+    }
+    delete [] this->fl_images;
     delete [] this->pixmaps;
+    this->numPixmaps = 0;
+    this->fl_images = nullptr;
+    this->pixmaps = nullptr;
 }
 
 

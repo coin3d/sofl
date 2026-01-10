@@ -40,5 +40,6 @@ class SoFlInternal {
 };
 
 std::string dumpWindowData(const Fl_Window* window);
+std::string dumpWidgetData(const Fl_Widget* widget);
 
 #endif //SOFL_SOFLINTERNAL_H
