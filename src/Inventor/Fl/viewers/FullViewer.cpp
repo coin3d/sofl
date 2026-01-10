@@ -340,7 +340,7 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
     int y = parent->y() + (parent->h() - t->h()) / 2;
 */
 
-Fl_Group*
+Fl_Window*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
@@ -353,7 +353,7 @@ SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
     return t;
 }
 
-Fl_Group*
+Fl_Window*
 SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
@@ -367,7 +367,7 @@ SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
     return t;
 }
 
-Fl_Group*
+Fl_Window*
 SoFlFullViewer::buildRightTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));

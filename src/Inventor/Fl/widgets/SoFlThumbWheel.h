@@ -33,7 +33,7 @@
 #ifndef SOFL_SOFLTHUMBWHEEL_H
 #define SOFL_SOFLTHUMBWHEEL_H
 
-#include <FL/Fl_Group.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_RGB_Image.H>
 
 #include "Inventor/Fl/SoFlBasic.h"
@@ -41,7 +41,7 @@
 
 #include <Inventor/SbVec2s.h>
 
-class SOFL_DLL_API SoFlThumbWheel : public Fl_Group {
+class SOFL_DLL_API SoFlThumbWheel : public Fl_Window {
 public:
     enum Orientation { Horizontal, Vertical };
 

@@ -80,12 +80,12 @@ public:
         VoidFuncOnePar onMove;
     };
 
-    typedef std::map<Fl_Widget*, WheelFunctions> MapEvent;
+    typedef std::map<Fl_Window*, WheelFunctions> MapEvent;
     MapEvent objectMap;
     void initThumbWheelEventMap();
 
     void setLeftWheelValue(const float value);
-    static void setThumbWheelValue(Fl_Widget*, float value);
+    static void setThumbWheelValue(Fl_Window*, float value);
     void showDecorationWidgets(SbBool onOff);
     // Thumbwheels.
     void wheelPressed(int);

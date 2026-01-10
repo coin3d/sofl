@@ -120,7 +120,7 @@ namespace
 
 SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
                                const char* name)
-    : Fl_Group(pos[0], pos[1],
+    : Fl_Window(pos[0], pos[1],
                 HORIZONTAL_WIDTH, HORIZONTAL_HEIGHT, name)
 {
     this->constructor(Vertical);
@@ -129,12 +129,13 @@ SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
                            "<w: %d, h: %d>",
                            w(), h());
 #endif
+    this->end();
 }
 
 SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
                                const SbVec2s& pos,
                                const char* name)
-    : Fl_Group(pos[0], pos[1],
+    : Fl_Window(pos[0], pos[1],
                 orientation == Horizontal ? HORIZONTAL_WIDTH : VERTICAL_WIDTH,
                 orientation == Horizontal ? HORIZONTAL_HEIGHT : VERTICAL_HEIGHT,
                 name)
@@ -328,10 +329,10 @@ SoFlThumbWheel::draw()
         return;
     assert(pixmap < numPixmaps);
 
-    this->fl_images[pixmap]->draw(x(), y());
+    this->fl_images[pixmap]->draw(0, 0);
 
     this->currentPixmap = pixmap;
-    Fl_Group::draw();
+    Fl_Window::draw();
 }
 
 /*!
@@ -364,7 +365,7 @@ SoFlThumbWheel::handle(int event)
     default:
         break;
     }
-    return Fl_Group::handle(event);
+    return Fl_Window::handle(event);
 }
 
 SoFlThumbWheel::Orientation
