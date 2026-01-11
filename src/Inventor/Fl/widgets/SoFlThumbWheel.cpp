@@ -46,85 +46,27 @@
 #include <Inventor/errors/SoDebugError.h>
 
 #include <cassert>
-#include <vector>
 #include <FL/fl_draw.H>
 #include <FL/Fl_PNG_Image.H>
-#include <FL/Fl_RGB_Image.H>
-#include <iostream>
 
 
-#include <FL/Fl_Box.H>
 #include <FL/Enumerations.H>
-#include <string>
-#include <sstream>
-#include <iomanip>
 
-std::string get_box_info_string(Fl_Box* box) {
-    if (!box) return "Errore: puntatore alla box nullo.";
-
-    std::ostringstream ss;
-
-    // Estrazione componenti RGB del colore di sfondo
-    uchar r, g, b;
-    Fl::get_color(box->color(), r, g, b);
-
-    ss << "--- INFO FL_BOX ---\n"
-       << "Label: " << (box->label() ? box->label() : "(null)") << "\n"
-       << "Geometry: x:" << box->x() << " y:" << box->y() << " w:" << box->w() << " h:" << box->h() << "\n"
-       << "Color (Hex): 0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << (unsigned int)box->color() << "\n"
-       << "Color (RGB): R:" << std::dec << (int)r << " G:" << (int)g << " B:" << (int)b << "\n"
-       << "Boxtype ID: " << (int)box->box() << "\n"
-       << "Align: " << (int)box->align() << "\n"
-       << "Visible: " << (box->visible() ? "Yes" : "No") << "\n"
-       << "Active: " << (box->active() ? "Yes" : "No") << "\n"
-       << "-------------------";
-
-    return ss.str();
-}
 namespace
 {
-    constexpr short VERTICAL_WIDTH = 24;
-    constexpr short VERTICAL_HEIGHT = 122;
-    constexpr short HORIZONTAL_WIDTH = 122;
-    constexpr short HORIZONTAL_HEIGHT = 24;
-    constexpr int SHADEBORDERWIDTH = 0;
-
-    void
-    fill(std::vector<uint8_t>& buffer,
-         unsigned long n,
-         int channel = 3)
-    {
-        if (channel > 3)
-        {
-            buffer.push_back((n >> 24) & 0xFF);
-        }
-        buffer.push_back((n >> 16) & 0xFF);
-        buffer.push_back((n >> 8) & 0xFF);
-        buffer.push_back(n & 0xFF);
-    }
-
-    uint8_t*
-    toRGBChannel(const std::vector<unsigned int>& img)
-    {
-        std::vector<uint8_t> vout;
-        for (unsigned int i : img)
-        {
-            fill(vout, i);
-        }
-        assert(vout.size() == img.size()*3);
-        auto out = new uint8_t [vout.size()];
-        memcpy(out, &vout[0], vout.size());
-        return (out);
-    }
+    const SbVec2s VERTICAL_SIZE(24,122);
+    const SbVec2s HORIZONTAL_SIZE(122,24);
+    constexpr int   SHADEBORDERWIDTH = 0;
 }
+
 
 SoFlThumbWheel::SoFlThumbWheel(const SbVec2s& pos,
                                const char* name)
     : Fl_Window(pos[0], pos[1],
-                HORIZONTAL_WIDTH, HORIZONTAL_HEIGHT, name)
+                HORIZONTAL_SIZE[0], HORIZONTAL_SIZE[1], name)
 {
     this->constructor(Vertical);
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::SoFlThumbWheel",
                            "<w: %d, h: %d>",
                            w(), h());
@@ -136,8 +78,8 @@ SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
                                const SbVec2s& pos,
                                const char* name)
     : Fl_Window(pos[0], pos[1],
-                orientation == Horizontal ? HORIZONTAL_WIDTH : VERTICAL_WIDTH,
-                orientation == Horizontal ? HORIZONTAL_HEIGHT : VERTICAL_HEIGHT,
+                orientation == Horizontal ? HORIZONTAL_SIZE[0] : VERTICAL_SIZE[0],
+                orientation == Horizontal ? HORIZONTAL_SIZE[1] : VERTICAL_SIZE[1],
                 name)
 {
     if (!name)
@@ -145,7 +87,7 @@ SoFlThumbWheel::SoFlThumbWheel(Orientation orientation,
     else
         this->copy_label(name);
     this->constructor(orientation);
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::SoFlThumbWheel",
                            "<w: %d, h: %d>",
                            w(), h());
@@ -191,7 +133,7 @@ SoFlThumbWheel::constructor(Orientation orientation)
 void
 SoFlThumbWheel::mousePressEvent(int event)
 {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::mousePressEvent",
                            "event: %d",
                            event);
@@ -209,7 +151,7 @@ SoFlThumbWheel::mousePressEvent(int event)
 
     this->mouseLastPos = this->mouseDownPos;
 
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::mousePressEvent",
                            "state: %d mouseDownPos: %d mouseLastPos: %d",
                            state, mouseDownPos, mouseLastPos);
@@ -282,12 +224,9 @@ SoFlThumbWheel::mouseReleaseEvent(int event)
 SbVec2s
 SoFlThumbWheel::sizeHint() const
 {
-    constexpr short length = HORIZONTAL_WIDTH;
-    constexpr short thick = HORIZONTAL_HEIGHT;
-
     if (this->orient == Horizontal)
-        return {length, thick};
-    return {thick, length};
+        return HORIZONTAL_SIZE;
+    return VERTICAL_SIZE;
 }
 
 /*!
@@ -296,9 +235,11 @@ SoFlThumbWheel::sizeHint() const
 void
 SoFlThumbWheel::draw()
 {
+    Fl_Window::draw();
+
     int w_val{};
     int dval{};
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("SoFlThumbWheel::draw",
                            "orientation: %s <w,h>: <%d,%d>",
                            orient == Vertical ? "Vertical" : "Horizontal",
@@ -320,7 +261,7 @@ SoFlThumbWheel::draw()
 
     this->initWheel(dval, w_val);
 
-    int pixmap = this->wheel->getBitmapForValue(this->tempWheelValue,
+    const int pixmap = this->wheel->getBitmapForValue(this->tempWheelValue,
                                                 (this->state == Disabled)
                                                     ? SoAnyThumbWheel::DISABLED
                                                     : SoAnyThumbWheel::ENABLED);
@@ -329,10 +270,9 @@ SoFlThumbWheel::draw()
         return;
     assert(pixmap < numPixmaps);
 
-    this->fl_images[pixmap]->draw(0, 0);
-
+    const auto position = this->getPosition(fl_images[pixmap]);
+    this->fl_images[pixmap]->draw(position[0], position[1]);
     this->currentPixmap = pixmap;
-    Fl_Window::draw();
 }
 
 /*!
@@ -433,7 +373,6 @@ SoFlThumbWheel::cleanPixmaps()
     this->pixmaps = nullptr;
 }
 
-
 void
 SoFlThumbWheel::setEnabled(bool enable)
 {
@@ -491,4 +430,21 @@ SoFlThumbWheel::getRangeBoundaryHandling() const
     default:
         assert(0 && "impossible");
     }
+}
+
+/*!
+  \internal
+*/
+SbVec2s
+SoFlThumbWheel::getPosition(const Fl_RGB_Image* currImage) const
+{
+    // retrieve the correct position of image respect to size of image and current window
+    auto width_rgb = currImage->w();
+    auto height_rgb = currImage->h();
+    auto width_fl = this->w();
+    auto height_fl = this->h();
+    SbVec2s pos((width_fl-width_rgb)*0.5, (height_fl-height_rgb)*0.5);
+    if (pos[0] < 0) pos[0] = 0;
+    if (pos[1] < 0) pos[1] = 0;
+    return pos;
 }

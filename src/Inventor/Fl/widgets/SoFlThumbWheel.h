@@ -66,6 +66,7 @@ public:
         MODULATE,
         ACCUMULATE
     };
+
     void setRangeBoundaryHandling(boundaryHandling handling);
     boundaryHandling getRangeBoundaryHandling() const;
 
@@ -95,6 +96,8 @@ private:
 
     void draw() override;
     int handle(int event) override;
+
+    SbVec2s getPosition(const Fl_RGB_Image*) const;
 };
 
 #endif //SOFL_SOFLTHUMBWHEEL_H

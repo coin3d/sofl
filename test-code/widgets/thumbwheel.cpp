@@ -49,12 +49,9 @@
 // *************************************************************************
 
 int
-main(
-    int /*argc*/,
-    char** argv)
+main()
 {
-    // 1. Finestra Principale
-    Fl_Window* main_win = new Fl_Window(400, 300, "Finestra Principale");
+    auto main_win = new Fl_Window(400, 300, "Finestra Principale");
 
     //Fl_Window* main_win =  SoFl::init(argv[0]);
     main_win->size(800, 800);
@@ -64,12 +61,12 @@ main(
     auto wheel_h = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(24, 0));
     wheel_h->color(FL_GREEN);
     //*/
-//*
+    //*
     auto wheel_v = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0, 24));
     wheel_v->color(FL_RED);
     main_win->end();
-//*/
-    std::clog << "main_win->children():" << main_win->children() << std::endl;
+    //*/
+    // std::clog << "main_win->children():" << main_win->children() << std::endl;
     assert(main_win->children() > 0);
 
     main_win->show();

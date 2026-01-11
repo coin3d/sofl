@@ -34,17 +34,32 @@
 
 #include <Inventor/Fl/SoFl.h>
 #define protected public
+#define private public
 #include <Inventor/Fl/viewers/SoFlFullViewer.h>
 #include <Inventor/Fl/widgets/SoFlThumbWheel.h>
 #undef protected
+#undef private
 #include <FL/Fl_Window.H>
 
-BOOST_AUTO_TEST_SUITE(TestFullViewer)
+namespace
+{
+    constexpr int THUMBWHEEL_WIDTH = 122;
+    constexpr int THUMBWHEEL_HEIGHT = 24;
+    constexpr int THUMBWHEEL_PIXMAP_WIDTH = 116;
+    constexpr int THUMBWHEEL_PIXMAP_HEIGHT = 12;
+    constexpr int WINDOW_WIDTH = 100;
+    constexpr int WINDOW_HEIGHT = 100;
+
+
+}
+
+BOOST_AUTO_TEST_SUITE(TestSoFlThumbWheel)
 
 BOOST_AUTO_TEST_CASE(test_wheels_initialization) {
-    Fl_Window* window = new Fl_Window(100, 100, "test_wheels_initialization");
+    auto window = new Fl_Window(WINDOW_WIDTH, WINDOW_HEIGHT,
+        "test_wheels_initialization");
 
-    SoFlFullViewer* viewer =
+    auto viewer =
         new SoFlFullViewer(window,
                            "Test Wheels",
                            FALSE,
@@ -52,7 +67,6 @@ BOOST_AUTO_TEST_CASE(test_wheels_initialization) {
                            SoFlViewer::BROWSER,
                            FALSE);
 
-    // Inizialmente i wheel dovrebbero essere null se BUILD_NONE è usato
     viewer->rightWheel = nullptr;
     viewer->leftWheel = nullptr;
     viewer->bottomWheel = nullptr;
@@ -89,5 +103,59 @@ BOOST_AUTO_TEST_CASE(test_wheels_initialization) {
     delete viewer;
     delete window;
 }
+
+BOOST_AUTO_TEST_CASE(test_wheels_size_horizontal)
+{
+    auto window = new Fl_Window(WINDOW_WIDTH, WINDOW_HEIGHT,
+        "test_wheels_size");
+    auto wheel = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(10,10));
+    BOOST_CHECK(wheel->sizeHint() == SbVec2s(THUMBWHEEL_WIDTH, THUMBWHEEL_HEIGHT));
+    delete wheel;
+    delete window;
+}
+
+BOOST_AUTO_TEST_CASE(test_wheels_size_vertical)
+{
+    auto window = new Fl_Window(THUMBWHEEL_WIDTH, THUMBWHEEL_HEIGHT, "test_wheels_size");
+    auto wheel = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(10,10));
+    BOOST_CHECK(wheel->sizeHint() == SbVec2s(THUMBWHEEL_HEIGHT, THUMBWHEEL_WIDTH ));
+    delete wheel;
+    delete window;
+}
+
+BOOST_AUTO_TEST_CASE(test_wheels_getPosition_vertical)
+{
+    auto window = new Fl_Window(THUMBWHEEL_WIDTH, THUMBWHEEL_HEIGHT, "test_wheels_size");
+    auto wheel = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(10,10));
+    wheel->initWheel(THUMBWHEEL_PIXMAP_WIDTH,THUMBWHEEL_PIXMAP_HEIGHT);
+    BOOST_CHECK(wheel->numPixmaps > 0);
+    BOOST_CHECK(wheel->pixmaps != nullptr);
+    BOOST_CHECK(wheel->fl_images != nullptr);
+    int a_pixmap = 0;
+    auto rgb_image = wheel->fl_images[0];
+    BOOST_CHECK(rgb_image != nullptr);
+    BOOST_CHECK(wheel->getPosition(rgb_image) == SbVec2s(6, 3 ));
+    delete wheel;
+    delete window;
+}
+
+BOOST_AUTO_TEST_CASE(test_wheels_getPosition_horizontal)
+{
+    auto window = new Fl_Window(THUMBWHEEL_WIDTH, THUMBWHEEL_HEIGHT, "test_wheels_size");
+    auto wheel = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(10,10));
+    wheel->initWheel(THUMBWHEEL_PIXMAP_WIDTH,THUMBWHEEL_PIXMAP_HEIGHT);
+    BOOST_CHECK(wheel->numPixmaps > 0);
+    BOOST_CHECK(wheel->pixmaps != nullptr);
+    BOOST_CHECK(wheel->fl_images != nullptr);
+    int a_pixmap = 0;
+    auto rgb_image = wheel->fl_images[0];
+    BOOST_CHECK(rgb_image != nullptr);
+    auto val = wheel->getPosition(rgb_image);
+    BOOST_CHECK(wheel->getPosition(rgb_image) == SbVec2s(3, 6 ));
+    delete wheel;
+    delete window;
+}
+
+
 
 BOOST_AUTO_TEST_SUITE_END()
