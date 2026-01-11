@@ -17,7 +17,7 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTranslation.h>
 
-#include <GL/gl.h>
+#include <FL/gl.h>
 
 // *************************************************************************
 

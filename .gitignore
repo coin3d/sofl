@@ -35,3 +35,8 @@
 .idea
 cmake-build-*
 build
+
+.vscode
+.vs
+
+CMakeSettings.json

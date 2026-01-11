@@ -32,12 +32,12 @@
 
 #include "Inventor/Fl/SoFlGLWidget.h"
 
-#include <GL/gl.h>
-
 #include "Inventor/Fl/SoFlGLWidgetP.h"
 #include "Inventor/Fl/widgets/SoFlGLArea.h"
 #include "sofldefs.h"
 #include "Inventor/Fl/SoAny.h"
+
+#include <FL/gl.h>
 
 SOFL_OBJECT_ABSTRACT_SOURCE(SoFlGLWidget);
 
@@ -335,7 +335,7 @@ SoFlGLWidget::initGraphic() {
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlGLWidget::initGraphic",
                            ":%s",
-                           __PRETTY_FUNCTION__
+                           __FUNCTION__
     );
 #endif
     this->glLockNormal();

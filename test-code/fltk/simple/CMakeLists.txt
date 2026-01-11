@@ -7,4 +7,4 @@ if(GLEW_FOUND)
 endif (GLEW_FOUND)
 
 add_executable(fltkWithOpenInventorWindow fltkWithOpenInventorWindow.cpp)
-target_link_libraries(fltkWithOpenInventorWindow fltk::fltk fltk::gl SoFl)
+target_link_libraries(fltkWithOpenInventorWindow SoFl)

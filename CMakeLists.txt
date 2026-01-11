@@ -125,7 +125,20 @@ report_prepare(
 # Fail early if one of the required packages cannot be found
 
 find_package(OpenGL REQUIRED)
-find_package(FLTK REQUIRED CONFIG)
+if(WIN32)
+    include(FetchContent)
+
+    FetchContent_Declare(FLTK
+      GIT_REPOSITORY  https://github.com/fltk/fltk
+      GIT_TAG         master
+      GIT_SHALLOW     TRUE
+    )
+    FetchContent_MakeAvailable(FLTK)
+else()
+    find_package(FLTK CONFIG REQUIRED) 
+endif()
+
+
 
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native

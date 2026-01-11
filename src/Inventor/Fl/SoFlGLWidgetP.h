@@ -38,6 +38,7 @@
 #include <Inventor/SbVec2s.h>
 
 #include <FL/Fl_Window.H>
+#include <FL/Fl_GL_Window.H>
 
 #include <set>
 #include <vector>

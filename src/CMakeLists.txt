@@ -148,7 +148,7 @@ if(NOT SO${GUI}_BUILD_MAC_FRAMEWORK)
 endif()
 
 #target_link_libraries(${PROJECT_NAME} Coin::Coin ${SOFL_OPENGL_LIBRARIES} ${fltk_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} Coin::Coin fltk::fltk-shared fltk::gl-shared ) # fltk::fltk_gl)
+target_link_libraries(${PROJECT_NAME} Coin::Coin fltk fltk_gl)
 
 # Add a target to generate API documentation with Doxygen
 if(SO${GUI}_BUILD_DOCUMENTATION)

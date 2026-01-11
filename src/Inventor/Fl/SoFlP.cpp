@@ -37,6 +37,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/sensors/SoSensorManager.h>
 
+#include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 
 

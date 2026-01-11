@@ -37,7 +37,6 @@
 
 #include <Inventor/SbTime.h>
 
-#include <GL/glx.h>
 #include "sofldefs.h"
 
 #define PRIVATE(obj) ((obj)->pimpl)
