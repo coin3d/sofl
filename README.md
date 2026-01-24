@@ -8,3 +8,7 @@ Coin GUI binding for FLTK
 - Only Ubuntu Linux tested
 - Open Inventor requires GL context to be managed independently of FLTK, so for having widget over the GL context,
 it is required an extension of SoFlRenderArea (to be done)
+
+# Compile
+
+See INSTALL

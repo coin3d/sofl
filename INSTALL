@@ -23,3 +23,10 @@ Cookbook Procedure
 
     $ make
     $ sudo make install
+
+Note
+==================
+
+cpack.d and data are subrepo if required you can update them after clone using the following command
+
+  $ git submodule update --init --recursive
