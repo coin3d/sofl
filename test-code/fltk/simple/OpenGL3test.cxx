@@ -258,7 +258,7 @@ int main(int argc, char **argv)
   add_widgets(win);
   topwin->end();
   topwin->resizable(win);
-  topwin->label("Click GL panel to reshape");
+  topwin->copy_label("Click GL panel to reshape");
   topwin->show(argc, argv);
   Fl::run();
 }

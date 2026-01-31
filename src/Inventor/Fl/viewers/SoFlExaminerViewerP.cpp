@@ -36,7 +36,8 @@
 #include "Inventor/Fl/common/pixmaps/perspective.xpm"
 #include "ButtonIndexValues.h"
 
-#include <FL/Fl_XPM_Image.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_Window.H>
 
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
@@ -71,14 +72,8 @@ SoFlExaminerViewerP::constructor(const SbBool build) {
 
     if (build) {
         Fl_Window *widget = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
-#if 0
-        widget->Bind( wxEVT_BUTTON,
-                      &SoFlExaminerViewerP::cameratoggleClicked,
-                      this,
-                      CAMERA_BUTTON);
         PUBLIC(this)->setBaseWidget(widget);
-        widget->SetMinSize(wxSize(500,300));
-#   endif
+        widget->size(500, 300);
         PUBLIC(this)->setSize(SbVec2s(500, 300));
     }
 }
@@ -88,5 +83,4 @@ SoFlExaminerViewerP::cameratoggleClicked(int) {
     if (PUBLIC(this)->getCamera())
         PUBLIC(this)->toggleCameraType();
 }
-
 

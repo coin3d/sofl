@@ -32,9 +32,7 @@
 
 #include "Inventor/Fl/viewers/SoFlFullViewerP.h"
 #include "Inventor/Fl/viewers/SoFlFullViewer.h"
-#include "Inventor/Fl/widgets/WheelEvents.h"
 #include "Inventor/Fl/widgets/SoFlThumbWheel.h"
-#include "Inventor/Fl/SoFlInternal.h"
 #include "ButtonIndexValues.h"
 #include "sofldefs.h"
 #include <FL/Fl_Window.H>
@@ -228,6 +226,29 @@ void SoFlFullViewerP::bindEvents(Fl_Window *w) {
     w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::viewallbuttonClicked, this, VIEW_ALL_BUTTON);
     */
 }
+
+void SoFlFullViewerP::layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s &size) {
+    if (!viewer) return;
+    if (!PRIVATE(viewer)->viewerbuttons) return;
+
+    const int count = PRIVATE(viewer)->viewerbuttons->getLength();
+    if (count <= 0) return;
+
+    const bool show = PRIVATE(viewer)->decorations ? true : false;
+    const int x = size[0] - XPM_BUTTON_SIZE - XPM_BUTTON_PADDING;
+    int y = XPM_BUTTON_PADDING;
+
+    for (int i = 0; i < count; ++i) {
+        auto *w = static_cast<Fl_Widget*>((*PRIVATE(viewer)->viewerbuttons)[i]);
+        if (!w) continue;
+        w->size(XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+        w->position(x, y);
+        if (show) w->show();
+        else w->hide();
+        y += XPM_BUTTON_SIZE + XPM_BUTTON_PADDING;
+    }
+}
+
 
 #undef ADD_DATA_IN_MAP
 #undef PUBLIC

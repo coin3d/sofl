@@ -42,7 +42,7 @@
 class SoFlComponentP : public SoGuiComponentP {
 public:
     SoFlComponentP(SoFlComponent * publ);
-    ~SoFlComponentP();
+    ~SoFlComponentP()=default;
 
     static void fatalerrorHandler(void * userdata);
     static void atexit_cleanup();
@@ -51,22 +51,18 @@ public:
 
     // Variables.
 
-    Fl_Window * parent;
-    Fl_Window * widget;
-    SbBool embedded, shelled;
+    Fl_Window * parent{};
+    Fl_Window * widget{};
+    SbBool embedded{}, shelled{};
     std::string classname, widgetname;
-    SoFlComponentCB * closeCB;
-    void * closeCBdata;
-    SbPList * visibilitychangeCBs;
-    SbBool realized;
+    SoFlComponentCB * closeCB{};
+    void * closeCBdata{};
+    SbPList * visibilitychangeCBs{};
+    SbBool realized{};
     SbVec2s storesize;
     SbVec2s size;
+    SbBool fullscreen{};
 
-    SbBool fullscreen;
-
-    // virtual bool eventFilter(QObject * obj, QEvent * e);
-
-public:
     void widgetClosed(void);
 
 private:

@@ -93,8 +93,6 @@ SoFlComponent::SoFlComponent(Fl_Window* const parent,
         PRIVATE(this)->parent = parent;
         PRIVATE(this)->embedded = true;
     }
-
-    // TODO: PRIVATE(this)->parent->installEventFilter(PRIVATE(this));
 }
 
 void  SoFlComponent::initClasses() {
@@ -334,14 +332,12 @@ SoFlComponent::setSize(const SbVec2s size) {
                            dumpWindowData(this->getShellWidget()).c_str());
 #endif
 
-#if 0
     if ( PRIVATE(this)->embedded ) {
         SoFl::setWidgetSize(this->getBaseWidget(), size);
     }
     else {
         SoFl::setWidgetSize(this->getShellWidget(), size);
     }
-#endif
 #if 1
 #if SOFL_DEBUG
     if((size[0] <= 0) || (size[1] <= 0)) {

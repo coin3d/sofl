@@ -41,6 +41,10 @@
 
 // Button icons.
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Flex.H>
+#include <FL/Fl_Toggle_Button.H>
 #include <Inventor/Fl/common/pixmaps/pick.xpm>
 #include <Inventor/Fl/common/pixmaps/view.xpm>
 #include <Inventor/Fl/common/pixmaps/home.xpm>
@@ -54,7 +58,57 @@
 
 SOFL_OBJECT_ABSTRACT_SOURCE(SoFlFullViewer);
 
-constexpr int XPM_BUTTON_SIZE = 24;
+namespace {
+
+void onInteractClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onInteractClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->interactbuttonClicked(0);
+}
+
+void onViewClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onViewClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->viewbuttonClicked(0);
+}
+
+void onHomeClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onViewClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->homebuttonClicked(0);
+}
+
+void onSetHomeClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onSetHomeClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->sethomebuttonClicked(0);
+}
+
+void onViewAllClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onViewAllClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->viewallbuttonClicked(0);
+}
+
+void onSeekClicked(Fl_Widget *, void *data) {
+#if SOFL_DEBUG
+    SoDebugError::postInfo("onSeekClicked", "[invoked]");
+#endif
+    auto *pimpl = static_cast<SoFlFullViewerP *>(data);
+    if (pimpl) pimpl->seekbuttonClicked(0);
+}
+
+} // namespace
 
 SoFlFullViewer::SoFlFullViewer(Fl_Window* parent,
                                const char* name,
@@ -152,14 +206,14 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
 
     this->registerWidget(PRIVATE(this)->viewerwidget);
 
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     PRIVATE(this)->viewerwidget->color(FL_LIGHT3);
 #endif
 
     PRIVATE(this)->canvas = inherited::buildWidget(PRIVATE(this)->viewerwidget);
     PRIVATE(this)->canvas->size(100, 100);
 
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     PRIVATE(this)->canvas->color(FL_YELLOW);
 #endif
 
@@ -180,7 +234,7 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
 #endif
 
     PRIVATE(this)->bindEvents(PRIVATE(this)->viewerwidget);
-
+    PRIVATE(this)->viewerwidget->resizable();
     return PRIVATE(this)->viewerwidget;
 }
 
@@ -290,7 +344,7 @@ SoFlFullViewer::setViewing(SbBool enable)
     }
 
     inherited::setViewing(enable);
-    /*
+    /* TODO
         // Must check that buttons have been built, in case this viewer
         // component was made without decorations.
         if (PRIVATE(this)->viewerbuttons->getLength() > 0) {
@@ -303,16 +357,18 @@ SoFlFullViewer::setViewing(SbBool enable)
 
 void
 SoFlFullViewer::buildDecoration(Fl_Window* parent) {
+
     this->leftDecoration = this->buildLeftTrim(parent);
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     this->leftDecoration->color(FL_GREEN);
 #endif
     this->bottomDecoration = this->buildBottomTrim(parent);
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     this->bottomDecoration->color(FL_BLUE);
 #endif
     this->rightDecoration = this->buildRightTrim(parent);
-#if SOFL_DEBUG
+
+#if SOFL_DEBUG && 0
     this->rightDecoration->color( FL_RED );
 #endif
 
@@ -331,6 +387,7 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
                            dumpWidgetData(this->bottomDecoration).c_str());
 #endif
 
+    this->buildViewerButtons(parent);
     PRIVATE(this)->initThumbWheelEventMap();
 }
 
@@ -343,9 +400,10 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
 Fl_Window*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
+    //auto
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
-    int y = (parent->h() - t->h()) / 2;
-    t->position(0, y);
+    //int y = (parent->h() - t->h()) / 2;
+    //t->position(0, y);
     t->copy_label("left thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->leftWheelVal = t->value();
@@ -357,9 +415,11 @@ Fl_Window*
 SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
-    int x = (parent->w() - t->w()) / 2;
+    /*
+     *int x = (parent->w() - t->w()) / 2;
     int y = parent->h() - t->h();
     t->position(x, y);
+    */
     t->copy_label("bottom thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->bottomWheelVal = t->value();
@@ -371,9 +431,11 @@ Fl_Window*
 SoFlFullViewer::buildRightTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
+    /*
     int x = parent->w() - t->w();
     int y = (parent->h() - t->h()) / 2;
     t->position(x, y);
+    */
     t->copy_label("right thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->rightWheelVal = t->value();
@@ -391,97 +453,68 @@ SoFlFullViewer::buildAppButtons(Fl_Window* parent)
 Fl_Window*
 SoFlFullViewer::buildViewerButtons(Fl_Window* parent)
 {
-    Fl_Window* w = nullptr;
-#if 0
-    wxPanel* w = new wxPanel(parent);
-    w->SetName("viewerButtons");
-#if SOFL_DEBUG
-    w->SetBackgroundColour(wxColour(250, 100, 250));
-#endif
-    this->createViewerButtons(w, PRIVATE(this)->viewerbuttons);
+    if (!parent) return nullptr;
 
-    const int numViewerButtons = PRIVATE(this)->viewerbuttons->getLength();
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    parent->begin();
+    this->createViewerButtons(parent, PRIVATE(this)->viewerbuttons);
+    parent->end();
 
-    for (int i = 0; i < numViewerButtons; i++)
-    {
-        wxAnyButton* b = PRIVATE(this)->getViewerbutton(i);
-        sizer->Add(b, 0, wxALL | wxCENTER, 0);
-    }
-    w->SetSizer(sizer);
-#endif
-
-    return (w);
+    PRIVATE(this)->layoutViewerButtons(this, SbVec2s(parent->w(), parent->h()));
+    return parent;
 }
 
 void
 SoFlFullViewer::createViewerButtons(Fl_Window* parent,
                                     SbPList* button_list)
 {
-#if 0
-    for (int i = 0; i <= SEEK_BUTTON; i++)
-    {
-        wxAnyButton* p = new Fl_Button(parent, i);
+    if (!parent || !button_list) return;
 
-        switch (i)
-        {
-        case INTERACT_BUTTON:
-            {
-                parent->RemoveChild(p);
-                delete p;
-                PRIVATE(this)->interactbutton = new wxToggleButton(parent, i, wxEmptyString);
-                p = PRIVATE(this)->interactbutton;
-                p->SetBitmap(Fl_Image(pick_xpm));
-                p->SetName("INTERACT");
-                PRIVATE(this)->interactbutton->SetValue(this->isViewing() ? FALSE : TRUE);
-            }
+    static Fl_Pixmap pick_pixmap(const_cast<char**>(pick_xpm));
+    static Fl_Pixmap view_pixmap(const_cast<char**>(view_xpm));
+    static Fl_Pixmap home_pixmap(const_cast<char**>(home_xpm));
+    static Fl_Pixmap set_home_pixmap(const_cast<char**>(set_home_xpm));
+    static Fl_Pixmap view_all_pixmap(const_cast<char**>(view_all_xpm));
+    static Fl_Pixmap seek_pixmap(const_cast<char**>(seek_xpm));
 
-            break;
-        case EXAMINE_BUTTON:
-            {
-                parent->RemoveChild(p);
-                delete p;
-                PRIVATE(this)->viewbutton = new wxToggleButton(parent, i, wxEmptyString);
-                p = PRIVATE(this)->viewbutton;
-                PRIVATE(this)->viewbutton->SetValue(this->isViewing());
-                p->SetName("EXAMINE");
-                p->SetBitmap(Fl_Image(view_xpm));
-            }
-            break;
-        case HOME_BUTTON:
-            {
-                p->SetBitmap(Fl_Image(home_xpm));
-                p->SetName("HOME");
-            }
-            break;
-        case SET_HOME_BUTTON:
-            {
-                p->SetBitmap(Fl_Image(set_home_xpm));
-                p->SetName("SET_HOME");
-            }
-            break;
-        case VIEW_ALL_BUTTON:
-            {
-                p->SetBitmap(Fl_Image(view_all_xpm));
-                p->SetName("VIEW_ALL");
-            }
-            break;
-        case SEEK_BUTTON:
-            {
-                p->SetBitmap(Fl_Image(seek_xpm));
-                p->SetName("SEEK");
-            }
-            break;
-        default:
-            assert(0);
-            break;
-        }
+    auto *interact = new Fl_Toggle_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    interact->image(&pick_pixmap);
+    interact->value(this->isViewing() ? 0 : 1);
+    interact->label(nullptr);
+    interact->callback(&onInteractClicked, PRIVATE(this));
+    PRIVATE(this)->interactbutton = interact;
+    button_list->append(interact);
 
-        p->SetWindowStyle(wxBU_EXACTFIT | wxBU_NOTEXT);
-        p->SetSize(XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
-        button_list->append(p);
-    }
-#endif
+    auto *view = new Fl_Toggle_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    view->image(&view_pixmap);
+    view->value(this->isViewing() ? 1 : 0);
+    view->label(nullptr);
+    view->callback(&onViewClicked, PRIVATE(this));
+    PRIVATE(this)->viewbutton = view;
+    button_list->append(view);
+
+    auto *home = new Fl_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    home->image(&home_pixmap);
+    home->label(nullptr);
+    home->callback(&onHomeClicked, PRIVATE(this));
+    button_list->append(home);
+
+    auto *set_home = new Fl_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    set_home->image(&set_home_pixmap);
+    set_home->label(nullptr);
+    set_home->callback(&onSetHomeClicked, PRIVATE(this));
+    button_list->append(set_home);
+
+    auto *view_all = new Fl_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    view_all->image(&view_all_pixmap);
+    view_all->label(nullptr);
+    view_all->callback(&onViewAllClicked, PRIVATE(this));
+    button_list->append(view_all);
+
+    auto *seek = new Fl_Button(0, 0, XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
+    seek->image(&seek_pixmap);
+    seek->label(nullptr);
+    seek->callback(&onSeekClicked, PRIVATE(this));
+    button_list->append(seek);
 }
 
 void
@@ -508,10 +541,10 @@ initString(char* & destination,
            const char* data)
 {
     delete [] destination;
-    destination = 0;
+    destination = nullptr;
     if (data)
     {
-        int length = strlen(data) + 1;
+        const auto length = strlen(data) + 1;
         destination = strncpy(new char[length], data, length);
     }
 }
@@ -552,32 +585,47 @@ SoFlFullViewer::sizeChanged(const SbVec2s& size)
                            size[0], size[1]);
 #endif
 
-    SbVec2s new_size(size);
-
     if (PRIVATE(this)->viewerwidget) {
-        if (PRIVATE(this)->canvas) {
-            PRIVATE(this)->canvas->size(size[0], size[1]);
-        }
+        int left_trim_w = 0;
+        int right_trim_w = 0;
+        int bottom_trim_h = 0;
 
         if (PRIVATE(this)->decorations) {
+            // leftDecoration -> basso a sinistra
             if (this->leftWheel) {
-                int y = (size[1] - this->leftWheel->h()) / 2;
+                left_trim_w = leftWheel->w();
+                int y = size[1] - this->leftWheel->h();
                 this->leftWheel->position(0, y);
             }
+            // rightDecoration -> basso a destra (sotto i bottoni)
+            if (this->rightWheel) {
+                right_trim_w = rightWheel->w();
+                int x = size[0] - this->rightWheel->w();
+                int y = size[1] - this->rightWheel->h();
+                this->rightWheel->position(x, y);
+            }
+            // bottomDecoration -> al centro, in basso
             if (this->bottomWheel) {
-                int x = (size[0] - this->bottomWheel->w()) / 2;
+                bottom_trim_h = bottomWheel->h();
+                int x = left_trim_w + (size[0] - left_trim_w - right_trim_w - this->bottomWheel->w()) / 2;
                 int y = size[1] - this->bottomWheel->h();
                 this->bottomWheel->position(x, y);
             }
-            if (this->rightWheel) {
-                int x = size[0] - this->rightWheel->w();
-                int y = (size[1] - this->rightWheel->h()) / 2;
-                this->rightWheel->position(x, y);
-            }
+        }
+
+        // layoutViewerButtons posiziona i bottoni in alto a destra
+        PRIVATE(this)->layoutViewerButtons(this, size);
+
+        // canvas -> centro, sopra bottomDecoration
+        if (PRIVATE(this)->canvas) {
+            // Occupa tutto lo spazio tranne i trim laterali (se vogliamo che copra i trim laterali in altezza)
+            // L'utente dice: "canvas e bottomDecoration devono essere al centro con canvas sopra e bottomDecoration sotto"
+            // Quindi il canvas deve finire dove inizia bottomDecoration.
+            PRIVATE(this)->canvas->resize(left_trim_w, 0, size[0] - left_trim_w - right_trim_w, size[1] - bottom_trim_h);
         }
     }
 
-    inherited::sizeChanged(new_size);
+    inherited::sizeChanged(size);
 }
 
 const char*

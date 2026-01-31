@@ -51,4 +51,7 @@ enum {
     Z_BUTTON
 };
 
+constexpr int XPM_BUTTON_SIZE = 24;
+constexpr int XPM_BUTTON_PADDING = 2;
+
 #endif //SOFL_BUTTONINDEXVALUES_H

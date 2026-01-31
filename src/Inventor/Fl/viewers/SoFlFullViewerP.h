@@ -112,6 +112,7 @@ public:
     void decreaseInteractiveCount();
 
     void bindEvents(Fl_Window*);
+    void layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s &size);
 };
 
 

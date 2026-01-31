@@ -131,10 +131,11 @@ BOOST_AUTO_TEST_CASE(test_wheels_getPosition_vertical)
     BOOST_CHECK(wheel->numPixmaps > 0);
     BOOST_CHECK(wheel->pixmaps != nullptr);
     BOOST_CHECK(wheel->fl_images != nullptr);
-    int a_pixmap = 0;
     auto rgb_image = wheel->fl_images[0];
     BOOST_CHECK(rgb_image != nullptr);
-    BOOST_CHECK(wheel->getPosition(rgb_image) == SbVec2s(6, 3 ));
+    auto position = wheel->getPosition(rgb_image);
+    BOOST_TEST_MESSAGE("wheel->getPosition: " << position[0]<<','<<position[1]);
+    BOOST_CHECK(position == SbVec2s(6, 3 ));
     delete wheel;
     delete window;
 }
@@ -150,8 +151,9 @@ BOOST_AUTO_TEST_CASE(test_wheels_getPosition_horizontal)
     int a_pixmap = 0;
     auto rgb_image = wheel->fl_images[0];
     BOOST_CHECK(rgb_image != nullptr);
-    auto val = wheel->getPosition(rgb_image);
-    BOOST_CHECK(wheel->getPosition(rgb_image) == SbVec2s(3, 6 ));
+    auto position = wheel->getPosition(rgb_image);
+    BOOST_TEST_MESSAGE("wheel->getPosition: " << position[0]<<','<<position[1]);
+    BOOST_CHECK(position == SbVec2s(3, 6 ));
     delete wheel;
     delete window;
 }

@@ -39,12 +39,11 @@
 
 #include <FL/Fl_Window.H>
 
-
 namespace
 {
     void timerQueueTimerCB(void* userdata)
     {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
         SoDebugError::postInfo("timerQueueTimerCB",
                                "processing timer queue");
 #endif
@@ -151,7 +150,7 @@ SoFlP::sensorQueueChanged()
         // So we clamp it, to a small positive value:
         if (interval.getValue() <= 0.0) { interval.setValue(1.0 / 5000.0); }
 
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
         SoDebugError::postInfo("SoFlP::sensorQueueChanged",
                                "timer sensor pending, interval %f",
                                interval.getValue());

@@ -37,52 +37,46 @@
 #define PRIVATE(obj) (obj)
 #define PUBLIC(obj) ((obj)->pub)
 
-SbDict * SoFlComponentP::cursordict = NULL;
+SbDict * SoFlComponentP::cursordict = nullptr;
 
 SoFlComponentP::SoFlComponentP(SoFlComponent *o)
         : SoGuiComponentP(o)
-        , classname("")
-        , widgetname("") {
-
-}
-
-SoFlComponentP::~SoFlComponentP() {
-
+        {
 }
 
 static void
 delete_dict_value(SbDict::Key key, void * value) {
-    delete (Fl_Cursor*)value;
+    delete static_cast<Fl_Cursor*>(value);
 }
 
 void
 SoFlComponentP::atexit_cleanup() {
     SOFL_STUB();
-    if (SoFlComponentP::cursordict) {
-        SoFlComponentP::cursordict->applyToAll(delete_dict_value);
-        delete SoFlComponentP::cursordict;
-        SoFlComponentP::cursordict = NULL;
+    if (cursordict) {
+        cursordict->applyToAll(delete_dict_value);
+        delete cursordict;
+        cursordict = nullptr;
     }
 }
 
 void
 SoFlComponentP::fatalerrorHandler(void *userdata) {
     SOFL_STUB();
-    SoFlComponentP * that = (SoFlComponentP *)userdata;
-    (void*)(that); // unused for the time being
+    auto * that = static_cast<SoFlComponentP*>(userdata);
+    static_cast<void*>(that); // unused for the time being
 }
 
 void
-SoFlComponentP::widgetClosed(void) {
+SoFlComponentP::widgetClosed() {
     SOFL_STUB();
     if (this->closeCB) { this->closeCB(this->closeCBdata, PUBLIC(this)); }
 }
 
 Fl_Cursor
 SoFlComponentP::getNativeCursor(const SoFlCursor::CustomCursor *cc) {
-    if (SoFlComponentP::cursordict == NULL) { // first call, initialize
-        SoFlComponentP::cursordict = new SbDict;
-        SoAny::atexit((SoAny::atexit_f*)SoFlComponentP::atexit_cleanup, 0);
+    if (cursordict == nullptr) { // first call, initialize
+        cursordict = new SbDict;
+        SoAny::atexit(atexit_cleanup, 0);
     }
 #if 0
     void * qc;
@@ -120,7 +114,7 @@ SoFlComponentP::getNativeCursor(const SoFlCursor::CustomCursor *cc) {
 #endif
 
     Fl_Cursor c = FL_CURSOR_DEFAULT;
-    SoFlComponentP::cursordict->enter((uintptr_t)cc, &c);
+    cursordict->enter((uintptr_t)cc, &c);
     return c;
 }
 

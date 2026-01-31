@@ -44,9 +44,12 @@ main(int argc,
     Fl_Window* window = SoFl::init( argv[0] );
 
     auto viewer = new SoFlExaminerViewer( window );
+    viewer->setSize(SbVec2s(800,800));
 
     SoNode * root = new SoCone;
     viewer->setSceneGraph( root );
+    // TODO: fltk can not retrieve a root window if not shown yet
+    viewer->setTitle("Examiner Viewer");
     viewer->show();
     SoFl::show( window );
 

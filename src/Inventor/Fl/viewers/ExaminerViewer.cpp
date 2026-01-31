@@ -38,18 +38,18 @@
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 
 #include "sofldefs.h"
-#include "ButtonIndexValues.h"
-
-
-#if HAVE_LIBXPM
-#include <Inventor/Fl/common/pixmaps/ortho.xpm>
-#include <Inventor/We/common/pixmaps/perspective.xpm>
-#endif // HAVE_LIBXPM
 
 #define PRIVATE(obj) ((obj)->pimpl)
 #define PUBLIC(obj) ((obj)->pub)
 
 SOFL_OBJECT_SOURCE(SoFlExaminerViewer);
+
+namespace {
+void onCameraToggleClicked(Fl_Widget *, void *data) {
+    auto *pimpl = static_cast<SoFlExaminerViewerP *>(data);
+    if (pimpl) pimpl->cameratoggleClicked(0);
+}
+} // namespace
 
 SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
                                        char const* name,
@@ -97,14 +97,11 @@ SoFlExaminerViewer::setCamera(SoCamera * newCamera) {
                 this->setRightWheelString("Dolly");
         }
         if (PRIVATE(this)->cameratogglebutton) {
-            // TODO:
-#if 0
-            PRIVATE(this)->cameratogglebutton->SetBitmap(
+            PRIVATE(this)->cameratogglebutton->image(
                     orthogonal ?
-                    (PRIVATE(this)->orthopixmap) :
-                    (PRIVATE(this)->perspectivepixmap));
-#endif
-
+                    PRIVATE(this)->orthopixmap :
+                    PRIVATE(this)->perspectivepixmap);
+            PRIVATE(this)->cameratogglebutton->redraw();
         }
     }
 
@@ -116,21 +113,20 @@ SoFlExaminerViewer::createViewerButtons(Fl_Window* parent,
                                         SbPList * buttonlist) {
 
     inherited::createViewerButtons(parent, buttonlist);
-    /*
-    PRIVATE(this)->cameratogglebutton = new Fl_Button(parent, CAMERA_BUTTON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-    PRIVATE(this)->cameratogglebutton->SetName("CAMERA");
+    PRIVATE(this)->cameratogglebutton = new Fl_Button(0,0,10,10,nullptr);
+    PRIVATE(this)->cameratogglebutton->copy_label("CAMERA");
+    PRIVATE(this)->cameratogglebutton->callback(&onCameraToggleClicked,
+                                                PRIVATE(this));
 
-    Fl_Image * p = NULL;
+    Fl_Image * p = nullptr;
     SoType t = this->getCameraType();
     if (t.isDerivedFrom(SoOrthographicCamera::getClassTypeId()))
-        p = &PRIVATE(this)->orthopixmap;
+        p = PRIVATE(this)->orthopixmap;
     else if (t.isDerivedFrom(SoPerspectiveCamera::getClassTypeId()))
-        p = &PRIVATE(this)->perspectivepixmap;
+        p = PRIVATE(this)->perspectivepixmap;
     else assert(0 && "unsupported cameratype");
 
-    PRIVATE(this)->cameratogglebutton->SetBitmap(*p);
-*/
+    PRIVATE(this)->cameratogglebutton->image(p);
+    PRIVATE(this)->cameratogglebutton->redraw();
     buttonlist->append(PRIVATE(this)->cameratogglebutton);
 }
-
-

@@ -30,7 +30,6 @@ set(HDRS
   Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
   Inventor/${Gui}/widgets/So${Gui}Slider.h          # added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.h
-  Inventor/${Gui}/widgets/WheelEvents.h     # added
 )
 
 set(SRCS
@@ -67,7 +66,6 @@ set(SRCS
   Inventor/${Gui}/widgets/So${Gui}Slider.cpp #added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.cpp
   Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
-  Inventor/${Gui}/widgets/WheelEvents.cpp     # added
 )
 
 file(GLOB_RECURSE COMMON_RESOURCES ${CMAKE_BINARY_DIR}/data/materials/*.h)
