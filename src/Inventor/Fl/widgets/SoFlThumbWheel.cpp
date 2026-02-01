@@ -120,7 +120,7 @@ SoFlThumbWheel::constructor(Orientation orientation)
     this->wheelValue = this->tempWheelValue = 0.0f;
     this->wheel = new SoAnyThumbWheel;
     this->wheel->setMovement(SoAnyThumbWheel::UNIFORM);
-    this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::ARGB);
+    this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::RGBA);
     this->pixmaps = nullptr;
     this->fl_images = nullptr;
     this->numPixmaps = 0;
@@ -347,12 +347,10 @@ SoFlThumbWheel::initWheel(int diameter, int width)
     for (int i = 0; i < this->numPixmaps; i++)
     {
         auto buffer = new uint8_t [pwidth * pheight *4];
-        this->wheel->setGraphicsByteOrder(SoAnyThumbWheel::RGBA);
         this->wheel->drawBitmap(i,
                                 buffer,
                                 (this->orient == Vertical) ?
                                 SoAnyThumbWheel::VERTICAL : SoAnyThumbWheel::HORIZONTAL);
-
         this->pixmaps[i] = buffer;
         this->fl_images[i] = new Fl_RGB_Image(buffer, pwidth, pheight, 4);
     }
