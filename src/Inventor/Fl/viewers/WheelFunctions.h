@@ -1,5 +1,5 @@
 /**************************************************************************\
- * BSD 3-Clause License
+* BSD 3-Clause License
  *
  * Copyright (c) 2025, Fabrizio Morciano
  * All rights reserved.
@@ -30,15 +30,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#ifndef SOFL_VIEWERSWXIDS_H
-#define SOFL_VIEWERSWXIDS_H
+#ifndef SOFL_WHEELFUNCTIONS_H
+#define SOFL_WHEELFUNCTIONS_H
 
 #ifndef SOFL_INTERNAL
 #error this is a private header file
 #endif
 
-#include "FL/windowid.h"
+#include "Inventor/Fl/viewers/SoFlFullViewer.h"
 
-extern const Fl_WidgetID FULL_VIEWER_P;
+typedef void(SoFlFullViewer:: *VoidFuncNoPar)() ;
+typedef void(SoFlFullViewer:: *VoidFuncOnePar)(float) ;
 
-#endif //SOFL_VIEWERSWXIDS_H
+struct WheelFunctions {
+    VoidFuncNoPar onPress;
+    VoidFuncNoPar onRelease;
+    VoidFuncOnePar onMove;
+    SoFlFullViewer* fullViewer;
+
+    WheelFunctions() : onPress(nullptr), onRelease(nullptr), onMove(nullptr), fullViewer(nullptr)
+    {
+    }
+
+    WheelFunctions(SoFlFullViewer* widget, VoidFuncNoPar o_p, VoidFuncNoPar o_r, VoidFuncOnePar o_m)
+    :fullViewer(widget)
+    ,onPress(o_p)
+    ,onRelease(o_r)
+    ,onMove(o_m) {
+
+    }
+
+};
+
+#endif //SOFL_WHEELFUNCTIONS_H

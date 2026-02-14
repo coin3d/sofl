@@ -49,8 +49,9 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_PNG_Image.H>
 
-
 #include <FL/Enumerations.H>
+
+#include "../viewers/WheelFunctions.h"
 
 namespace
 {
@@ -133,7 +134,7 @@ SoFlThumbWheel::constructor(Orientation orientation)
 void
 SoFlThumbWheel::mousePressEvent(int event)
 {
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::mousePressEvent",
                            "event: %d",
                            event);
@@ -151,11 +152,14 @@ SoFlThumbWheel::mousePressEvent(int event)
 
     this->mouseLastPos = this->mouseDownPos;
 
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::mousePressEvent",
                            "state: %d mouseDownPos: %d mouseLastPos: %d",
                            state, mouseDownPos, mouseLastPos);
 #endif
+    assert(this->user_data());
+    auto wheelFunctions = static_cast<WheelFunctions*>(this->user_data());
+    (wheelFunctions->fullViewer ->* wheelFunctions->WheelFunctions::onPress) ();
 
     redraw();
 }
@@ -166,7 +170,7 @@ SoFlThumbWheel::mousePressEvent(int event)
 void
 SoFlThumbWheel::mouseMoveEvent(int event)
 {
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     if (event != 11)
     {
         SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent",
@@ -189,7 +193,7 @@ SoFlThumbWheel::mouseMoveEvent(int event)
                                                        this->mouseDownPos,
                                                        delta);
 
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::mouseMoveEvent",
                            "delta: %d <x,y>: %d,%d tempWheelValue: %d mouseDownPos: %d",
                            delta,
@@ -197,6 +201,9 @@ SoFlThumbWheel::mouseMoveEvent(int event)
                            this->tempWheelValue,
                            this->mouseDownPos);
 #endif
+    assert(this->user_data());
+    auto wheelFunctions = static_cast<WheelFunctions*>(this->user_data());
+    (wheelFunctions->fullViewer ->* wheelFunctions->WheelFunctions::onMove) (this->tempWheelValue);
     redraw();
 }
 
@@ -206,7 +213,7 @@ SoFlThumbWheel::mouseMoveEvent(int event)
 void
 SoFlThumbWheel::mouseReleaseEvent(int event)
 {
-#if SOFL_DEBUG && 0
+#if SOFL_DEBUG
     SoDebugError::postInfo("SoFlThumbWheel::mouseReleaseEvent",
                            "event: %d",
                            event);
@@ -218,6 +225,10 @@ SoFlThumbWheel::mouseReleaseEvent(int event)
     this->wheelValue = this->tempWheelValue;
     this->mouseLastPos = this->mouseDownPos;
     this->state = Idle;
+    assert(this->user_data());
+    auto wheelFunctions = static_cast<WheelFunctions*>(this->user_data());
+    (wheelFunctions->fullViewer ->* wheelFunctions->WheelFunctions::onRelease) ();
+
     redraw();
 }
 
@@ -387,8 +398,7 @@ SoFlThumbWheel::isEnabled() const
     return (this->state != Disabled);
 }
 
-void
-SoFlThumbWheel::setValue(float value)
+auto SoFlThumbWheel::setValue(float value) -> void
 {
     this->wheelValue = this->tempWheelValue = value;
     this->mouseDownPos = this->mouseLastPos;

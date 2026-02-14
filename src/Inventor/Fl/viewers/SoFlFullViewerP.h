@@ -39,8 +39,9 @@
 #include "Inventor/Fl/viewers/SoGuiFullViewerP.h"
 #include "Inventor/Fl/viewers/SoFlFullViewer.h"
 #include <FL/Fl_Toggle_Button.H>
+#include "WheelFunctions.h"
 #include <string>
-#include <map>
+#include <vector>
 
 class SoFlFullViewerP : public SoGuiFullViewerP {
 public:
@@ -62,29 +63,8 @@ public:
     SbPList * appbuttonlist;
     SbPList * viewerbuttons;
 
-    typedef void(SoFlFullViewer:: *VoidFuncNoPar)() ;
-    typedef void(SoFlFullViewer:: *VoidFuncOnePar)(float) ;
-    struct WheelFunctions {
-        WheelFunctions() {
+    std::vector<WheelFunctions*> objectMap;
 
-        }
-        WheelFunctions(VoidFuncNoPar o_p, VoidFuncNoPar o_r, VoidFuncOnePar o_m)
-        :onPress(o_p)
-        ,onRelease(o_r)
-        ,onMove(o_m) {
-
-        }
-
-        VoidFuncNoPar onPress;
-        VoidFuncNoPar onRelease;
-        VoidFuncOnePar onMove;
-    };
-
-    typedef std::map<Fl_Window*, WheelFunctions> MapEvent;
-    MapEvent objectMap;
-    void initThumbWheelEventMap();
-
-    void setLeftWheelValue(const float value);
     static void setThumbWheelValue(Fl_Window*, float value);
     void showDecorationWidgets(SbBool onOff);
     // Thumbwheels.
@@ -107,11 +87,12 @@ public:
     void selectedDecoration();
     void selectedHeadlight();
 
+    void initThumbWheelEvent();
+
     // Generic slots.
     void increaseInteractiveCount();
     void decreaseInteractiveCount();
 
-    void bindEvents(Fl_Window*);
     void layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s &size);
 };
 

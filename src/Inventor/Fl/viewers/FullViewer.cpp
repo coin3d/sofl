@@ -232,8 +232,6 @@ SoFlFullViewer::buildWidget(Fl_Window* parent)
 #endif
 
 #endif
-
-    PRIVATE(this)->bindEvents(PRIVATE(this)->viewerwidget);
     PRIVATE(this)->viewerwidget->resizable();
     return PRIVATE(this)->viewerwidget;
 }
@@ -388,7 +386,7 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
 #endif
 
     this->buildViewerButtons(parent);
-    PRIVATE(this)->initThumbWheelEventMap();
+    PRIVATE(this)->initThumbWheelEvent();
 }
 
 /*
@@ -400,10 +398,7 @@ SoFlFullViewer::buildDecoration(Fl_Window* parent) {
 Fl_Window*
 SoFlFullViewer::buildLeftTrim(Fl_Window* parent)
 {
-    //auto
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
-    //int y = (parent->h() - t->h()) / 2;
-    //t->position(0, y);
     t->copy_label("left thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->leftWheelVal = t->value();
@@ -415,11 +410,6 @@ Fl_Window*
 SoFlFullViewer::buildBottomTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Horizontal, SbVec2s(0,0));
-    /*
-     *int x = (parent->w() - t->w()) / 2;
-    int y = parent->h() - t->h();
-    t->position(x, y);
-    */
     t->copy_label("bottom thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->bottomWheelVal = t->value();
@@ -431,11 +421,6 @@ Fl_Window*
 SoFlFullViewer::buildRightTrim(Fl_Window* parent)
 {
     auto t = new SoFlThumbWheel(SoFlThumbWheel::Vertical, SbVec2s(0,0));
-    /*
-    int x = parent->w() - t->w();
-    int y = (parent->h() - t->h()) / 2;
-    t->position(x, y);
-    */
     t->copy_label("right thumb wheel");
     t->setRangeBoundaryHandling(SoFlThumbWheel::ACCUMULATE);
     this->rightWheelVal = t->value();

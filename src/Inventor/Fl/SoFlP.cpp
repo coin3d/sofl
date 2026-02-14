@@ -61,7 +61,7 @@ namespace
     // starvation).
     void delayTimeoutTimerCB(void* userdata)
     {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
         SoDebugError::postInfo("delayTimeoutTimerCB",
                                "processing delay queue");
 #endif
@@ -171,7 +171,7 @@ SoFlP::sensorQueueChanged()
     // Set up idle notification to delay queue processing if necessary.
     if (sm->isDelaySensorPending())
     {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
         // debug
         SoDebugError::postInfo("SoFlP::sensorQueueChanged",
                                "delay sensor pending");

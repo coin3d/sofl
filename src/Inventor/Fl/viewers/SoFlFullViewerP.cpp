@@ -42,21 +42,29 @@
 #define PRIVATE(o) (o->pimpl)
 
 SoFlFullViewerP::SoFlFullViewerP(SoFlFullViewer *pViewer)
-        : SoGuiFullViewerP(pViewer) {
+        : SoGuiFullViewerP(pViewer)
+{
     assert(pViewer);
 }
 
-SoFlFullViewerP::~SoFlFullViewerP() {
-    objectMap.clear();
+SoFlFullViewerP::~SoFlFullViewerP()
+{
+    while (!objectMap.empty())
+    {
+        delete objectMap.back();
+        objectMap.pop_back();
+    }
 }
 
 void
-SoFlFullViewerP::setThumbWheelValue(Fl_Window* wheel, float val) {
+SoFlFullViewerP::setThumbWheelValue(Fl_Window* wheel, float val)
+{
     dynamic_cast<SoFlThumbWheel*>(wheel)->setValue(val);
 }
 
 void
-SoFlFullViewerP::showDecorationWidgets(SbBool onOff) {
+SoFlFullViewerP::showDecorationWidgets(SbBool onOff)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets", "[invoked] %s", onOff ? "ON" : "OFF");
 #endif
@@ -76,75 +84,45 @@ SoFlFullViewerP::showDecorationWidgets(SbBool onOff) {
 }
 
 void
-SoFlFullViewerP::wheelPressed(int event) {
+SoFlFullViewerP::wheelPressed(int event)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelPressed", "event arrived!");
 #endif
-    MapEvent::iterator it = objectMap.find(static_cast<Fl_Window*>(nullptr));//event.GetEventObject()));
-    if( it != objectMap.end() ) {
-        VoidFuncNoPar function = it->second.onPress;
-        (PUBLIC(this)->*function)();
-    }
-
-#if SOFL_DEBUG
-    else {
-        SoDebugError::postWarning("SoFlFullViewerP::wheelPressed", "not valid event found!");
-    }
-#endif
-
 
 }
 
 void
-SoFlFullViewerP::wheelReleased(int event) {
+SoFlFullViewerP::wheelReleased(int event)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelReleased", "event arrived!");
 #endif
-    MapEvent::iterator it = objectMap.find(static_cast<Fl_Window*>(nullptr));//event.GetEventObject()));
-    if( it != objectMap.end() ) {
-        VoidFuncNoPar function = it->second.onRelease;
-        (PUBLIC(this)->*function)();
-    }
-
-#if SOFL_DEBUG
-    else {
-        SoDebugError::postWarning("SoFlFullViewerP::wheelReleased", "not valid event found!");
-    }
-#endif
 
 }
 
 void
-SoFlFullViewerP::wheelMoved(int event) {
+SoFlFullViewerP::wheelMoved(int event)
+{
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelMoved", "event arrived!");
 #endif
 
-    Fl_Window* emitting_thumb_wheel = nullptr; //static_cast<Fl_Widget*>(event.GetEventObject());
-    MapEvent::iterator it = objectMap.find( emitting_thumb_wheel);
-    if( it != objectMap.end() ) {
-        VoidFuncOnePar function = it->second.onMove;
-        float *v = nullptr;//static_cast<float*>(event.GetClientData());
-        if(v)
-            (PUBLIC(this)->*function)(*v);
-    }
-
-#if SOFL_DEBUG
-    else {
-        SoDebugError::postWarning("SoFlFullViewerP::wheelMoved", "not valid event found!");
-    }
-#endif
-
-
 }
 
-#define ADD_DATA_IN_MAP(objectName) \
+
+#define ADD_DATA_IN_MAP(objectName) do {\
 assert(PUBLIC(this)->objectName && "Thumbwheel Can no be null"); \
-objectMap[PUBLIC(this)->objectName] = WheelFunctions(&SoFlFullViewer::objectName ## Start,\
-                                                     &SoFlFullViewer::objectName ## Finish, \
-                                                     &SoFlFullViewer::objectName ## Motion)
+auto wheelFunctions = new WheelFunctions(PUBLIC(this), \
+                                        &SoFlFullViewer::objectName ## Start,\
+                                        &SoFlFullViewer::objectName ## Finish,\
+                                        &SoFlFullViewer::objectName ## Motion);\
+objectMap.push_back(wheelFunctions);\
+PUBLIC(this)->objectName->user_data(wheelFunctions); } while (0)
+
+
 void
-SoFlFullViewerP::initThumbWheelEventMap() {
+SoFlFullViewerP::initThumbWheelEvent() {
     ADD_DATA_IN_MAP(rightWheel);
     ADD_DATA_IN_MAP(leftWheel);
     ADD_DATA_IN_MAP(bottomWheel);
@@ -210,23 +188,6 @@ SoFlFullViewerP::viewbuttonClicked(int) {
 
 }
 
-void SoFlFullViewerP::bindEvents(Fl_Window *w) {
-    assert(w && "window can not be null!");
-    /*
-    w->Bind(SO_WX_MOUSE_WHEEL_PRESSED, &SoFlFullViewerP::wheelPressed, this, FULL_VIEWER_P);
-    w->Bind(SO_WX_MOUSE_WHEEL_RELEASED, &SoFlFullViewerP::wheelReleased, this, FULL_VIEWER_P);
-    w->Bind(SO_WX_MOUSE_WHEEL_MOVED, &SoFlFullViewerP::wheelMoved, this, FULL_VIEWER_P);
-
-    w->Bind(wxEVT_TOGGLEBUTTON, &SoFlFullViewerP::interactbuttonClicked, this, INTERACT_BUTTON);
-    w->Bind(wxEVT_TOGGLEBUTTON, &SoFlFullViewerP::viewbuttonClicked, this, EXAMINE_BUTTON);
-
-    w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::homebuttonClicked, this, HOME_BUTTON);
-    w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::sethomebuttonClicked, this, SET_HOME_BUTTON);
-    w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::seekbuttonClicked, this, SEEK_BUTTON);
-    w->Bind(wxEVT_BUTTON, &SoFlFullViewerP::viewallbuttonClicked, this, VIEW_ALL_BUTTON);
-    */
-}
-
 void SoFlFullViewerP::layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s &size) {
     if (!viewer) return;
     if (!PRIVATE(viewer)->viewerbuttons) return;
@@ -249,7 +210,5 @@ void SoFlFullViewerP::layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s 
     }
 }
 
-
-#undef ADD_DATA_IN_MAP
 #undef PUBLIC
 #undef PRIVATE

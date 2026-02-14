@@ -54,8 +54,8 @@ void onCameraToggleClicked(Fl_Widget *, void *data) {
 SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
                                        char const* name,
                                        int embed,
-                                       SoFlFullViewer::BuildFlag flag,
-                                       SoFlViewer::Type type)
+                                       BuildFlag flag,
+                                       Type type)
         : inherited(parent, name, embed, flag, type, FALSE) {
     PRIVATE(this) = new SoFlExaminerViewerP(this);
     PRIVATE(this)->constructor(TRUE);
@@ -64,8 +64,8 @@ SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window* parent,
 SoFlExaminerViewer::SoFlExaminerViewer(Fl_Window *parent,
                                        const char *name,
                                        SbBool embed,
-                                       SoFlFullViewer::BuildFlag flag,
-                                       SoFlViewer::Type type,
+                                       BuildFlag flag,
+                                       Type type,
                                        SbBool build)
     : inherited(parent, name, embed, flag, type, build) {
     PRIVATE(this) = new SoFlExaminerViewerP(this);
