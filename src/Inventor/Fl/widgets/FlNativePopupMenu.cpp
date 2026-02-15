@@ -422,6 +422,18 @@ FlNativePopupMenu::removeMenuItem(int itemid)
     }
 }
 
+// La funzione callback
+void mio_callback(Fl_Widget* w, void* data) {
+    // 'w' è il widget padre (es. Fl_Menu_Bar)
+    // Per sapere quale voce è stata cliccata, usiamo mvalue()
+
+#if SOFL_DEBUG
+    SoDebugError::postInfo("mio_callback",
+                           "mio_callback");
+#endif
+
+}
+
 // Helper to build FLTK menu items
 void
 FlNativePopupMenu::build_fltk_menu(int menuid,
@@ -441,7 +453,8 @@ FlNativePopupMenu::build_fltk_menu(int menuid,
                 fl_item.text = item->title.c_str();
                 fl_item.user_data_ = reinterpret_cast<void*>(static_cast<uintptr_t>(item->itemid));
                 fl_item.flags = 0;
-                if (!(item->flags & ITEM_ENABLED)) fl_item.flags |= FL_MENU_INACTIVE;
+                fl_item.callback(mio_callback);
+                // TODO: why is disabled?? if (!(item->flags & ITEM_ENABLED)) fl_item.flags |= FL_MENU_INACTIVE;
                 if (item->flags & ITEM_MARKED) fl_item.flags |= FL_MENU_TOGGLE | FL_MENU_VALUE;
                 fl_items.push_back(fl_item);
             }

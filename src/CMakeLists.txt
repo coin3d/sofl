@@ -42,7 +42,7 @@ set(SRCS
   Inventor/${Gui}/So${Gui}GLWidgetP.cpp #added
   Inventor/${Gui}/So${Gui}Internal.cpp #added
   Inventor/${Gui}/So${Gui}LightSliderSet.cpp #added
-  #Inventor/${Gui}/So${Gui}MaterialList.cpp           # FIXME why not?!
+  Inventor/${Gui}/So${Gui}MaterialList.cpp           # FIXME why not?!
   Inventor/${Gui}/So${Gui}MaterialSliderSet.cpp #added
   Inventor/${Gui}/So${Gui}SliderSetBase.cpp #added
   Inventor/${Gui}/So${Gui}SliderSet.cpp #added

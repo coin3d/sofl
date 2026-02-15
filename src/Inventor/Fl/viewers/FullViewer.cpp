@@ -61,7 +61,7 @@ SOFL_OBJECT_ABSTRACT_SOURCE(SoFlFullViewer);
 namespace {
 
 void onInteractClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onInteractClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
@@ -69,7 +69,7 @@ void onInteractClicked(Fl_Widget *, void *data) {
 }
 
 void onViewClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onViewClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
@@ -77,7 +77,7 @@ void onViewClicked(Fl_Widget *, void *data) {
 }
 
 void onHomeClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onViewClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
@@ -85,7 +85,7 @@ void onHomeClicked(Fl_Widget *, void *data) {
 }
 
 void onSetHomeClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onSetHomeClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
@@ -93,7 +93,7 @@ void onSetHomeClicked(Fl_Widget *, void *data) {
 }
 
 void onViewAllClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onViewAllClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
@@ -101,7 +101,7 @@ void onViewAllClicked(Fl_Widget *, void *data) {
 }
 
 void onSeekClicked(Fl_Widget *, void *data) {
-#if SOFL_DEBUG
+#if SOFL_DEBUG && 0
     SoDebugError::postInfo("onSeekClicked", "[invoked]");
 #endif
     auto *pimpl = static_cast<SoFlFullViewerP *>(data);
