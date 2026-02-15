@@ -28,7 +28,7 @@ set(HDRS
   Inventor/${Gui}/viewers/So${Gui}PlaneViewerP.h
   Inventor/${Gui}/widgets/So${Gui}GLArea.h
   Inventor/${Gui}/widgets/${Gui}NativePopupMenu.h
-  Inventor/${Gui}/widgets/So${Gui}Slider.h          # added
+  #Inventor/${Gui}/widgets/So${Gui}Slider.h          # added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.h
 )
 
@@ -38,7 +38,6 @@ set(SRCS
   Inventor/${Gui}/So${Gui}Clipboard.cpp #added
   Inventor/${Gui}/So${Gui}Component.cpp
   Inventor/${Gui}/So${Gui}ComponentP.cpp #added
-#  Inventor/${Gui}/So${Gui}DirectionalLightEditor.cpp #added
   Inventor/${Gui}/So${Gui}GLWidget.cpp
   Inventor/${Gui}/So${Gui}GLWidgetP.cpp #added
   Inventor/${Gui}/So${Gui}Internal.cpp #added
@@ -63,7 +62,7 @@ set(SRCS
   Inventor/${Gui}/viewers/PlaneViewer.cpp
   #Inventor/${Gui}/viewers/WalkViewer.cpp             # FIXME why not?!
   Inventor/${Gui}/widgets/So${Gui}GLArea.cpp
-  Inventor/${Gui}/widgets/So${Gui}Slider.cpp #added
+  #Inventor/${Gui}/widgets/So${Gui}Slider.cpp #added
   Inventor/${Gui}/widgets/So${Gui}ThumbWheel.cpp
   Inventor/${Gui}/widgets/${Gui}NativePopupMenu.cpp
 )

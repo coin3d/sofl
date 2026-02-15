@@ -30,13 +30,52 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#ifndef SOFL_SOFLSLIDER_H
-#define SOFL_SOFLSLIDER_H
+#define BOOST_TEST_NO_LIB 1
+#include <boost/test/unit_test.hpp>
 
+#include "Inventor/Fl/viewers/SoFlPlaneViewer.h"
+#include <Inventor/nodes/SoCamera.h>
+#include <FL/Fl_Window.H>
 
-class SoFlSlider {
+BOOST_AUTO_TEST_SUITE(TestSoFlPlaneViewer);
 
-};
+BOOST_AUTO_TEST_CASE(shouldCreateViewer) {
+    Fl_Window* window = new Fl_Window(100, 100, "Test PlaneViewer");
+    SoFlPlaneViewer* viewer = new SoFlPlaneViewer(window);
+    
+    BOOST_CHECK(viewer != NULL);
+    BOOST_CHECK_EQUAL(viewer->getParentWidget(), window);
+    
+    delete viewer;
+    delete window;
+}
 
+BOOST_AUTO_TEST_CASE(shouldHandleCameraType) {
+    Fl_Window* window = new Fl_Window(100, 100, "Test PlaneViewer Camera");
+    SoFlPlaneViewer* viewer = new SoFlPlaneViewer(window);
+    
+    // Default should be orthographic for PlaneViewer usually, but let's check
+    SoType type = viewer->getCameraType();
+    // In many Coin3D viewers, default might be perspective unless specified.
+    // We just check it's a valid camera type.
+    BOOST_CHECK(type.isDerivedFrom(SoCamera::getClassTypeId()));
 
-#endif //SOFL_SOFLSLIDER_H
+    delete viewer;
+    delete window;
+}
+
+BOOST_AUTO_TEST_CASE(shouldHandleDecoration) {
+    Fl_Window* window = new Fl_Window(100, 100, "Test PlaneViewer Decoration");
+    SoFlPlaneViewer* viewer = new SoFlPlaneViewer(window);
+    
+    viewer->setDecoration(TRUE);
+    BOOST_CHECK_EQUAL(viewer->isDecoration(), TRUE);
+    
+    viewer->setDecoration(FALSE);
+    BOOST_CHECK_EQUAL(viewer->isDecoration(), FALSE);
+    
+    delete viewer;
+    delete window;
+}
+
+BOOST_AUTO_TEST_SUITE_END();

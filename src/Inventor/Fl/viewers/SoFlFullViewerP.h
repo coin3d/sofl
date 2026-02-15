@@ -50,18 +50,18 @@ public:
     ~SoFlFullViewerP();
 
     std::string popupmenutitle;
-    Fl_Window * viewerwidget;
-    Fl_Window * canvas;
-    Fl_Toggle_Button * interactbutton;
-    Fl_Toggle_Button * viewbutton;
-    SbBool decorations;
+    Fl_Window * viewerwidget{nullptr};
+    Fl_Window * canvas{nullptr};
+    Fl_Toggle_Button * interactbutton{nullptr};
+    Fl_Toggle_Button * viewbutton{nullptr};
+    SbBool decorations{FALSE};
     SbString menutitle;
-    SbBool menuenabled;
-    Fl_Widget* mainlayout;
-    Fl_Widget * appbuttonlayout;
-    Fl_Widget* appbuttonform;
-    SbPList * appbuttonlist;
-    SbPList * viewerbuttons;
+    SbBool menuenabled{FALSE};
+    Fl_Widget* mainlayout{nullptr};
+    Fl_Widget * appbuttonlayout{nullptr};
+    Fl_Widget* appbuttonform{nullptr};
+    SbPList * appbuttonlist{nullptr};
+    SbPList * viewerbuttons{nullptr};
 
     std::vector<WheelFunctions*> objectMap;
 

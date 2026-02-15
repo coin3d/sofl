@@ -41,8 +41,8 @@
 #define PUBLIC(o) (o->pub)
 #define PRIVATE(o) (o->pimpl)
 
-SoFlFullViewerP::SoFlFullViewerP(SoFlFullViewer *pViewer)
-        : SoGuiFullViewerP(pViewer)
+SoFlFullViewerP::SoFlFullViewerP(SoFlFullViewer* pViewer)
+    : SoGuiFullViewerP(pViewer)
 {
     assert(pViewer);
 }
@@ -68,16 +68,38 @@ SoFlFullViewerP::showDecorationWidgets(SbBool onOff)
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::showDecorationWidgets", "[invoked] %s", onOff ? "ON" : "OFF");
 #endif
-    if (onOff) {
-        if (PUBLIC(this)->leftDecoration) PUBLIC(this)->leftDecoration->show();
-        if (PUBLIC(this)->bottomDecoration) PUBLIC(this)->bottomDecoration->show();
-        if (PUBLIC(this)->rightDecoration) PUBLIC(this)->rightDecoration->show();
-    } else {
-        if (PUBLIC(this)->leftDecoration) PUBLIC(this)->leftDecoration->hide();
-        if (PUBLIC(this)->bottomDecoration) PUBLIC(this)->bottomDecoration->hide();
-        if (PUBLIC(this)->rightDecoration) PUBLIC(this)->rightDecoration->hide();
+    if (onOff)
+    {
+        if (PUBLIC(this)->leftDecoration)
+        {
+            PUBLIC(this)->leftDecoration->show();
+        }
+        if (PUBLIC(this)->bottomDecoration)
+        {
+            PUBLIC(this)->bottomDecoration->show();
+        }
+        if (PUBLIC(this)->rightDecoration)
+        {
+            PUBLIC(this)->rightDecoration->show();
+        }
     }
-    if (this->viewerwidget) {
+    else
+    {
+        if (PUBLIC(this)->leftDecoration)
+        {
+            PUBLIC(this)->leftDecoration->hide();
+        }
+        if (PUBLIC(this)->bottomDecoration)
+        {
+            PUBLIC(this)->bottomDecoration->hide();
+        }
+        if (PUBLIC(this)->rightDecoration)
+        {
+            PUBLIC(this)->rightDecoration->hide();
+        }
+    }
+    if (this->viewerwidget)
+    {
         SbVec2s size(this->viewerwidget->w(), this->viewerwidget->h());
         PUBLIC(this)->sizeChanged(size);
     }
@@ -89,7 +111,6 @@ SoFlFullViewerP::wheelPressed(int event)
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelPressed", "event arrived!");
 #endif
-
 }
 
 void
@@ -98,7 +119,6 @@ SoFlFullViewerP::wheelReleased(int event)
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelReleased", "event arrived!");
 #endif
-
 }
 
 void
@@ -107,7 +127,6 @@ SoFlFullViewerP::wheelMoved(int event)
 #if SOFL_DEBUG
     SoDebugError::postInfo("SoFlFullViewerP::wheelMoved", "event arrived!");
 #endif
-
 }
 
 
@@ -122,93 +141,135 @@ PUBLIC(this)->objectName->user_data(wheelFunctions); } while (0)
 
 
 void
-SoFlFullViewerP::initThumbWheelEvent() {
+SoFlFullViewerP::initThumbWheelEvent()
+{
     ADD_DATA_IN_MAP(rightWheel);
     ADD_DATA_IN_MAP(leftWheel);
     ADD_DATA_IN_MAP(bottomWheel);
 }
 
 void
-SoFlFullViewerP::homebuttonClicked(int ) {
+SoFlFullViewerP::homebuttonClicked(int)
+{
     PUBLIC(this)->resetToHomePosition();
 }
 
 void
-SoFlFullViewerP::sethomebuttonClicked(int) {
+SoFlFullViewerP::sethomebuttonClicked(int)
+{
     PUBLIC(this)->saveHomePosition();
 }
 
 void
-SoFlFullViewerP::viewallbuttonClicked(int) {
+SoFlFullViewerP::viewallbuttonClicked(int)
+{
     PUBLIC(this)->viewAll();
 }
 
 void
-SoFlFullViewerP::seekbuttonClicked(int) {
+SoFlFullViewerP::seekbuttonClicked(int)
+{
     PUBLIC(this)->setSeekMode(PUBLIC(this)->isSeekMode() ? FALSE : TRUE);
 }
 
 void
-SoFlFullViewerP::interactbuttonClicked(int) {
-
+SoFlFullViewerP::interactbuttonClicked(int)
+{
     if (this->interactbutton)
+    {
         this->interactbutton->value(TRUE);
+    }
 
     if (this->viewbutton)
+    {
         this->viewbutton->value(FALSE);
+    }
 
     if (PUBLIC(this)->isViewing())
+    {
         PUBLIC(this)->setViewing(FALSE);
+    }
 }
 
 void
-SoFlFullViewerP::seekbuttonClicked() {
+SoFlFullViewerP::seekbuttonClicked()
+{
     PUBLIC(this)->setSeekMode(PUBLIC(this)->isSeekMode() ? FALSE : TRUE);
 }
 
 void
-SoFlFullViewerP::increaseInteractiveCount() {
+SoFlFullViewerP::increaseInteractiveCount()
+{
     PUBLIC(this)->interactiveCountInc();
 }
 
 void
-SoFlFullViewerP::decreaseInteractiveCount() {
+SoFlFullViewerP::decreaseInteractiveCount()
+{
     PUBLIC(this)->interactiveCountDec();
 }
 
 void
-SoFlFullViewerP::viewbuttonClicked(int) {
+SoFlFullViewerP::viewbuttonClicked(int)
+{
     if (this->interactbutton)
+    {
         this->interactbutton->value(FALSE);
+    }
     if (this->viewbutton)
+    {
         this->viewbutton->value(TRUE);
+    }
 
     if (!PUBLIC(this)->isViewing())
+    {
         PUBLIC(this)->setViewing(TRUE);
-
+    }
 }
 
-void SoFlFullViewerP::layoutViewerButtons(SoFlFullViewer *viewer, const SbVec2s &size) {
-    if (!viewer) return;
-    if (!PRIVATE(viewer)->viewerbuttons) return;
+void
+SoFlFullViewerP::layoutViewerButtons(SoFlFullViewer* viewer, const SbVec2s& size)
+{
+    if (!viewer)
+    {
+        return;
+    }
+    if (!PRIVATE(viewer)->viewerbuttons)
+    {
+        return;
+    }
 
     const int count = PRIVATE(viewer)->viewerbuttons->getLength();
-    if (count <= 0) return;
+    if (count <= 0)
+    {
+        return;
+    }
 
     const bool show = PRIVATE(viewer)->decorations ? true : false;
     const int x = size[0] - XPM_BUTTON_SIZE - XPM_BUTTON_PADDING;
     int y = XPM_BUTTON_PADDING;
 
-    for (int i = 0; i < count; ++i) {
-        auto *w = static_cast<Fl_Widget*>((*PRIVATE(viewer)->viewerbuttons)[i]);
-        if (!w) continue;
+    for (int i = 0; i < count; ++i)
+    {
+        auto* w = static_cast<Fl_Widget*>((*PRIVATE(viewer)->viewerbuttons)[i]);
+        if (!w)
+        {
+            continue;
+        }
         w->size(XPM_BUTTON_SIZE, XPM_BUTTON_SIZE);
         w->position(x, y);
-        if (show) w->show();
-        else w->hide();
+        if (show)
+        {
+            w->show();
+        }
+        else
+        {
+            w->hide();
+        }
         y += XPM_BUTTON_SIZE + XPM_BUTTON_PADDING;
     }
 }
 
+#undef ADD_DATA_IN_MAP
 #undef PUBLIC
 #undef PRIVATE

@@ -124,9 +124,6 @@ SoFlPlaneViewerP::SoFlPlaneViewerP(SoFlPlaneViewer *v)
 
 void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     this->commonConstructor(); // init generic stuff
-#if 0
-    this->pixmaps.orthogonal = new Fl_Image((const char **) ortho_xpm);
-    this->pixmaps.perspective = new Fl_Image((const char **) perspective_xpm);
 
     PUBLIC(this)->setClassName("SoFlPlaneViewer");
     PUBLIC(this)->setLeftWheelString("transY");
@@ -137,25 +134,6 @@ void SoFlPlaneViewerP::constructor(SbBool buildnow) {
     PUBLIC(this)->setSize(SbVec2s(550, 490)); // extra buttons -> more height
     Fl_Window * viewer = PUBLIC(this)->buildWidget(PUBLIC(this)->getParentWidget());
     PUBLIC(this)->setBaseWidget(viewer);
-
-    viewer->Bind(wxEVT_BUTTON,
-                 &SoFlPlaneViewerP::cameraToggleClicked,
-                 this,
-                 CAMERA_BUTTON);
-    viewer->Bind(wxEVT_BUTTON,
-                 &SoFlPlaneViewerP::xClicked,
-                 this,
-                 X_BUTTON);
-    viewer->Bind(wxEVT_BUTTON,
-                 &SoFlPlaneViewerP::yClicked,
-                 this,
-                 Y_BUTTON);
-    viewer->Bind(wxEVT_BUTTON,
-                 &SoFlPlaneViewerP::zClicked,
-                 this,
-                 Z_BUTTON);
-#endif
-
 }
 
 void SoFlPlaneViewerP::xClicked(int) {

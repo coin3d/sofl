@@ -7,6 +7,7 @@ executable(righttrim  SOURCES righttrim.cpp LIBS SoFl)
 executable(fullviewer SOURCES fullviewer.cpp LIBS SoFl)
 
 executable(examinerviewer SOURCES examinerviewer.cpp LIBS SoFl)
+executable(planeviewer SOURCES planeviewer.cpp LIBS SoFl)
 
 executable(embeddedexaminer SOURCES embeddedexaminer.cpp LIBS SoFl)
 

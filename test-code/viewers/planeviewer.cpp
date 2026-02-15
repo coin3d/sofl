@@ -32,34 +32,31 @@
 
 #include <Inventor/nodes/SoCone.h>
 
-#define VIEWER_TYPE  SoFlFlyViewer
-
 #include <Inventor/Fl/SoFl.h>
-#include <Inventor/Fl/viewers/SoFlExaminerViewer.h>
 #include <Inventor/Fl/viewers/SoFlPlaneViewer.h>
-#include <Inventor/Fl/viewers/SoFlFlyViewer.h>
-
 
 // *************************************************************************
 
 int
-main(
-    int argc,
-    char** argv)
+main(int argc,
+     char ** argv )
 {
-    Fl_Window* window = SoFl::init(argv[0]);
+    Fl_Window* window = SoFl::init( argv[0] );
 
-    SoNode* root = new SoCone;
+    auto viewer = new SoFlPlaneViewer( window );
+    viewer->setSize(SbVec2s(800,800));
 
-    VIEWER_TYPE* viewer = new VIEWER_TYPE(window);
-
-    viewer->setSceneGraph(root);
+    SoNode * root = new SoCone;
+    viewer->setSceneGraph( root );
+    // TODO: fltk can not retrieve a root window if not shown yet
+    viewer->setTitle("Plane Viewer");
     viewer->show();
-    SoFl::show(window);
+    SoFl::show( window );
 
     SoFl::mainLoop();
 
     delete viewer;
+    SoFl::done(); // delete all Coin stuff
     return 0;
 } // main()
 

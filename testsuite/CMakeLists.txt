@@ -23,6 +23,7 @@ if( Boost_UNIT_TEST_FRAMEWORK_FOUND OR Boost_FOUND)
 
     add_subdirectory(devices)
     add_subdirectory(widgets)
+    add_subdirectory(viewers)
 
     set(TEST_NAME test_sofl)
     add_executable(${TEST_NAME} TestSuiteMain.cpp TestSoFl.cpp)

@@ -30,8 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
-#ifndef SOFL_WXNATIVEPOPUPMENU_H
-#define SOFL_WXNATIVEPOPUPMENU_H
+#ifndef SOFL_FLNATIVEPOPUPMENU_H
+#define SOFL_FLNATIVEPOPUPMENU_H
 
 #include <Inventor/Fl/widgets/SoFlPopupMenu.h>
 
@@ -89,4 +89,4 @@ private:
 };
 
 
-#endif //SOFL_WXNATIVEPOPUPMENU_H
+#endif //SOFL_FLNATIVEPOPUPMENU_H
